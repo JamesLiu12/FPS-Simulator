@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <memory.h>
 #include "canvas.h"
+#include "vector.h"
+#include "math.h"
+
 
 /*
  This is the definition of canvas.
@@ -12,6 +15,7 @@ struct Canvas* new_canvas(short height, short width){
 
     canvas->height = height;
     canvas->width = width;
+    canvas->field_of_view = M_PI / 2;
 
     int vram_size = height * width * (int)sizeof(int);
     int depth_size = height * width * (int)sizeof(double);
@@ -29,9 +33,6 @@ struct Canvas* new_canvas(short height, short width){
     return canvas;
 }
 
-/*
- Freeing the memory of canvas.
- */
 void del_canvas(struct Canvas* canvas){
     free(canvas->vram_red);
     free(canvas->vram_green);
@@ -39,9 +40,6 @@ void del_canvas(struct Canvas* canvas){
     free(canvas);
 }
 
-/*
- Displaying the current frame.
- */
 void canvas_flush(struct Canvas* canvas){
     move_cursor_top_left();
 
@@ -60,12 +58,41 @@ void canvas_flush(struct Canvas* canvas){
     }
 }
 
-//clear the terminal
 void clear() {
     printf("\033[2J");
 }
 
-// Move the cursor to the top-left corner
 void move_cursor_top_left() {
     printf("\033[1;1H");
+}
+
+void canvas_draw_triangle(struct Canvas *canvas, struct Triangle* triangle){
+    struct Vector3 projected_p1, projected_p2, projected_p3;
+    projected_p1.x = triangle->v1.x / triangle->v1.z;
+    projected_p1.y = triangle->v1.y / triangle->v1.z;
+    projected_p1.z = triangle->v1.z / triangle->v1.z;
+    projected_p2.x = triangle->v2.x / triangle->v2.z;
+    projected_p2.y = triangle->v2.y / triangle->v2.z;
+    projected_p2.z = triangle->v2.z / triangle->v2.z;
+    projected_p3.x = triangle->v3.x / triangle->v3.z;
+    projected_p3.y = triangle->v3.y / triangle->v3.z;
+    projected_p3.z = triangle->v3.z / triangle->v3.z;
+
+    // TODO
+}
+
+void canvas_move(struct Canvas *canvas, struct Vector3* displacement){
+    vector3_add(&(canvas->transformation_position), displacement);
+}
+
+void canvas_rotate(struct Canvas *canvas, struct EulerAngle* eulerAngle){
+    canvas->transformation_rotation.yaw += eulerAngle->yaw;
+    canvas->transformation_rotation.pinch += eulerAngle->pinch;
+    canvas->transformation_rotation.row += eulerAngle->row;
+}
+
+void canvas_stretch(struct Canvas *canvas, struct Vector3* scale){
+    canvas->transformation_scale.x *= scale->x;
+    canvas->transformation_scale.y *= scale->y;
+    canvas->transformation_scale.z *= scale->z;
 }
