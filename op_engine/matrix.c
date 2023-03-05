@@ -34,12 +34,18 @@ void matrix3x3_transform(struct Matrix3x3 *m, struct Vector3 *v) {
     v->z = result_z;
 }
 
-void matrix3x3_from_euler_angle(struct Matrix3x3 *m, struct EulerAngle* ea) {
+void matrix3x3_from_euler_angle(struct Matrix3x3 *m, struct EulerAngle* ea, char reversed) {
     double yaw, pinch, row;
 
-    yaw = ea->yaw;
-    pinch = ea->pinch;
-    row = ea->row;
+    if (reversed) {
+        yaw = -ea->yaw;
+        pinch = -ea->pinch;
+        row = -ea->roll;
+    } else {
+        yaw = ea->yaw;
+        pinch = ea->pinch;
+        row = ea->roll;
+    }
 
     m->data[0][0] = cos(yaw) * cos(row) + sin(yaw) * sin(pinch) * sin(row);
     m->data[0][1] = sin(yaw) * sin(pinch) * cos(row) - cos(yaw) * sin(row);

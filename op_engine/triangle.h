@@ -1,6 +1,6 @@
-#include "vector.h"
-
 #ifndef OP_TRIANGLE
+
+#include "vector.h"
 
 struct Triangle {
     //3 positions for vertices

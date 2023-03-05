@@ -73,6 +73,18 @@ build CMakeFiles/FPS_Simulator.dir/op_engine/vector.c.obj: C_COMPILER__FPS_Simul
   OBJECT_DIR = CMakeFiles\FPS_Simulator.dir
   OBJECT_FILE_DIR = CMakeFiles\FPS_Simulator.dir\op_engine
 
+build CMakeFiles/FPS_Simulator.dir/op_engine/models/cube.c.obj: C_COMPILER__FPS_Simulator_Debug D$:/JamesLiu/Documents/FPS$ Simulator/op_engine/models/cube.c || cmake_object_order_depends_target_FPS_Simulator
+  DEP_FILE = CMakeFiles\FPS_Simulator.dir\op_engine\models\cube.c.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\FPS_Simulator.dir
+  OBJECT_FILE_DIR = CMakeFiles\FPS_Simulator.dir\op_engine\models
+
+build CMakeFiles/FPS_Simulator.dir/util/util.c.obj: C_COMPILER__FPS_Simulator_Debug D$:/JamesLiu/Documents/FPS$ Simulator/util/util.c || cmake_object_order_depends_target_FPS_Simulator
+  DEP_FILE = CMakeFiles\FPS_Simulator.dir\util\util.c.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\FPS_Simulator.dir
+  OBJECT_FILE_DIR = CMakeFiles\FPS_Simulator.dir\util
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target FPS_Simulator
@@ -81,7 +93,7 @@ build CMakeFiles/FPS_Simulator.dir/op_engine/vector.c.obj: C_COMPILER__FPS_Simul
 #############################################
 # Link the executable FPS_Simulator.exe
 
-build FPS_Simulator.exe: C_EXECUTABLE_LINKER__FPS_Simulator_Debug CMakeFiles/FPS_Simulator.dir/main.c.obj CMakeFiles/FPS_Simulator.dir/op_engine/canvas.c.obj CMakeFiles/FPS_Simulator.dir/op_engine/matrix.c.obj CMakeFiles/FPS_Simulator.dir/op_engine/vector.c.obj
+build FPS_Simulator.exe: C_EXECUTABLE_LINKER__FPS_Simulator_Debug CMakeFiles/FPS_Simulator.dir/main.c.obj CMakeFiles/FPS_Simulator.dir/op_engine/canvas.c.obj CMakeFiles/FPS_Simulator.dir/op_engine/matrix.c.obj CMakeFiles/FPS_Simulator.dir/op_engine/vector.c.obj CMakeFiles/FPS_Simulator.dir/op_engine/models/cube.c.obj CMakeFiles/FPS_Simulator.dir/util/util.c.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\FPS_Simulator.dir
