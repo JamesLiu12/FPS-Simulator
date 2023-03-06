@@ -4,9 +4,10 @@
 #include "canvas.h"
 #include "vector.h"
 #include "math.h"
+#include "transform.h"
 #include "../util/util.h"
 
-struct Canvas* new_canvas(short height, short width){
+struct Canvas* new_Canvas(short height, short width) {
     struct Canvas* canvas = malloc(sizeof(struct Canvas));
 
     canvas->height = height;
@@ -27,37 +28,23 @@ struct Canvas* new_canvas(short height, short width){
     canvas->color.green = (char)255;
     canvas->color.blue = (char)255;
 
-    canvas->transformation_position.x = 0;
-    canvas->transformation_position.y = 0;
-    canvas->transformation_position.z = 0;
+    init_Transform(&canvas->transform);
 
-    canvas->transformation_rotation.yaw = 0;
-    canvas->transformation_rotation.pinch = 0;
-    canvas->transformation_rotation.roll = 0;
-
-    canvas->transformation_scale.x = 1;
-    canvas->transformation_scale.y = 1;
-    canvas->transformation_scale.z = 1;
-
-    matrix3x3_from_euler_angle(
-            &canvas->transformation_rotation_matrix,
-            &canvas->transformation_rotation,
-            EULER_ANGLE_NORMAL);
-
-    canvas_calculate_screen_projection(canvas);
-    canvas_clear(canvas);
+    Canvas_CalculateScreenProjection(canvas);
+    Canvas_clear(canvas);
 
     return canvas;
 }
 
-void del_canvas(struct Canvas* canvas){
+void del_Canvas(struct Canvas* canvas){
     free(canvas->vram_red);
     free(canvas->vram_green);
     free(canvas->vram_blue);
+    free(canvas->vram_depth);
     free(canvas);
 }
 
-void canvas_flush(struct Canvas* canvas){
+void Canvas_flush(struct Canvas* canvas){
     move_cursor_top_left();
 
     register int height, width, vram_index;
@@ -68,25 +55,25 @@ void canvas_flush(struct Canvas* canvas){
 
             vram_index = height * canvas->width + width;
 
-            brightness = (int)(
-                    0.2126 * canvas->vram_red[vram_index] +
-                    0.7152 * canvas->vram_green[vram_index] +
-                    0.0722 * canvas->vram_blue[vram_index]);
+//            brightness = (int)(
+//                    0.2126 * canvas->vram_red[vram_index] +
+//                    0.7152 * canvas->vram_green[vram_index] +
+//                    0.0722 * canvas->vram_blue[vram_index]);
 
-#ifdef OP_ENGINE_CHROMATIC
-            printf("\x1b[38;2;%d;%d;%dm",
-                   canvas->vram_red[vram_index],
-                   canvas->vram_green[vram_index],
-                   canvas->vram_blue[vram_index]);
-            putchar(0xe2);
-            putchar(0x96);
-            putchar(0x88);
-            putchar(0xe2);
-            putchar(0x96);
-            putchar(0x88);
-#endif
+//#ifdef OP_ENGINE_CHROMATIC
+//            printf("\x1b[38;2;%d;%d;%dm",
+//                   canvas->vram_red[vram_index],
+//                   canvas->vram_green[vram_index],
+//                   canvas->vram_blue[vram_index]);
+//            putchar(0xe2);
+//            putchar(0x96);
+//            putchar(0x88);
+//            putchar(0xe2);
+//            putchar(0x96);
+//            putchar(0x88);
+//#endif
 
-#ifndef OP_ENGINE_CHROMATIC
+//#ifndef OP_ENGINE_CHROMATIC
             if (canvas->vram_red[vram_index] == 255) {
                 // Blocks of different brightness ░▒▓█ ▖ ▗ ▘ ▙ ▚ ▛ ▜ ▝ ▞ ▟
                 //faster version of printf("██");
@@ -100,20 +87,22 @@ void canvas_flush(struct Canvas* canvas){
                 putchar(' ');
                 putchar(' ');
             }
-#endif
+//#endif
         }
         putchar('\n');
     }
 }
 
-void canvas_clear(struct Canvas* canvas){
+void Canvas_clear(struct Canvas* canvas){
     int vram_size = canvas->height * canvas->width * sizeof(unsigned char);
     int depth_size = canvas->height * canvas->width * sizeof(double);
 
     memset(canvas->vram_red, 0, vram_size);
     memset(canvas->vram_green, 0, vram_size);
     memset(canvas->vram_blue, 0, vram_size);
-    memset(canvas->vram_depth, INFINITY, depth_size);
+    for (int i = 0; i < canvas->height * canvas->width; i++) {
+        canvas->vram_depth[i] = INFINITY;
+    }
 }
 
 void terminal_clear() {
@@ -124,7 +113,7 @@ void move_cursor_top_left() {
     printf("\033[1;1H");
 }
 
-void canvas_calculate_screen_projection(struct Canvas* canvas) {
+void Canvas_CalculateScreenProjection(struct Canvas* canvas) {
     double visible_z_plane_half_width = tan(canvas->field_of_view / 2);
 
     canvas->screen_projection.scale_factor = 1 / visible_z_plane_half_width * canvas->width / 2;
@@ -133,14 +122,11 @@ void canvas_calculate_screen_projection(struct Canvas* canvas) {
     canvas->screen_projection.y_displacement = (double)canvas->height / 2;
 }
 
-void canvas_project_from_world_to_camera(struct Canvas *canvas, struct Vector3 *from, struct Vector3 *to) {
+void Canvas_ProjectFromWorldToCamera(struct Canvas *canvas, struct Vector3 *from, struct Vector3 *to) {
+    Vector3_Copy(from, to);
 
-    to->x = from->x;
-    to->y = from->y;
-    to->z = from->z;
-    //question: inverse?
-    matrix3x3_transform(&canvas->transformation_rotation_matrix, to);
-    vector3_subtract(to, &canvas->transformation_position);
+    Vector3_Subtract(to, &canvas->camera_transform.position);
+    Matrix3x3_Transform(&canvas->camera_transform.rotation_matrix, to);
 }
 
 void canvas_project_from_camera_to_screen(struct Canvas *canvas, struct Vector3 *from, struct Vector3 *to) {
@@ -157,7 +143,7 @@ void canvas_project_from_camera_to_screen(struct Canvas *canvas, struct Vector3 
 
 void canvas_project_from_world_to_screen(struct Canvas *canvas, struct Vector3 *from, struct Vector3 *to) {
     struct Vector3 vector_tmp;
-    canvas_project_from_world_to_camera(canvas, from, &vector_tmp);
+    Canvas_ProjectFromWorldToCamera(canvas, from, &vector_tmp);
     canvas_project_from_camera_to_screen(canvas, &vector_tmp, to);
 }
 
@@ -171,7 +157,7 @@ void vram_write(struct Canvas *canvas, int vram_index, double distance2){
     canvas->vram_blue[vram_index] = canvas->color.blue;
 }
 
-void canvas_draw_point(struct Canvas *canvas, struct Vector3 *point){
+void Canvas_DrawPoint(struct Canvas *canvas, struct Vector3 *point){
     struct Vector3 projected_p;
 
     canvas_project_from_camera_to_screen(canvas, point, &projected_p);
@@ -187,14 +173,15 @@ void canvas_draw_point(struct Canvas *canvas, struct Vector3 *point){
         return;
     }
     int vram_index = row * canvas->width + column;
-    double distance2 = vector3_length2(point);
+    double distance2 = Vector3_MagnitudeSq(point);
     vram_write(canvas, vram_index, distance2);
 }
 
-void canvas_draw_triangle_face(struct Canvas *canvas, struct Triangle* triangle) {
+void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle) {
     struct Vector3 p1, p2, p3;
     struct Vector3 *projected_low = &p1, *projected_mid = &p2, *projected_top = &p3;
     struct Vector3 *original_low = &triangle->v1, *original_mid = &triangle->v2, *original_top = &triangle->v3;
+
     canvas_project_from_world_to_screen(canvas, &triangle->v1, &p1);
     canvas_project_from_world_to_screen(canvas, &triangle->v2, &p2);
     canvas_project_from_world_to_screen(canvas, &triangle->v3, &p3);
@@ -225,13 +212,15 @@ void canvas_draw_triangle_face(struct Canvas *canvas, struct Triangle* triangle)
         y_start = fmax((short)ceil(projected_low->y), 0),
         y_end = fmin((short)floor(projected_mid->y), canvas->height - 1);
     double
-        depth_low_top_step = sqrt(vector3_length2(projected_top)) - sqrt(vector3_length2(projected_low))
-                            / (floor(projected_mid->y) - ceil(projected_low->y)),
-        depth_low_top_now = sqrt(vector3_length2(projected_low))
+        depth_low_top_step = (projected_top->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_top))
+                - (projected_low->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_low))
+                / (floor(projected_mid->y) - ceil(projected_low->y)),
+        depth_low_top_now = (projected_low->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_low))
                             + depth_low_top_step * (y_start - (short)ceil(projected_low->y)),
-        depth_low_mid_step = sqrt(vector3_length2(projected_mid)) - sqrt(vector3_length2(projected_low))
-                            / (floor(projected_mid->y) - ceil(projected_low->y)),
-        depth_low_mid_now = sqrt(vector3_length2(projected_low))
+        depth_low_mid_step = (projected_mid->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_mid)) -
+                (projected_low->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_low))
+                / (floor(projected_mid->y) - ceil(projected_low->y)),
+        depth_low_mid_now = (projected_low->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_low))
                             + depth_low_mid_step * (y_start - (short)ceil(projected_low->y));
 
     //if lower_bound > upper_bound, the direction of depth change should be reversed
@@ -278,6 +267,7 @@ void canvas_draw_triangle_face(struct Canvas *canvas, struct Triangle* triangle)
             depth_now = depth_low_top_now + depth_step * (x_start - x_lower);
 
         for (x = x_start; x <= x_end; x++, depth_now += depth_step) {
+            if (depth_now < 0) continue;
             vram_write(canvas, canvas->width * y + x, depth_now * depth_now);
         }
     }
@@ -286,14 +276,16 @@ void canvas_draw_triangle_face(struct Canvas *canvas, struct Triangle* triangle)
     y_start = fmax((short)ceil(projected_mid->y), 0);
     y_end = fmin((short)floor(projected_top->y), canvas->height - 1);
 
-    depth_low_top_step = sqrt(vector3_length2(projected_top)) - sqrt(vector3_length2(projected_low))
-                        / (floor(projected_mid->y) - ceil(projected_low->y));
-    depth_low_top_now = sqrt(vector3_length2(projected_low))
+    depth_low_top_step = (projected_top->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_top))
+            - (projected_low->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_low))
+            / (floor(projected_mid->y) - ceil(projected_low->y));
+    depth_low_top_now = (projected_low->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_low))
                         + depth_low_top_step * (y_start - (short)ceil(projected_low->y));
     double
-        depth_mid_top_step = sqrt(vector3_length2(projected_top)) - sqrt(vector3_length2(projected_mid))
-                            / (floor(projected_top->y) - ceil(projected_mid->y)),
-        depth_mid_top_now = sqrt(vector3_length2(projected_mid))
+        depth_mid_top_step = (projected_top->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_top))
+                - (projected_mid->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_mid))
+                / (floor(projected_top->y) - ceil(projected_mid->y)),
+        depth_mid_top_now = (projected_mid->z ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_mid))
                             + depth_mid_top_step * (y_start - (short)ceil(projected_mid->y));
 
     if (projected_low->x > projected_mid->x){
@@ -334,28 +326,38 @@ void canvas_draw_triangle_face(struct Canvas *canvas, struct Triangle* triangle)
                 depth_now = depth_low_top_now + depth_step * (x_start - x_lower);
 
         for (x = x_start; x <= x_end; x++, depth_now += depth_step) {
+            if (depth_now < 0) continue;
             vram_write(canvas, canvas->width * y + x, depth_now * depth_now);
         }
     }
 }
 
-void canvas_move(struct Canvas *canvas, struct Vector3* displacement){
-    vector3_add(&(canvas->transformation_position), displacement);
+void Canvas_Move(struct Canvas *canvas, struct Vector3* displacement){
+    Vector3_Add(&canvas->transform.position, displacement);
 }
 
-void canvas_rotate(struct Canvas *canvas, struct EulerAngle* eulerAngle){
-    canvas->transformation_rotation.yaw += eulerAngle->yaw;
-    canvas->transformation_rotation.pinch += eulerAngle->pinch;
-    canvas->transformation_rotation.roll += eulerAngle->roll;
+void Canvas_Rotation(struct Canvas *canvas, struct Vector3* rotation){
+    canvas->transform.rotation.x += rotation->x;
+    canvas->transform.rotation.y += rotation->y;
+    canvas->transform.rotation.z += rotation->z;
 
-    matrix3x3_from_euler_angle(
-            &canvas->transformation_rotation_matrix,
-            &canvas->transformation_rotation,
+    Transform_rotation_matrix_update(&canvas->transform);
+}
+
+void Canvas_Stretch(struct Canvas *canvas, struct Vector3* scale){
+    canvas->transform.scale.x *= scale->x;
+    canvas->transform.scale.y *= scale->y;
+    canvas->transform.scale.z *= scale->z;
+}
+
+void Canvas_CameraMove(struct Canvas *canvas, struct Vector3 *displacement) {
+    Vector3_Add(&canvas->camera_transform.position, displacement);
+}
+
+void Canvas_CameraRotate(struct Canvas *canvas, struct Vector3 *rotation) {
+    Vector3_Add(&canvas->camera_transform.rotation, rotation);
+    Matrix3x3_FromEulerAngle(
+            &canvas->camera_transform.rotation_matrix,
+            &canvas->camera_transform.rotation,
             EULER_ANGLE_REVERSED);
-}
-
-void canvas_stretch(struct Canvas *canvas, struct Vector3* scale){
-    canvas->transformation_scale.x *= scale->x;
-    canvas->transformation_scale.y *= scale->y;
-    canvas->transformation_scale.z *= scale->z;
 }

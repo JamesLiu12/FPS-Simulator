@@ -17,10 +17,15 @@ add_executable(
     op_engine/vector.c
     op_engine/vector.h
     op_engine/matrix.c
-    op_engine/model.h
+    op_engine/mesh.h
+    op_engine/collide_box.h
+    op_engine/scene.h
+    op_engine/models/rectangle.h
+    op_engine/models/rectangle.c
+    op_engine/triangle.c
 
     op_engine/models/cube.c
 
     util/util.h
     util/util.c
-)
+        op_engine/transform.c op_engine/mesh.c)

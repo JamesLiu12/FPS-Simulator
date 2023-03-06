@@ -1,32 +1,32 @@
+//#define OP_ENGINE_CHROMATIC
 #include <stdio.h>
-#include <math.h>
-#define OP_ENGINE_CHROMATIC
 #include "op_engine/op_engine.h"
 
 int main() {
-    struct Canvas *canvas = new_canvas(64, 64);
+    struct Canvas *canvas = new_Canvas(64, 64);
+    struct Vector3 rotation;
+    Vector3_Set(&rotation, 0.1, 0, 0);
     struct Vector3 p1, p2, p3;
-    p1.x = -1;
-    p1.y = -1;
-    p1.z = 9;
-    p2.x = -1;
-    p2.y = 9;
-    p2.z = 12;
-    p3.x = 6;
-    p3.y = -1;
-    p3.z = 15;
+    Vector3_Set(&p1, -1, -1, 9);
+    Vector3_Set(&p2, -1, 9, 12);
+    Vector3_Set(&p3, 6, -1, 15);
+
     struct Triangle triangle;
     triangle.v1 = p1;
     triangle.v2 = p2;
     triangle.v3 = p3;
-    canvas_draw_triangle_face(canvas, &triangle);
-    canvas_flush(canvas);
+//    for (int i = 0; i < 100; i++) {
+        Canvas_clear(canvas);
+        Canvas_CameraRotate(canvas, &rotation);
+        Canvas_DrawTriangle(canvas, &triangle);
+        Canvas_flush(canvas);
+//    }
     for (int i = 0; i < canvas->height; i++){
         for (int j = 0; j < canvas->width; j++) printf("%f ", canvas->vram_depth[i * canvas->width + j]);
         puts("");
     }
     printf("\x1b[38;2;%d;%d;%dm", 0xee, 0xee, 0xee);
 
-    del_canvas(canvas);
+    del_Canvas(canvas);
     return 0;
 }

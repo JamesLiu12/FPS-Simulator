@@ -1,9 +1,8 @@
 #include "matrix.h"
-#include <stdlib.h>
 #include <memory.h>
 #include <math.h>
 
-void matrix3x3_multiply(struct Matrix3x3 *m1, struct Matrix3x3 *m2){
+void Matrix3x3_Multiply(struct Matrix3x3 *m1, struct Matrix3x3 *m2){
     double results[3] = {0, 0, 0};
     register int row, col, pt;
 
@@ -19,32 +18,38 @@ void matrix3x3_multiply(struct Matrix3x3 *m1, struct Matrix3x3 *m2){
 
 }
 
-void matrix3x3_transform(struct Matrix3x3 *m, struct Vector3 *v) {
+void Matrix3x3_Transform(struct Matrix3x3 *m, struct Vector3 *v) {
     double result_x = 0, result_y = 0, result_z = 0;
-    register int column;
+    register int col;
 
-    for (column = 0; column < 3; column++) {
-        result_x += m->data[0][column] * v->x;
-        result_y += m->data[1][column] * v->y;
-        result_z += m->data[2][column] * v->z;
-    }
+    result_x += m->data[0][0] * v->x;
+    result_y += m->data[1][0] * v->x;
+    result_z += m->data[2][0] * v->x;
+
+    result_x += m->data[0][1] * v->y;
+    result_y += m->data[1][1] * v->y;
+    result_z += m->data[2][1] * v->y;
+
+    result_x += m->data[0][2] * v->z;
+    result_y += m->data[1][2] * v->z;
+    result_z += m->data[2][2] * v->z;
 
     v->x = result_x;
     v->y = result_y;
     v->z = result_z;
 }
 
-void matrix3x3_from_euler_angle(struct Matrix3x3 *m, struct EulerAngle* ea, char reversed) {
+void Matrix3x3_FromEulerAngle(struct Matrix3x3 *m, struct Vector3 *ea, char reversed) {
     double yaw, pinch, row;
 
     if (reversed) {
-        yaw = -ea->yaw;
-        pinch = -ea->pinch;
-        row = -ea->roll;
+        yaw = -ea->y;
+        pinch = -ea->x;
+        row = -ea->z;
     } else {
-        yaw = ea->yaw;
-        pinch = ea->pinch;
-        row = ea->roll;
+        yaw = ea->y;
+        pinch = ea->x;
+        row = ea->z;
     }
 
     m->data[0][0] = cos(yaw) * cos(row) + sin(yaw) * sin(pinch) * sin(row);
