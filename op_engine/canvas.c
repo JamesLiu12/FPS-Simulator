@@ -88,8 +88,8 @@ void canvas_flush(struct Canvas* canvas){
 
 #ifndef OP_ENGINE_CHROMATIC
             if (canvas->vram_red[vram_index] == 255) {
-                //faster version of printf("██");
                 // Blocks of different brightness ░▒▓█ ▖ ▗ ▘ ▙ ▚ ▛ ▜ ▝ ▞ ▟
+                //faster version of printf("██");
                 putchar(0xe2);
                 putchar(0x96);
                 putchar(0x88);
@@ -138,7 +138,7 @@ void canvas_project_from_world_to_camera(struct Canvas *canvas, struct Vector3 *
     to->x = from->x;
     to->y = from->y;
     to->z = from->z;
-
+    //question: inverse?
     matrix3x3_transform(&canvas->transformation_rotation_matrix, to);
     vector3_subtract(to, &canvas->transformation_position);
 }
@@ -191,7 +191,7 @@ void canvas_draw_point(struct Canvas *canvas, struct Vector3 *point){
     vram_write(canvas, vram_index, distance2);
 }
 
-void canvas_draw_triangle_alternative(struct Canvas *canvas, struct Triangle* triangle) {
+void canvas_draw_triangle_face(struct Canvas *canvas, struct Triangle* triangle) {
     struct Vector3 p1, p2, p3;
     struct Vector3 *projected_low = &p1, *projected_mid = &p2, *projected_top = &p3;
     struct Vector3 *original_low = &triangle->v1, *original_mid = &triangle->v2, *original_top = &triangle->v3;
@@ -219,8 +219,34 @@ void canvas_draw_triangle_alternative(struct Canvas *canvas, struct Triangle* tr
     if (projected_top->y - projected_low->y == 0) {
         return;
     }
+
     // Lower part
-    for (y = (short)ceil(projected_low->y); y <= (short)floor(projected_mid->y); y++) {
+    short
+        y_start = fmax((short)ceil(projected_low->y), 0),
+        y_end = fmin((short)floor(projected_mid->y), canvas->height - 1);
+    double
+        depth_low_top_step = sqrt(vector3_length2(projected_top)) - sqrt(vector3_length2(projected_low))
+                            / (floor(projected_mid->y) - ceil(projected_low->y)),
+        depth_low_top_now = sqrt(vector3_length2(projected_low))
+                            + depth_low_top_step * (y_start - (short)ceil(projected_low->y)),
+        depth_low_mid_step = sqrt(vector3_length2(projected_mid)) - sqrt(vector3_length2(projected_low))
+                            / (floor(projected_mid->y) - ceil(projected_low->y)),
+        depth_low_mid_now = sqrt(vector3_length2(projected_low))
+                            + depth_low_mid_step * (y_start - (short)ceil(projected_low->y));
+
+    //if lower_bound > upper_bound, the direction of depth change should be reversed
+    if (projected_low->x > projected_mid->x){
+        double tmp = depth_low_mid_step;
+        depth_low_mid_step = depth_low_top_step;
+        depth_low_top_step = tmp;
+        tmp = depth_low_mid_now;
+        depth_low_mid_now = depth_low_top_now;
+        depth_low_top_now = tmp;
+    }
+
+    for (y = y_start; y <= y_end; y++,
+            depth_low_mid_now += depth_low_mid_step,
+            depth_low_top_now += depth_low_top_step) {
         // Calculate the lower and upper bound of this horizontal line
         x_lower = (short)round(linear_interpolate(
                 projected_low->x,
@@ -243,19 +269,45 @@ void canvas_draw_triangle_alternative(struct Canvas *canvas, struct Triangle* tr
         }
 
         // Skip the points out of the bound
-        for (x = x_lower; x <= x_upper; x++) {
-            if (x < 0 ||
-                x >= canvas->width ||
-                y < 0 ||
-                y >= canvas->height) {
-                continue;
-            }
-            vram_write(canvas, canvas->width * y + x, 1);
+        int x_start = fmax(x_lower, 0), x_end = fmin(x_upper, canvas->width - 1);
+
+        //The depth of each pixel
+        double
+            //x_upper-x_lower may be zero
+            depth_step = (depth_low_mid_now - depth_low_top_now) / fmax(1, (x_upper - x_lower)),
+            depth_now = depth_low_top_now + depth_step * (x_start - x_lower);
+
+        for (x = x_start; x <= x_end; x++, depth_now += depth_step) {
+            vram_write(canvas, canvas->width * y + x, depth_now * depth_now);
         }
     }
 
     // Upper part (slightly the same as above)
-    for (y = (short)ceil(projected_mid->y); y <= (short)floor(projected_top->y); y++) {
+    y_start = fmax((short)ceil(projected_mid->y), 0);
+    y_end = fmin((short)floor(projected_top->y), canvas->height - 1);
+
+    depth_low_top_step = sqrt(vector3_length2(projected_top)) - sqrt(vector3_length2(projected_low))
+                        / (floor(projected_mid->y) - ceil(projected_low->y));
+    depth_low_top_now = sqrt(vector3_length2(projected_low))
+                        + depth_low_top_step * (y_start - (short)ceil(projected_low->y));
+    double
+        depth_mid_top_step = sqrt(vector3_length2(projected_top)) - sqrt(vector3_length2(projected_mid))
+                            / (floor(projected_top->y) - ceil(projected_mid->y)),
+        depth_mid_top_now = sqrt(vector3_length2(projected_mid))
+                            + depth_mid_top_step * (y_start - (short)ceil(projected_mid->y));
+
+    if (projected_low->x > projected_mid->x){
+        double tmp = depth_low_top_step;
+        depth_low_top_step = depth_mid_top_step;
+        depth_mid_top_step = tmp;
+        tmp = depth_low_top_now;
+        depth_low_top_now = depth_mid_top_now;
+        depth_mid_top_now = tmp;
+    }
+
+    for (y = y_start; y <= y_end; y++,
+            depth_low_top_now += depth_low_top_step,
+            depth_mid_top_now += depth_mid_top_step) {
 
         x_lower = (short)round(linear_interpolate(
                 projected_low->x,
@@ -276,174 +328,15 @@ void canvas_draw_triangle_alternative(struct Canvas *canvas, struct Triangle* tr
             x_upper = tmp;
         }
 
-        for (x = x_lower; x <= x_upper; x++) {
-            if (x < 0 ||
-                x >= canvas->width ||
-                y < 0 ||
-                y >= canvas->height) {
-                continue;
-            }
-            vram_write(canvas, canvas->width * y + x, 1);
+        int x_start = fmax(x_lower, 0), x_end = fmin(x_upper, canvas->width - 1);
+        double
+                depth_step = (depth_mid_top_now - depth_low_top_now) / fmax(1, (x_upper - x_lower)),
+                depth_now = depth_low_top_now + depth_step * (x_start - x_lower);
+
+        for (x = x_start; x <= x_end; x++, depth_now += depth_step) {
+            vram_write(canvas, canvas->width * y + x, depth_now * depth_now);
         }
     }
-}
-
-void canvas_draw_triangle(struct Canvas *canvas, struct Triangle* triangle){
-    struct Vector3 projected_p1, projected_p2, projected_p3;
-    canvas_project_from_world_to_screen(canvas, &triangle->v1, &projected_p1);
-    canvas_project_from_world_to_screen(canvas, &triangle->v2, &projected_p2);
-    canvas_project_from_world_to_screen(canvas, &triangle->v3, &projected_p3);
-
-    if (projected_p1.x > projected_p2.x) vector3_swap(&projected_p1, &projected_p2);
-    if (projected_p1.x > projected_p3.x) vector3_swap(&projected_p1, &projected_p3);
-
-    int screen_p1_row, screen_p1_col, screen_p2_row, screen_p2_col, screen_p3_row, screen_p3_col;
-    screen_p1_row = (int)round(projected_p1.y);
-    screen_p1_col = (int)round(projected_p1.x);
-    screen_p2_row = (int)round(projected_p2.y);
-    screen_p2_col = (int)round(projected_p2.x);
-    screen_p3_row = (int)round(projected_p3.y);
-    screen_p3_col = (int)round(projected_p3.x);
-
-    if (screen_p1_col == screen_p2_col){
-        if (screen_p1_row > screen_p2_row) int_swap(&screen_p1_row, &screen_p2_row);
-        if (screen_p1_row == screen_p2_row){
-            int vram_index = screen_p1_row * canvas->width + screen_p1_col;
-            double distance2 = vector3_length2(&projected_p1);
-            vram_write(canvas, vram_index, distance2);
-        }
-        else{
-            double depth_dif = (projected_p2.z - projected_p1.z) / (screen_p2_row - screen_p1_row);
-            double distance2 = vector3_length2(&projected_p1);
-            for (register int row = screen_p1_row; row <= screen_p2_row; row++){
-                if (row < 0 ||
-                    row >= canvas->height ||
-                    screen_p1_col < 0 ||
-                    screen_p1_col >= canvas->width) {
-                    continue;
-                }
-                int vram_index = row * canvas->width + screen_p1_col;
-                vram_write(canvas, vram_index, distance2);
-                distance2 += depth_dif;
-            }
-        }
-    }
-    else{
-        double slope = (projected_p2.y - projected_p1.y) / (projected_p2.x - projected_p1.x);
-        double current_y = projected_p1.y, current_x = projected_p1.x;
-        double unit_length_row = (projected_p2.y - projected_p1.y) / (screen_p2_row - screen_p1_row);
-        double unit_length_col = (projected_p2.x - projected_p1.x) / (screen_p2_col - screen_p1_col);
-        int direction = screen_p2_row > screen_p1_row ? 1 : -1;
-        if (abs(screen_p2_row - screen_p1_row) > screen_p2_col - screen_p1_col){
-            double depth_dif = (projected_p2.z - projected_p1.z) / abs(screen_p2_row - screen_p1_row);
-            double distance2 = vector3_length2(&projected_p1);
-            for (int row = screen_p1_row; row != screen_p2_row; row += direction){
-                int col = round((projected_p1.y +
-                        (1 / slope * (row - unit_length_row) * unit_length_row) / unit_length_col));
-                if (row < 0 ||
-                    row >= canvas->height ||
-                    col < 0 ||
-                    col >= canvas->width) {
-                    continue;
-                }
-                int vram_index = row * canvas->width + col;
-                vram_write(canvas, vram_index, distance2);
-                distance2 += depth_dif;
-            }
-        }
-        else{
-            double depth_dif = (projected_p2.z - projected_p1.z) / (screen_p2_col - screen_p1_col);
-            double distance2 = vector3_length2(&projected_p1);
-            for (int col = screen_p1_col; col < screen_p2_col; col++){
-                int row = round(projected_p1.x +
-                        (slope * (col - screen_p1_col) * unit_length_col) / (projected_p2.x - projected_p1.x));
-                if (row < 0 ||
-                    row >= canvas->height ||
-                    col < 0 ||
-                    col >= canvas->width) {
-                    continue;
-                }
-                int vram_index = row * canvas->width + col;
-                vram_write(canvas, vram_index, distance2);
-                distance2 += depth_dif;
-            }
-        }
-    }
-
-    vector3_swap(&projected_p2, &projected_p3);
-    int int_tmp = screen_p2_row;
-    screen_p2_row = screen_p3_row;
-    screen_p3_row = int_tmp;
-    int_tmp = screen_p2_col;
-    screen_p2_col = screen_p3_col;
-    screen_p3_col = int_tmp;
-//    int_swap(&screen_p2_row, &screen_p3_row);
-//    int_swap(&screen_p2_col, &screen_p3_col);
-    if (screen_p1_col == screen_p2_col){
-        if (screen_p1_row > screen_p2_row) int_swap(&screen_p1_row, &screen_p2_row);
-        if (screen_p1_row == screen_p2_row){
-            int vram_index = screen_p1_row * canvas->width + screen_p1_col;
-            double distance2 = vector3_length2(&projected_p1);
-            vram_write(canvas, vram_index, distance2);
-        }
-        else{
-            double depth_dif = (projected_p2.z - projected_p1.z) / (screen_p2_row - screen_p1_row);
-            double distance2 = vector3_length2(&projected_p1);
-            for (register int row = screen_p1_row; row <= screen_p2_row; row++){
-                if (row < 0 ||
-                    row >= canvas->height ||
-                    screen_p1_col < 0 ||
-                    screen_p1_col >= canvas->width) {
-                    continue;
-                }
-                int vram_index = row * canvas->width + screen_p1_col;
-                vram_write(canvas, vram_index, distance2);
-                distance2 += depth_dif;
-            }
-        }
-    }
-    else{
-        double slope = (projected_p2.y - projected_p1.y) / (projected_p2.x - projected_p1.x);
-        double current_y = projected_p1.y, current_x = projected_p1.x;
-        double unit_length_row = (projected_p2.y - projected_p1.y) / (screen_p2_row - screen_p1_row);
-        double unit_length_col = (projected_p2.x - projected_p1.x) / (screen_p2_col - screen_p1_col);
-        int direction = screen_p2_row > screen_p1_row ? 1 : -1;
-        if (abs(screen_p2_row - screen_p1_row) > screen_p2_col - screen_p1_col){
-            double depth_dif = (projected_p2.z - projected_p1.z) / abs(screen_p2_row - screen_p1_row);
-            double distance2 = vector3_length2(&projected_p1);
-            for (int row = screen_p1_row; row != screen_p2_row; row += direction){
-                int col = round((projected_p1.y +
-                                 (1 / slope * (row - unit_length_row) * unit_length_row) / unit_length_col));
-                if (row < 0 ||
-                    row >= canvas->height ||
-                    col < 0 ||
-                    col >= canvas->width) {
-                    continue;
-                }
-                int vram_index = row * canvas->width + col;
-                vram_write(canvas, vram_index, distance2);
-                distance2 += depth_dif;
-            }
-        }
-        else{
-            double depth_dif = (projected_p2.z - projected_p1.z) / (screen_p2_col - screen_p1_col);
-            double distance2 = vector3_length2(&projected_p1);
-            for (int col = screen_p1_col; col < screen_p2_col; col++){
-                int row = round(projected_p1.x +
-                                (slope * (col - screen_p1_col) * unit_length_col) / (projected_p2.x - projected_p1.x));
-                if (row < 0 ||
-                    row >= canvas->height ||
-                    col < 0 ||
-                    col >= canvas->width) {
-                    continue;
-                }
-                int vram_index = row * canvas->width + col;
-                vram_write(canvas, vram_index, distance2);
-                distance2 += depth_dif;
-            }
-        }
-    }
-    // TODO
 }
 
 void canvas_move(struct Canvas *canvas, struct Vector3* displacement){
