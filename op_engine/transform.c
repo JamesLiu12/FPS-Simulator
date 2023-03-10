@@ -1,5 +1,6 @@
 #include "transform.h"
 #include "matrix.h"
+#include <stdio.h>
 
 void init_Transform(struct Transform *transform) {
     transform->position.x = 0;

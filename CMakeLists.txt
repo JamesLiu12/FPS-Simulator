@@ -28,4 +28,4 @@ add_executable(
 
     util/util.h
     util/util.c
-        op_engine/transform.c op_engine/mesh.c)
+        op_engine/transform.c op_engine/mesh.c op_engine/line.h op_engine/plane.h op_engine/segment.h op_engine/segment.c op_engine/plane.c op_engine/line.c)

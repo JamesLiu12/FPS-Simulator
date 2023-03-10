@@ -5,6 +5,7 @@
 #include "vector.h"
 #include "math.h"
 #include "transform.h"
+#include "segment.h"
 #include "../util/util.h"
 
 struct Canvas* new_Canvas(short height, short width) {
@@ -29,11 +30,36 @@ struct Canvas* new_Canvas(short height, short width) {
     canvas->color.blue = (char)255;
 
     init_Transform(&canvas->transform);
+    init_Transform(&canvas->camera_transform);
+
+    Canvas_init_planes_view(canvas);
 
     Canvas_CalculateScreenProjection(canvas);
     Canvas_clear(canvas);
 
     return canvas;
+}
+
+void Canvas_init_planes_view(struct Canvas *canvas){
+    //The vectors representing a plane
+    struct Vector3 position, direction1, direction2;
+    Vector3_Set(&position, 0, 0, 0);
+
+    Vector3_Set(&direction1, (double)canvas->width / 2, (double)canvas->height / 2, canvas->screen_projection.scale_factor);
+    Vector3_Set(&direction2, (double)canvas->width / 2, -(double)canvas->height / 2, canvas->screen_projection.scale_factor);
+    Plane_Set(&canvas->view_planes[0], &position, &direction1, &direction2);
+
+    Vector3_Set(&direction1, (double)canvas->width / 2, -(double)canvas->height / 2, canvas->screen_projection.scale_factor);
+    Vector3_Set(&direction2, -(double)canvas->width / 2, -(double)canvas->height / 2, canvas->screen_projection.scale_factor);
+    Plane_Set(&canvas->view_planes[1], &position, &direction1, &direction2);
+
+    Vector3_Set(&direction1, -(double)canvas->width / 2, -(double)canvas->height / 2, canvas->screen_projection.scale_factor);
+    Vector3_Set(&direction2, -(double)canvas->width / 2, (double)canvas->height / 2, canvas->screen_projection.scale_factor);
+    Plane_Set(&canvas->view_planes[2], &position, &direction1, &direction2);
+
+    Vector3_Set(&direction1, -(double)canvas->width / 2, (double)canvas->height / 2, canvas->screen_projection.scale_factor);
+    Vector3_Set(&direction2, (double)canvas->width / 2, (double)canvas->height / 2, canvas->screen_projection.scale_factor);
+    Plane_Set(&canvas->view_planes[3], &position, &direction1, &direction2);
 }
 
 void del_Canvas(struct Canvas* canvas){
@@ -124,12 +150,11 @@ void Canvas_CalculateScreenProjection(struct Canvas* canvas) {
 
 void Canvas_ProjectFromWorldToCamera(struct Canvas *canvas, struct Vector3 *from, struct Vector3 *to) {
     Vector3_Copy(from, to);
-
     Vector3_Subtract(to, &canvas->camera_transform.position);
     Matrix3x3_Transform(&canvas->camera_transform.rotation_matrix, to);
 }
 
-void canvas_project_from_camera_to_screen(struct Canvas *canvas, struct Vector3 *from, struct Vector3 *to) {
+void Canvas_ProjectFromCameraToScreen(struct Canvas *canvas, struct Vector3 *from, struct Vector3 *to) {
     to->x = from->x
             * (canvas->screen_projection.scale_factor / from->z)
             + canvas->screen_projection.x_displacement;
@@ -141,10 +166,10 @@ void canvas_project_from_camera_to_screen(struct Canvas *canvas, struct Vector3 
     to->z = from->z;
 }
 
-void canvas_project_from_world_to_screen(struct Canvas *canvas, struct Vector3 *from, struct Vector3 *to) {
+void Canvas_ProjectFromWorldToScreen(struct Canvas *canvas, struct Vector3 *from, struct Vector3 *to) {
     struct Vector3 vector_tmp;
     Canvas_ProjectFromWorldToCamera(canvas, from, &vector_tmp);
-    canvas_project_from_camera_to_screen(canvas, &vector_tmp, to);
+    Canvas_ProjectFromCameraToScreen(canvas, &vector_tmp, to);
 }
 
 void vram_write(struct Canvas *canvas, int vram_index, double distance2){
@@ -160,7 +185,7 @@ void vram_write(struct Canvas *canvas, int vram_index, double distance2){
 void Canvas_DrawPoint(struct Canvas *canvas, struct Vector3 *point){
     struct Vector3 projected_p;
 
-    canvas_project_from_camera_to_screen(canvas, point, &projected_p);
+    Canvas_ProjectFromCameraToScreen(canvas, point, &projected_p);
 
     int row, column;
     row = (int)round(projected_p.y);
@@ -177,14 +202,131 @@ void Canvas_DrawPoint(struct Canvas *canvas, struct Vector3 *point){
     vram_write(canvas, vram_index, distance2);
 }
 
-void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle) {
+double Canvas_GetProjectedDepth(struct Canvas *canvas, struct Vector3 *point){
+    struct Vector3 p;
+    Vector3_Copy(point, &p);
+    int reverse = FALSE;
+    if (p.z < 0){
+        reverse = TRUE;
+        p.x = -p.x;
+        p.y = -p.y;
+        p.z = -p.z;
+    }
+    double distance_to_plane = canvas->width / 2 / tan(canvas->field_of_view / 2);
+    struct Vector3 plane_normal;
+    Vector3_Set(&plane_normal, 0, 0, 1);
+    double included_angle = Vector3_IncludedAngle(&plane_normal, &p);
+    return (sqrt(Vector3_MagnitudeSq(&p)) - distance_to_plane / cos(included_angle)) * (reverse ? -1 : 1);
+}
+
+/*
+ * A function return true <=> the camera_point could be view in the camera
+ * The camera_point is the one have been transformed already in to camera relative coordinate
+ * */
+int Canvas_PointInCamera(struct Canvas *canvas, struct Vector3 *camera_point){
+    if (camera_point->z <= 0) return FALSE;
+    struct Vector3 screen_point;
+    Canvas_ProjectFromCameraToScreen(canvas, camera_point, &screen_point);
+    return 0 <= screen_point.x && screen_point.x < canvas->width
+        && 0 <= screen_point.y && screen_point.y < canvas->height;
+}
+
+void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle){
+    struct Vector3 camera_p1, camera_p2, camera_p3;
+
+    Canvas_ProjectFromWorldToCamera(canvas, &triangle->v1, &camera_p1);
+    Canvas_ProjectFromWorldToCamera(canvas, &triangle->v2, &camera_p2);
+    Canvas_ProjectFromWorldToCamera(canvas, &triangle->v3, &camera_p3);
+
+    int number_in_view = 0;
+    struct Vector3 *points_in_view = malloc(6 * sizeof(struct Vector3));
+    double *points_depth = malloc(6 * sizeof(double));
+
+    if (Canvas_PointInCamera(canvas, &camera_p1)){
+        struct Vector3 screen_p;
+        Canvas_ProjectFromCameraToScreen(canvas, &camera_p1, &screen_p);
+        Vector3_Set(&points_in_view[number_in_view], screen_p.x, screen_p.y, screen_p.z);
+        number_in_view++;
+    }
+    if (Canvas_PointInCamera(canvas, &camera_p2)){
+        struct Vector3 screen_p;
+        Canvas_ProjectFromCameraToScreen(canvas, &camera_p2, &screen_p);
+        Vector3_Set(&points_in_view[number_in_view], screen_p.x, screen_p.y, screen_p.z);
+        number_in_view++;
+    }
+    if (Canvas_PointInCamera(canvas, &camera_p3)){
+        struct Vector3 screen_p;
+        Canvas_ProjectFromCameraToScreen(canvas, &camera_p2, &screen_p);
+        Vector3_Set(&points_in_view[number_in_view], screen_p.x, screen_p.y, screen_p.z);
+        number_in_view++;
+    }
+
+    struct Segment segment1, segment2, segment3;
+
+    Segment_Set(&segment1, &camera_p1, &camera_p2),
+    Segment_Set(&segment2, &camera_p1, &camera_p3),
+    Segment_Set(&segment3, &camera_p2, &camera_p3);
+
+    struct Line line1, line2, line3;
+    struct Vector3 vec_tmp;
+
+    Vector3_Copy(&camera_p2, &vec_tmp);
+    Vector3_Subtract(&vec_tmp, &camera_p1);
+    Line_Set(&line1, &camera_p1, &vec_tmp);
+
+    Vector3_Copy(&camera_p3, &vec_tmp);
+    Vector3_Subtract(&vec_tmp, &camera_p1);
+    Line_Set(&line2, &camera_p1, &vec_tmp);
+
+    Vector3_Copy(&camera_p3, &vec_tmp);
+    Vector3_Subtract(&vec_tmp, &camera_p2);
+    Line_Set(&line3, &camera_p2, &vec_tmp);
+
+    for (register int i = 0; i < 4; i++){
+        struct Vector3 intersection;
+
+        Plane_intersection_Line(&canvas->view_planes[i], &line1, &intersection);
+        if (Segment_is_point_inside(&segment1, &intersection) && intersection.z > 0){
+            struct Vector3 screen_p;
+            Canvas_ProjectFromCameraToScreen(canvas, &intersection, &screen_p);
+            Vector3_Set(&points_in_view[number_in_view], screen_p.x, screen_p.y, screen_p.z);
+            number_in_view++;
+        }
+
+        Plane_intersection_Line(&canvas->view_planes[i], &line2, &intersection);
+        if (Segment_is_point_inside(&segment2, &intersection) && intersection.z > 0){
+            struct Vector3 screen_p;
+            Canvas_ProjectFromCameraToScreen(canvas, &intersection, &screen_p);
+            Vector3_Set(&points_in_view[number_in_view], screen_p.x, screen_p.y, screen_p.z);
+            number_in_view++;
+        }
+
+        Plane_intersection_Line(&canvas->view_planes[i], &line3, &intersection);
+        if (Segment_is_point_inside(&segment3, &intersection) && intersection.z > 0){
+            struct Vector3 screen_p;
+            Canvas_ProjectFromCameraToScreen(canvas, &intersection, &screen_p);
+            Vector3_Set(&points_in_view[number_in_view], screen_p.x, screen_p.y, screen_p.z);
+            number_in_view++;
+        }
+    }
+    Canvas_Rasterize(canvas, points_in_view, points_depth, number_in_view);
+
+    free(points_in_view);
+    free(points_depth);
+}
+
+void Canvas_Rasterize(struct Canvas *canvas, struct Vector3* points_in_view, double* points_depth, int size){
+
+}
+
+void Canvas_DrawTriangleFront(struct Canvas *canvas, struct Triangle* triangle) {
     struct Vector3 p1, p2, p3;
     struct Vector3 *projected_low = &p1, *projected_mid = &p2, *projected_top = &p3;
     struct Vector3 *original_low = &triangle->v1, *original_mid = &triangle->v2, *original_top = &triangle->v3;
 
-    canvas_project_from_world_to_screen(canvas, &triangle->v1, &p1);
-    canvas_project_from_world_to_screen(canvas, &triangle->v2, &p2);
-    canvas_project_from_world_to_screen(canvas, &triangle->v3, &p3);
+    Canvas_ProjectFromWorldToScreen(canvas, &triangle->v1, &p1);
+    Canvas_ProjectFromWorldToScreen(canvas, &triangle->v2, &p2);
+    Canvas_ProjectFromWorldToScreen(canvas, &triangle->v3, &p3);
 
     // Order the points by their y-axes.
     if (projected_low->y > projected_mid->y) {
@@ -211,16 +353,15 @@ void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle) {
     short
         y_start = fmax((short)ceil(projected_low->y), 0),
         y_end = fmin((short)floor(projected_mid->y), canvas->height - 1);
+
     double
-        depth_low_top_step = (projected_top->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_top))
-                - (projected_low->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_low))
-                / (floor(projected_mid->y) - ceil(projected_low->y)),
-        depth_low_top_now = (projected_low->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_low))
+        depth_low_top_step = (projected_top->z - projected_low->z)
+                / fmax(1, (floor(projected_top->y) - ceil(projected_low->y))),
+        depth_low_top_now = projected_low->z
                             + depth_low_top_step * (y_start - (short)ceil(projected_low->y)),
-        depth_low_mid_step = (projected_mid->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_mid)) -
-                (projected_low->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_low))
-                / (floor(projected_mid->y) - ceil(projected_low->y)),
-        depth_low_mid_now = (projected_low->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_low))
+        depth_low_mid_step = (projected_mid->z - projected_low->z)
+                / fmax(1, (floor(projected_mid->y) - ceil(projected_low->y))),
+        depth_low_mid_now = projected_low->z
                             + depth_low_mid_step * (y_start - (short)ceil(projected_low->y));
 
     //if lower_bound > upper_bound, the direction of depth change should be reversed
@@ -276,16 +417,15 @@ void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle) {
     y_start = fmax((short)ceil(projected_mid->y), 0);
     y_end = fmin((short)floor(projected_top->y), canvas->height - 1);
 
-    depth_low_top_step = (projected_top->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_top))
-            - (projected_low->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_low))
-            / (floor(projected_mid->y) - ceil(projected_low->y));
-    depth_low_top_now = (projected_low->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_low))
+    depth_low_top_step = (projected_top->z - projected_low->z)
+            / fmax(1, (floor(projected_top->y) - ceil(projected_low->y)));
+    depth_low_top_now = projected_low->z
                         + depth_low_top_step * (y_start - (short)ceil(projected_low->y));
+
     double
-        depth_mid_top_step = (projected_top->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_top))
-                - (projected_mid->z > 0 ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_mid))
-                / (floor(projected_top->y) - ceil(projected_mid->y)),
-        depth_mid_top_now = (projected_mid->z ? 1 : -1) * sqrt(Vector3_MagnitudeSq(projected_mid))
+        depth_mid_top_step = (projected_top->z - projected_mid->z)
+                / fmax(1, (floor(projected_top->y) - ceil(projected_mid->y))),
+        depth_mid_top_now = projected_mid->z
                             + depth_mid_top_step * (y_start - (short)ceil(projected_mid->y));
 
     if (projected_low->x > projected_mid->x){

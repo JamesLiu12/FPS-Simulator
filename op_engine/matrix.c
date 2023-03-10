@@ -40,26 +40,26 @@ void Matrix3x3_Transform(struct Matrix3x3 *m, struct Vector3 *v) {
 }
 
 void Matrix3x3_FromEulerAngle(struct Matrix3x3 *m, struct Vector3 *ea, char reversed) {
-    double yaw, pinch, row;
+    double yaw, pinch, roll;
 
     if (reversed) {
         yaw = -ea->y;
         pinch = -ea->x;
-        row = -ea->z;
+        roll = -ea->z;
     } else {
         yaw = ea->y;
         pinch = ea->x;
-        row = ea->z;
+        roll = ea->z;
     }
 
-    m->data[0][0] = cos(yaw) * cos(row) + sin(yaw) * sin(pinch) * sin(row);
-    m->data[0][1] = sin(yaw) * sin(pinch) * cos(row) - cos(yaw) * sin(row);
+    m->data[0][0] = cos(yaw) * cos(roll) + sin(yaw) * sin(pinch) * sin(roll);
+    m->data[0][1] = sin(yaw) * sin(pinch) * cos(roll) - cos(yaw) * sin(roll);
     m->data[0][2] = sin(yaw) * cos(pinch);
-    m->data[1][0] = cos(pinch) * sin(row);
-    m->data[1][1] = cos(pinch) * cos(row);
+    m->data[1][0] = cos(pinch) * sin(roll);
+    m->data[1][1] = cos(pinch) * cos(roll);
     m->data[1][2] = -sin(pinch);
-    m->data[2][0] = cos(yaw) * sin(pinch) * sin(row) - sin(yaw) * cos(row);
-    m->data[2][1] = cos(yaw) * sin(pinch) * cos(row) + sin(yaw) * sin(row);
+    m->data[2][0] = cos(yaw) * sin(pinch) * sin(roll) - sin(yaw) * cos(roll);
+    m->data[2][1] = cos(yaw) * sin(pinch) * cos(roll) + sin(yaw) * sin(roll);
     m->data[2][2] = cos(yaw) * cos(pinch);
 }
 

@@ -1,6 +1,7 @@
 //#define OP_ENGINE_CHROMATIC
 #include <stdio.h>
 #include "op_engine/op_engine.h"
+#include <math.h>
 
 int main() {
     struct Canvas *canvas = new_Canvas(64, 64);
@@ -15,16 +16,17 @@ int main() {
     triangle.v1 = p1;
     triangle.v2 = p2;
     triangle.v3 = p3;
-//    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 100; i++) {
         Canvas_clear(canvas);
         Canvas_CameraRotate(canvas, &rotation);
-        Canvas_DrawTriangle(canvas, &triangle);
+        Canvas_DrawTriangleFront(canvas, &triangle);
         Canvas_flush(canvas);
-//    }
-    for (int i = 0; i < canvas->height; i++){
-        for (int j = 0; j < canvas->width; j++) printf("%f ", canvas->vram_depth[i * canvas->width + j]);
-        puts("");
+//        getchar();
     }
+//    for (int i = 0; i < canvas->height; i++){
+//        for (int j = 0; j < canvas->width; j++) printf("%f ", canvas->vram_depth[i * canvas->width + j]);
+//        puts("");
+//    }
     printf("\x1b[38;2;%d;%d;%dm", 0xee, 0xee, 0xee);
 
     del_Canvas(canvas);

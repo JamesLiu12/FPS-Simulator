@@ -1,11 +1,6 @@
 #include <stdlib.h>
 #include <memory.h>
-
-void int_swap(int *a, int *b){
-    int *tmp = a;
-    a = b;
-    b = tmp;
-}
+#include "util.h"
 
 void swap(void *a, void *b, size_t size) {
     void *temp = malloc(size);
@@ -19,3 +14,6 @@ double linear_interpolate(double from, double to, double proportion) {
     return from + proportion * (to - from);
 }
 
+double double_equal(double a, double b){
+    return (a > b ? a - b : b - a) <= epsilon;
+}

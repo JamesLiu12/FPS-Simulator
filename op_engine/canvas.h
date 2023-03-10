@@ -4,6 +4,7 @@
 #include "matrix.h"
 #include "triangle.h"
 #include "transform.h"
+#include "plane.h"
 
 struct ScreenProjection {
     double scale_factor;
@@ -20,13 +21,11 @@ struct Canvas {
 
     unsigned char *vram_red, *vram_green, *vram_blue;
     double *vram_depth;
-//    struct Vector3 transformation_position;
-//    struct Vector3 transformation_scale;
-//    struct EulerAngle transformation_rotation;
-//    struct Matrix3x3 transformation_rotation_matrix;
 
     struct Transform camera_transform;
     struct Transform transform;
+
+    struct Plane view_planes[4];
 
     struct Color color;
 
@@ -36,6 +35,11 @@ struct Canvas {
 
 //The function for construction of a new canvas
 struct Canvas* new_Canvas(short height, short width);
+
+//The function for initializing the planes of view
+void Canvas_init_planes_view(struct Canvas *canvas);
+
+void Canvas_Rasterize(struct Canvas *canvas, struct Vector3* points_in_view, double* points_depth, int size);
 
 //The function for freeing the space of a canvas
 void del_Canvas(struct Canvas* canvas);
@@ -52,6 +56,7 @@ void move_cursor_top_left();
 
 void Canvas_DrawPoint(struct Canvas *canvas, struct Vector3 *point);
 void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle);
+void Canvas_DrawTriangleFront(struct Canvas *canvas, struct Triangle* triangle);
 
 // Move the position of canvas by adding displacement
 void Canvas_Move(struct Canvas *canvas, struct Vector3* displacement);
