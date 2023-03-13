@@ -56,8 +56,24 @@ double Vector3_MagnitudeSq(struct Vector3 *v){
     return v->x * v->x + v->y * v->y + v->z * v->z;
 }
 
-double Vector3_IncludedAngle(struct Vector3 *v1, struct Vector3 *v2){
-    double angle = acos((v1->x * v2->x + v1->y * v2->y + v1->z * v2->z)
-            / sqrt(Vector3_MagnitudeSq(v1)) / sqrt(Vector3_MagnitudeSq(v2)));
-    return angle <= M_PI / 2 ? angle : M_PI - angle;
+double Vector3_CrossProduct2D(struct Vector3 *v1, struct Vector3 *v2){
+    return v1->x * v2->y - v2->x * v1->y;
+}
+
+double Vector3_DistanceSq2D(struct Vector3 *v1, struct Vector3 *v2){
+    return (v1->x - v2->x) * (v1->x - v2->x) + (v1->y - v2->y) * (v1->y - v2->y);
+}
+
+double Vector3_Distance2D(struct Vector3 *v1, struct Vector3 *v2){
+    return sqrt(Vector3_DistanceSq2D(v1, v2));
+}
+
+void Vector3_CrossProduct3D(struct Vector3 *v1, struct Vector3 *v2, struct Vector3 *result){
+    result->x = v1->y * v2->z - v1->z * v2->y;
+    result->y = -(v1->x * v2->z - v1->z * v2->x);
+    result->z = v1->x * v2->y - v1->y * v2->x;
+}
+
+double Vector3_DotProduct3D(struct Vector3 *v1, struct Vector3 *v2){
+    return v1->x * v2->x + v1->y * v2->y + v1->z * v2->z;
 }

@@ -26,6 +26,7 @@ struct Canvas {
     struct Transform transform;
 
     struct Plane view_planes[4];
+    struct Line view_rays[4];
 
     struct Color color;
 
@@ -36,10 +37,11 @@ struct Canvas {
 //The function for construction of a new canvas
 struct Canvas* new_Canvas(short height, short width);
 
-//The function for initializing the planes of view
-void Canvas_init_planes_view(struct Canvas *canvas);
+//The function for initializing the planes and rays of the view
+void Canvas_InitView(struct Canvas *canvas);
 
-void Canvas_Rasterize(struct Canvas *canvas, struct Vector3* points_in_view, double* points_depth, int size);
+//Rasterize a polygon on the screen
+void Canvas_Rasterize(struct Canvas *canvas, struct Vector3* points, int size);
 
 //The function for freeing the space of a canvas
 void del_Canvas(struct Canvas* canvas);

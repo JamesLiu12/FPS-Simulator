@@ -10,7 +10,7 @@ struct Segment{
 };
 
 //seg is the segment, p is the point, the function returns ture <=> p is a point on seg
-int Segment_is_point_inside(struct Segment *seg, struct Vector3 *p);
+int Segment_IsPointOnSegment(struct Segment *seg, struct Vector3 *p);
 void Segment_Set(struct Segment *seg, struct Vector3 *p1, struct Vector3 *p2);
 struct Segment* Segment_New(struct Vector3 *p1, struct Vector3 *p2);
 

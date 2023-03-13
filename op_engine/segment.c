@@ -2,10 +2,13 @@
 #include "stdlib.h"
 #include "../util/util.h"
 
-int Segment_is_point_inside(struct Segment *seg, struct Vector3 *p){
-    return double_equal((seg->p1.y - p->y) * (seg->p1.x - p->x), (seg->p2.y - p->y) * (seg->p2.x - p->x))
-        && double_equal((seg->p1.z - p->z) * (seg->p1.x - p->x), (seg->p2.z - p->z) * (seg->p2.x - p->x))
-        && double_equal((seg->p1.z - p->z) * (seg->p1.y - p->y), (seg->p2.z - p->z) * (seg->p2.y - p->y))
+int Segment_IsPointOnSegment(struct Segment *seg, struct Vector3 *p){
+    struct Line line;
+    struct Vector3 vec_tmp;
+    Vector3_Copy(&seg->p2, &vec_tmp);
+    Vector3_Subtract(&vec_tmp, &seg->p1);
+    Line_Set(&line, &seg->p1, &vec_tmp);
+    return Line_IsPointOnLine(&line, p)
         && (seg->p1.x <= p->x || seg->p2.x <= p->x) && (p->x <= seg->p1.x || p->x <= seg->p2.x)
         && (seg->p1.y <= p->y || seg->p2.y <= p->y) && (p->y <= seg->p1.y || p->y <= seg->p2.y)
         && (seg->p1.z <= p->z || seg->p2.z <= p->z) && (p->z <= seg->p1.z || p->z <= seg->p2.z);

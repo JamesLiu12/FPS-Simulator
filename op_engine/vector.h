@@ -18,7 +18,13 @@ void Vector3_Subtract(struct Vector3 *v1, struct Vector3 *v2);
 void Vector3_Scale(struct Vector3 *v, double factor);
 void vector3_swap(struct Vector3 *v1, struct Vector3 *v2);
 double Vector3_MagnitudeSq(struct Vector3 *v);
-double Vector3_DistanceBetweenSq(struct Vector3 *v1, struct Vector3 *v2);
+double Vector3_DistanceSq3D(struct Vector3 *v1, struct Vector3 *v2);
+double Vector3_Distance3D(struct Vector3 *v1, struct Vector3 *v2);
 double Vector3_IncludedAngle(struct Vector3 *v1, struct Vector3 *v2);
+double Vector3_CrossProduct2D(struct Vector3 *v1, struct Vector3 *v2);
+void Vector3_CrossProduct3D(struct Vector3 *v1, struct Vector3 *v2, struct Vector3 *result);
+double Vector3_DotProduct3D(struct Vector3 *v1, struct Vector3 *v2);
+double Vector3_DistanceSq2D(struct Vector3 *v1, struct Vector3 *v2);
+double Vector3_Distance2D(struct Vector3 *v1, struct Vector3 *v2);
 #define OP_VECTOR
 #endif

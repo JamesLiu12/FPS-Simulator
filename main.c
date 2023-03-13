@@ -8,9 +8,9 @@ int main() {
     struct Vector3 rotation;
     Vector3_Set(&rotation, 0.1, 0, 0);
     struct Vector3 p1, p2, p3;
-    Vector3_Set(&p1, -1, -1, 9);
-    Vector3_Set(&p2, -1, 9, 12);
-    Vector3_Set(&p3, 6, -1, 15);
+    Vector3_Set(&p1, -6, 6, 6);
+    Vector3_Set(&p2, 0, 9, -5);
+    Vector3_Set(&p3, 9, 0, -5);
 
     struct Triangle triangle;
     triangle.v1 = p1;
@@ -19,7 +19,7 @@ int main() {
     for (int i = 0; i < 100; i++) {
         Canvas_clear(canvas);
         Canvas_CameraRotate(canvas, &rotation);
-        Canvas_DrawTriangleFront(canvas, &triangle);
+        Canvas_DrawTriangle(canvas, &triangle);
         Canvas_flush(canvas);
 //        getchar();
     }

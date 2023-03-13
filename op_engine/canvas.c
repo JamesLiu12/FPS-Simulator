@@ -32,33 +32,49 @@ struct Canvas* new_Canvas(short height, short width) {
     init_Transform(&canvas->transform);
     init_Transform(&canvas->camera_transform);
 
-    Canvas_init_planes_view(canvas);
 
     Canvas_CalculateScreenProjection(canvas);
+    Canvas_InitView(canvas);
     Canvas_clear(canvas);
 
     return canvas;
 }
 
-void Canvas_init_planes_view(struct Canvas *canvas){
+void Canvas_InitView(struct Canvas *canvas){
     //The vectors representing a plane
     struct Vector3 position, direction1, direction2;
+
+    //The position vectors of rays and planes are the same
     Vector3_Set(&position, 0, 0, 0);
 
+    //Initialize the rays
     Vector3_Set(&direction1, (double)canvas->width / 2, (double)canvas->height / 2, canvas->screen_projection.scale_factor);
-    Vector3_Set(&direction2, (double)canvas->width / 2, -(double)canvas->height / 2, canvas->screen_projection.scale_factor);
-    Plane_Set(&canvas->view_planes[0], &position, &direction1, &direction2);
+    Line_Set(&canvas->view_rays[0], &position, &direction1);
 
     Vector3_Set(&direction1, (double)canvas->width / 2, -(double)canvas->height / 2, canvas->screen_projection.scale_factor);
-    Vector3_Set(&direction2, -(double)canvas->width / 2, -(double)canvas->height / 2, canvas->screen_projection.scale_factor);
-    Plane_Set(&canvas->view_planes[1], &position, &direction1, &direction2);
+    Line_Set(&canvas->view_rays[1], &position, &direction1);
 
     Vector3_Set(&direction1, -(double)canvas->width / 2, -(double)canvas->height / 2, canvas->screen_projection.scale_factor);
-    Vector3_Set(&direction2, -(double)canvas->width / 2, (double)canvas->height / 2, canvas->screen_projection.scale_factor);
-    Plane_Set(&canvas->view_planes[2], &position, &direction1, &direction2);
+    Line_Set(&canvas->view_rays[2], &position, &direction1);
 
     Vector3_Set(&direction1, -(double)canvas->width / 2, (double)canvas->height / 2, canvas->screen_projection.scale_factor);
-    Vector3_Set(&direction2, (double)canvas->width / 2, (double)canvas->height / 2, canvas->screen_projection.scale_factor);
+    Line_Set(&canvas->view_rays[3], &position, &direction1);
+
+    //Initialize the planes
+    Vector3_Copy(&canvas->view_rays[0].direction, &direction1);
+    Vector3_Copy(&canvas->view_rays[1].direction, &direction2);
+    Plane_Set(&canvas->view_planes[0], &position, &direction1, &direction2);
+
+    Vector3_Copy(&canvas->view_rays[1].direction, &direction1);
+    Vector3_Copy(&canvas->view_rays[2].direction, &direction2);
+    Plane_Set(&canvas->view_planes[1], &position, &direction1, &direction2);
+
+    Vector3_Copy(&canvas->view_rays[2].direction, &direction1);
+    Vector3_Copy(&canvas->view_rays[3].direction, &direction2);
+    Plane_Set(&canvas->view_planes[2], &position, &direction1, &direction2);
+
+    Vector3_Copy(&canvas->view_rays[3].direction, &direction1);
+    Vector3_Copy(&canvas->view_rays[0].direction, &direction2);
     Plane_Set(&canvas->view_planes[3], &position, &direction1, &direction2);
 }
 
@@ -202,65 +218,53 @@ void Canvas_DrawPoint(struct Canvas *canvas, struct Vector3 *point){
     vram_write(canvas, vram_index, distance2);
 }
 
-double Canvas_GetProjectedDepth(struct Canvas *canvas, struct Vector3 *point){
-    struct Vector3 p;
-    Vector3_Copy(point, &p);
-    int reverse = FALSE;
-    if (p.z < 0){
-        reverse = TRUE;
-        p.x = -p.x;
-        p.y = -p.y;
-        p.z = -p.z;
-    }
-    double distance_to_plane = canvas->width / 2 / tan(canvas->field_of_view / 2);
-    struct Vector3 plane_normal;
-    Vector3_Set(&plane_normal, 0, 0, 1);
-    double included_angle = Vector3_IncludedAngle(&plane_normal, &p);
-    return (sqrt(Vector3_MagnitudeSq(&p)) - distance_to_plane / cos(included_angle)) * (reverse ? -1 : 1);
-}
-
 /*
  * A function return true <=> the camera_point could be view in the camera
  * The camera_point is the one have been transformed already in to camera relative coordinate
  * */
-int Canvas_PointInCamera(struct Canvas *canvas, struct Vector3 *camera_point){
+int Canvas_IsPointInCamera(struct Canvas *canvas, struct Vector3 *camera_point){
     if (camera_point->z <= 0) return FALSE;
     struct Vector3 screen_point;
     Canvas_ProjectFromCameraToScreen(canvas, camera_point, &screen_point);
-    return 0 <= screen_point.x && screen_point.x < canvas->width
-        && 0 <= screen_point.y && screen_point.y < canvas->height;
+    return 0 <= screen_point.x + EPSILON && screen_point.x - EPSILON < canvas->width
+           && 0 <= screen_point.y + EPSILON && screen_point.y - EPSILON < canvas->height;
 }
 
 void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle){
+    //The position of the points respective to camera
     struct Vector3 camera_p1, camera_p2, camera_p3;
 
+    //Calculate the coordinates of the points taking camera as the origin
     Canvas_ProjectFromWorldToCamera(canvas, &triangle->v1, &camera_p1);
     Canvas_ProjectFromWorldToCamera(canvas, &triangle->v2, &camera_p2);
     Canvas_ProjectFromWorldToCamera(canvas, &triangle->v3, &camera_p3);
 
+
+    //At most 6 points could appear in view
     int number_in_view = 0;
     struct Vector3 *points_in_view = malloc(6 * sizeof(struct Vector3));
-    double *points_depth = malloc(6 * sizeof(double));
 
-    if (Canvas_PointInCamera(canvas, &camera_p1)){
+    //If the points are in the view, add them into the list
+    if (Canvas_IsPointInCamera(canvas, &camera_p1)){
         struct Vector3 screen_p;
         Canvas_ProjectFromCameraToScreen(canvas, &camera_p1, &screen_p);
-        Vector3_Set(&points_in_view[number_in_view], screen_p.x, screen_p.y, screen_p.z);
+        Vector3_Copy(&screen_p, &points_in_view[number_in_view]);
         number_in_view++;
     }
-    if (Canvas_PointInCamera(canvas, &camera_p2)){
+    if (Canvas_IsPointInCamera(canvas, &camera_p2)){
         struct Vector3 screen_p;
         Canvas_ProjectFromCameraToScreen(canvas, &camera_p2, &screen_p);
-        Vector3_Set(&points_in_view[number_in_view], screen_p.x, screen_p.y, screen_p.z);
+        Vector3_Copy(&screen_p, &points_in_view[number_in_view]);
         number_in_view++;
     }
-    if (Canvas_PointInCamera(canvas, &camera_p3)){
+    if (Canvas_IsPointInCamera(canvas, &camera_p3)){
         struct Vector3 screen_p;
-        Canvas_ProjectFromCameraToScreen(canvas, &camera_p2, &screen_p);
-        Vector3_Set(&points_in_view[number_in_view], screen_p.x, screen_p.y, screen_p.z);
+        Canvas_ProjectFromCameraToScreen(canvas, &camera_p3, &screen_p);
+        Vector3_Copy(&screen_p, &points_in_view[number_in_view]);
         number_in_view++;
     }
 
+    //Some points may not in view, then calculate the intersection of the sides of triangle and the view plane
     struct Segment segment1, segment2, segment3;
 
     Segment_Set(&segment1, &camera_p1, &camera_p2),
@@ -285,38 +289,112 @@ void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle){
     for (register int i = 0; i < 4; i++){
         struct Vector3 intersection;
 
-        Plane_intersection_Line(&canvas->view_planes[i], &line1, &intersection);
-        if (Segment_is_point_inside(&segment1, &intersection) && intersection.z > 0){
+        Plane_LineIntersection(&canvas->view_planes[i], &line1, &intersection);
+
+        if (Segment_IsPointOnSegment(&segment1, &intersection)
+            && Canvas_IsPointInCamera(canvas, &intersection)){
             struct Vector3 screen_p;
             Canvas_ProjectFromCameraToScreen(canvas, &intersection, &screen_p);
-            Vector3_Set(&points_in_view[number_in_view], screen_p.x, screen_p.y, screen_p.z);
+            Vector3_Copy(&screen_p, &points_in_view[number_in_view]);
             number_in_view++;
         }
 
-        Plane_intersection_Line(&canvas->view_planes[i], &line2, &intersection);
-        if (Segment_is_point_inside(&segment2, &intersection) && intersection.z > 0){
+        Plane_LineIntersection(&canvas->view_planes[i], &line2, &intersection);
+        if (Segment_IsPointOnSegment(&segment2, &intersection)
+            && Canvas_IsPointInCamera(canvas, &intersection)){
             struct Vector3 screen_p;
             Canvas_ProjectFromCameraToScreen(canvas, &intersection, &screen_p);
-            Vector3_Set(&points_in_view[number_in_view], screen_p.x, screen_p.y, screen_p.z);
+            Vector3_Copy(&screen_p, &points_in_view[number_in_view]);
             number_in_view++;
         }
 
-        Plane_intersection_Line(&canvas->view_planes[i], &line3, &intersection);
-        if (Segment_is_point_inside(&segment3, &intersection) && intersection.z > 0){
+        Plane_LineIntersection(&canvas->view_planes[i], &line3, &intersection);
+        if (Segment_IsPointOnSegment(&segment3, &intersection)
+            && Canvas_IsPointInCamera(canvas, &intersection)){
             struct Vector3 screen_p;
             Canvas_ProjectFromCameraToScreen(canvas, &intersection, &screen_p);
-            Vector3_Set(&points_in_view[number_in_view], screen_p.x, screen_p.y, screen_p.z);
+            Vector3_Copy(&screen_p, &points_in_view[number_in_view]);
             number_in_view++;
         }
     }
-    Canvas_Rasterize(canvas, points_in_view, points_depth, number_in_view);
 
+    /* Some sides may not have intersection with the plane in range, then calculate the intersection of the face of
+       triangle and the ray of the view*/
+    struct Plane plane_triangle;
+    struct Triangle triangle_camera;
+    Plane_Set(&plane_triangle, &camera_p1, &line1.direction, &line2.direction);
+    Triangle_Set(&triangle_camera, &camera_p1, &camera_p2, &camera_p3);
+    for (int i = 0; i < 4; i++){
+        struct Vector3 intersection;
+        Plane_LineIntersection(&plane_triangle, &canvas->view_rays[i], &intersection);
+        if (Triangle_IsPointInTriangle3D(&triangle_camera, &intersection) && intersection.z >= 0){
+            struct Vector3 screen_p;
+            Canvas_ProjectFromCameraToScreen(canvas, &intersection, &screen_p);
+            Vector3_Copy(&screen_p, &points_in_view[number_in_view]);
+            number_in_view++;
+        }
+    }
+
+    Canvas_Rasterize(canvas, points_in_view, number_in_view);
+
+    //Free the memory from heap
     free(points_in_view);
-    free(points_depth);
 }
 
-void Canvas_Rasterize(struct Canvas *canvas, struct Vector3* points_in_view, double* points_depth, int size){
+struct Vector3 first_point_position;
+int cmp_SortInCircle(const void *first, const void *second){
+    struct Vector3 *a = (struct Vector3 *)first, *b = (struct Vector3 *)second;
+    return atan((first_point_position.y - a->y) / (a->x - first_point_position.x))
+        < atan((first_point_position.y - b->y) / (b->x - first_point_position.x));
+}
 
+void Canvas_Rasterize(struct Canvas *canvas, struct Vector3* points, int size){
+    //no triangle needs to be rasterized
+    if (size == 0) return;
+
+    //The 3 points of triangle
+    struct Vector3 p1, p2, p3;
+    int p1_index, p2_index, p3_index;
+
+    //Move the left most point to the first
+    for (int i = 1; i < size; i++){
+        if (points[i].x < points[0].x) swap(&points[i].x, &points[0].x, sizeof(struct Vector3));
+    }
+
+    //Sort the points in the order forming a convex polygon
+    Vector3_Copy(&points[0], &first_point_position);
+    qsort(points + 1, size - 1, sizeof(struct Vector3), cmp_SortInCircle);
+
+    Vector3_Copy(&points[0], &p1);
+    Vector3_Copy(&points[1], &p2);
+    for (register int point_index = 2; point_index < size; point_index++){
+        Vector3_Copy(&points[point_index], &p3);
+        int min_x, min_y, max_x, max_y;
+        min_x = fmax(0, floor(fmin(p1.x, fmin(p2.x, p3.x))));
+        max_x = fmin(canvas->width - 1, ceil(fmax(p1.x, fmax(p2.x, p3.x))));
+        min_y = fmax(0, floor(fmin(p1.y, fmin(p2.y, p3.y))));
+        max_y = fmin(canvas->height - 1, ceil(fmax(p1.y, fmax(p2.y, p3.y))));
+        for (register int y = min_y; y <= max_y; y++){
+            for (register int x = min_x; x <= max_x; x++){
+                struct Triangle triangle_screen;
+                Triangle_Set(&triangle_screen, &p1, &p2, &p3);
+                struct Vector3 point_screen;
+                Vector3_Set(&point_screen, x + 0.5, y + 0.5, 0);
+                if (Triangle_IsPointInTriangle2D(&triangle_screen, &point_screen)){
+                    double depth =
+                            p1.z +
+                            (p2.z - p1.z) / Vector3_Distance2D(&p1, &p2)
+                            * (Vector3_Distance2D(&p1, &point_screen)) +
+                            (p3.z - p1.z) / Vector3_Distance2D(&p1, &p3)
+                            * (Vector3_Distance2D(&p1, &point_screen));
+//                    if (depth < 0) continue;
+                    vram_write(canvas, canvas->width * y + x, depth * depth);
+                }
+            }
+        }
+
+        Vector3_Copy(&p3, &p2);
+    }
 }
 
 void Canvas_DrawTriangleFront(struct Canvas *canvas, struct Triangle* triangle) {
