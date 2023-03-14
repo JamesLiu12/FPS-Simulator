@@ -10,8 +10,8 @@ struct Transform {
     struct Matrix3x3 rotation_matrix;
 };
 
-void init_Transform(struct Transform *transform);
-void Transform_rotation_matrix_update(struct Transform *transform);
+void Transform_Init(struct Transform *transform);
+void Transform_RotationMatrixUpdate(struct Transform *transform);
 
 #define OP_ENGINE_TRANSFORMATION
 #endif

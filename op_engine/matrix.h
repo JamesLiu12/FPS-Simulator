@@ -7,16 +7,19 @@ struct Matrix3x3 {
     double data[3][3];
 };
 
-struct EulerAngle {
-    double yaw, pinch, roll;
-};
-
-//The operations of matrix
+//The multiplication of two matrix
 void Matrix3x3_Multiply(struct Matrix3x3 *m1, struct Matrix3x3 *m2);
+
+//Apply a transformation m to v
 void Matrix3x3_Transform(struct Matrix3x3 *m, struct Vector3 *v);
 
 #define EULER_ANGLE_REVERSED 1
 #define EULER_ANGLE_NORMAL 0
+
+/*
+ * Transform the euler angle ea in to the matrix form m
+ * if reversed is true, then result is the inverse matrix
+ */
 void Matrix3x3_FromEulerAngle(struct Matrix3x3 *m, struct Vector3 *ea, char reversed);
 
 #define OP_MATRIX

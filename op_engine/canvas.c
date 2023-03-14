@@ -29,8 +29,8 @@ struct Canvas* new_Canvas(short height, short width) {
     canvas->color.green = (char)255;
     canvas->color.blue = (char)255;
 
-    init_Transform(&canvas->transform);
-    init_Transform(&canvas->camera_transform);
+    Transform_Init(&canvas->transform);
+    Transform_Init(&canvas->camera_transform);
 
 
     Canvas_CalculateScreenProjection(canvas);
@@ -381,13 +381,14 @@ void Canvas_Rasterize(struct Canvas *canvas, struct Vector3* points, int size){
                 struct Vector3 point_screen;
                 Vector3_Set(&point_screen, x + 0.5, y + 0.5, 0);
                 if (Triangle_IsPointInTriangle2D(&triangle_screen, &point_screen)){
-                    double depth =
-                            p1.z +
-                            (p2.z - p1.z) / Vector3_Distance2D(&p1, &p2)
-                            * (Vector3_Distance2D(&p1, &point_screen)) +
-                            (p3.z - p1.z) / Vector3_Distance2D(&p1, &p3)
-                            * (Vector3_Distance2D(&p1, &point_screen));
-//                    if (depth < 0) continue;
+//                    double depth =
+//                            p1.z +
+//                            (p2.z - p1.z) / Vector3_Distance2D(&p1, &p2)
+//                            * (Vector3_Distance2D(&p1, &point_screen)) +
+//                            (p3.z - p1.z) / Vector3_Distance2D(&p1, &p3)
+//                            * (Vector3_Distance2D(&p1, &point_screen));
+                    double depth = Triangle_PerspectiveCorrectInterpolation(&triangle_screen, &point_screen);
+                    if (depth < 0) continue;
                     vram_write(canvas, canvas->width * y + x, depth * depth);
                 }
             }
@@ -559,7 +560,7 @@ void Canvas_Rotation(struct Canvas *canvas, struct Vector3* rotation){
     canvas->transform.rotation.y += rotation->y;
     canvas->transform.rotation.z += rotation->z;
 
-    Transform_rotation_matrix_update(&canvas->transform);
+    Transform_RotationMatrixUpdate(&canvas->transform);
 }
 
 void Canvas_Stretch(struct Canvas *canvas, struct Vector3* scale){

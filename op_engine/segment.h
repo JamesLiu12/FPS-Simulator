@@ -9,9 +9,13 @@ struct Segment{
     struct Vector3 p1, p2;
 };
 
-//seg is the segment, p is the point, the function returns ture <=> p is a point on seg
-int Segment_IsPointOnSegment(struct Segment *seg, struct Vector3 *p);
+//Returns ture <=> point is on segment
+int Segment_IsPointOnSegment(struct Segment *segment, struct Vector3 *point);
+
+//The setter of segment
 void Segment_Set(struct Segment *seg, struct Vector3 *p1, struct Vector3 *p2);
+
+//The newer of segment
 struct Segment* Segment_New(struct Vector3 *p1, struct Vector3 *p2);
 
 #endif //FPS_SIMULATOR_SEGMENT_H

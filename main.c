@@ -8,9 +8,9 @@ int main() {
     struct Vector3 rotation;
     Vector3_Set(&rotation, 0.1, 0, 0);
     struct Vector3 p1, p2, p3;
-    Vector3_Set(&p1, -6, 6, 6);
-    Vector3_Set(&p2, 0, 9, -5);
-    Vector3_Set(&p3, 9, 0, -5);
+    Vector3_Set(&p1, 0, 6, 6);
+    Vector3_Set(&p2, 0, -9, 5);
+    Vector3_Set(&p3, 9, 0, 5);
 
     struct Triangle triangle;
     triangle.v1 = p1;

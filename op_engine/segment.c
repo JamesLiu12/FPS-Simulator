@@ -2,25 +2,28 @@
 #include "stdlib.h"
 #include "../util/util.h"
 
-int Segment_IsPointOnSegment(struct Segment *seg, struct Vector3 *p){
+int Segment_IsPointOnSegment(struct Segment *segment, struct Vector3 *point){
     struct Line line;
     struct Vector3 vec_tmp;
-    Vector3_Copy(&seg->p2, &vec_tmp);
-    Vector3_Subtract(&vec_tmp, &seg->p1);
-    Line_Set(&line, &seg->p1, &vec_tmp);
-    return Line_IsPointOnLine(&line, p)
-        && (seg->p1.x <= p->x || seg->p2.x <= p->x) && (p->x <= seg->p1.x || p->x <= seg->p2.x)
-        && (seg->p1.y <= p->y || seg->p2.y <= p->y) && (p->y <= seg->p1.y || p->y <= seg->p2.y)
-        && (seg->p1.z <= p->z || seg->p2.z <= p->z) && (p->z <= seg->p1.z || p->z <= seg->p2.z);
+
+    //Calculate the line which the segment is on
+    Vector3_Copy(&segment->p2, &vec_tmp);
+    Vector3_Subtract(&vec_tmp, &segment->p1);
+    Line_Set(&line, &segment->p1, &vec_tmp);
+
+    //Ture if the point is on the line, and all the directions are in the range
+    return Line_IsPointOnLine(&line, point)
+           && (segment->p1.x <= point->x || segment->p2.x <= point->x)
+           && (point->x <= segment->p1.x || point->x <= segment->p2.x)
+           && (segment->p1.y <= point->y || segment->p2.y <= point->y)
+           && (point->y <= segment->p1.y || point->y <= segment->p2.y)
+           && (segment->p1.z <= point->z || segment->p2.z <= point->z)
+           && (point->z <= segment->p1.z || point->z <= segment->p2.z);
 }
 
 void Segment_Set(struct Segment *seg, struct Vector3 *p1, struct Vector3 *p2){
-    seg->p1.x = p1->x;
-    seg->p1.y = p1->y;
-    seg->p1.z = p1->z;
-    seg->p2.x = p2->x;
-    seg->p2.y = p2->y;
-    seg->p2.z = p2->z;
+    Vector3_Copy(p1, &seg->p1);
+    Vector3_Copy(p2, &seg->p2);
 }
 
 struct Segment* Segment_New(struct Vector3 *p1, struct Vector3 *p2){

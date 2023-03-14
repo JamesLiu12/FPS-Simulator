@@ -2,7 +2,7 @@
 #include "matrix.h"
 #include <stdio.h>
 
-void init_Transform(struct Transform *transform) {
+void Transform_Init(struct Transform *transform) {
     transform->position.x = 0;
     transform->position.y = 0;
     transform->position.z = 0;
@@ -19,7 +19,7 @@ void init_Transform(struct Transform *transform) {
             &transform->rotation_matrix, &transform->rotation, EULER_ANGLE_NORMAL);
 }
 
-void Transform_rotation_matrix_update(struct Transform *transform) {
+void Transform_RotationMatrixUpdate(struct Transform *transform) {
     Matrix3x3_FromEulerAngle(
             &transform->rotation_matrix, &transform->rotation, EULER_ANGLE_NORMAL);
 }

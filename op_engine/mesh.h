@@ -20,5 +20,8 @@ struct Mesh {
 struct Mesh *new_Mesh(unsigned int triangle_count, unsigned int vertex_count);
 void del_Mesh(struct Mesh *model);
 
+void ModelCube_Init(struct Mesh *cube);
+struct Mesh* ModelCube_New();
+
 #define OP_MODEL
 #endif

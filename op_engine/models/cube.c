@@ -1,9 +1,7 @@
 #include "../mesh.h"
 
 
-struct Mesh *new_model_cube() {
-    struct Mesh *cube = new_Mesh(12, 8);
-
+void ModelCube_Init(struct Mesh *cube) {
     Face_Set(&cube->triangles[0], 0, 1, 5);
     Face_Set(&cube->triangles[1], 0, 2, 1);
     Face_Set(&cube->triangles[2], 0, 3, 2);
@@ -25,6 +23,10 @@ struct Mesh *new_model_cube() {
     Vector3_Set(&cube->vertices[5], .5, .5, -.5);
     Vector3_Set(&cube->vertices[6], .5, .5, .5);
     Vector3_Set(&cube->vertices[7], -.5, .5, .5);
+}
 
+struct Mesh* ModelCube_New() {
+    struct Mesh *cube = new_Mesh(12, 8);
+    ModelCube_Init(cube);
     return cube;
 }
