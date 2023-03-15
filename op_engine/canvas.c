@@ -89,7 +89,7 @@ void del_Canvas(struct Canvas* canvas){
 void Canvas_flush(struct Canvas* canvas){
     move_cursor_top_left();
 
-    register int height, width, vram_index;
+    int height, width, vram_index;
     int brightness;
 
     for (height = 0; height < canvas->height; height++) {
@@ -286,7 +286,7 @@ void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle){
     Vector3_Subtract(&vec_tmp, &camera_p2);
     Line_Set(&line3, &camera_p2, &vec_tmp);
 
-    for (register int i = 0; i < 4; i++){
+    for (int i = 0; i < 4; i++){
         struct Vector3 intersection;
 
         Plane_LineIntersection(&canvas->view_planes[i], &line1, &intersection);
@@ -367,26 +367,20 @@ void Canvas_Rasterize(struct Canvas *canvas, struct Vector3* points, int size){
 
     Vector3_Copy(&points[0], &p1);
     Vector3_Copy(&points[1], &p2);
-    for (register int point_index = 2; point_index < size; point_index++){
+    for (int point_index = 2; point_index < size; point_index++){
         Vector3_Copy(&points[point_index], &p3);
         int min_x, min_y, max_x, max_y;
         min_x = fmax(0, floor(fmin(p1.x, fmin(p2.x, p3.x))));
         max_x = fmin(canvas->width - 1, ceil(fmax(p1.x, fmax(p2.x, p3.x))));
         min_y = fmax(0, floor(fmin(p1.y, fmin(p2.y, p3.y))));
         max_y = fmin(canvas->height - 1, ceil(fmax(p1.y, fmax(p2.y, p3.y))));
-        for (register int y = min_y; y <= max_y; y++){
-            for (register int x = min_x; x <= max_x; x++){
+        for (int y = min_y; y <= max_y; y++){
+            for (int x = min_x; x <= max_x; x++){
                 struct Triangle triangle_screen;
                 Triangle_Set(&triangle_screen, &p1, &p2, &p3);
                 struct Vector3 point_screen;
                 Vector3_Set(&point_screen, x + 0.5, y + 0.5, 0);
                 if (Triangle_IsPointInTriangle2D(&triangle_screen, &point_screen)){
-//                    double depth =
-//                            p1.z +
-//                            (p2.z - p1.z) / Vector3_Distance2D(&p1, &p2)
-//                            * (Vector3_Distance2D(&p1, &point_screen)) +
-//                            (p3.z - p1.z) / Vector3_Distance2D(&p1, &p3)
-//                            * (Vector3_Distance2D(&p1, &point_screen));
                     double depth = Triangle_PerspectiveCorrectInterpolation(&triangle_screen, &point_screen);
                     if (depth < 0) continue;
                     vram_write(canvas, canvas->width * y + x, depth * depth);
@@ -395,159 +389,6 @@ void Canvas_Rasterize(struct Canvas *canvas, struct Vector3* points, int size){
         }
 
         Vector3_Copy(&p3, &p2);
-    }
-}
-
-void Canvas_DrawTriangleFront(struct Canvas *canvas, struct Triangle* triangle) {
-    struct Vector3 p1, p2, p3;
-    struct Vector3 *projected_low = &p1, *projected_mid = &p2, *projected_top = &p3;
-    struct Vector3 *original_low = &triangle->v1, *original_mid = &triangle->v2, *original_top = &triangle->v3;
-
-    Canvas_ProjectFromWorldToScreen(canvas, &triangle->v1, &p1);
-    Canvas_ProjectFromWorldToScreen(canvas, &triangle->v2, &p2);
-    Canvas_ProjectFromWorldToScreen(canvas, &triangle->v3, &p3);
-
-    // Order the points by their y-axes.
-    if (projected_low->y > projected_mid->y) {
-        swap(projected_low, projected_mid, sizeof(struct Vector3));
-        swap(original_low, original_mid, sizeof(struct Vector3));
-    }
-    if (projected_mid->y > projected_top->y) {
-        swap(projected_mid, projected_top, sizeof(struct Vector3));
-        swap(original_mid, original_top, sizeof(struct Vector3));
-    }
-    if (projected_low->y > projected_mid->y) {
-        swap(projected_low, projected_mid, sizeof(struct Vector3));
-        swap(original_low, original_mid, sizeof(struct Vector3));
-    }
-
-    // Rasterise the triangle with many horizontal lines
-    register short x_lower, x_upper, x, y;
-
-    if (projected_top->y - projected_low->y == 0) {
-        return;
-    }
-
-    // Lower part
-    short
-        y_start = fmax((short)ceil(projected_low->y), 0),
-        y_end = fmin((short)floor(projected_mid->y), canvas->height - 1);
-
-    double
-        depth_low_top_step = (projected_top->z - projected_low->z)
-                / fmax(1, (floor(projected_top->y) - ceil(projected_low->y))),
-        depth_low_top_now = projected_low->z
-                            + depth_low_top_step * (y_start - (short)ceil(projected_low->y)),
-        depth_low_mid_step = (projected_mid->z - projected_low->z)
-                / fmax(1, (floor(projected_mid->y) - ceil(projected_low->y))),
-        depth_low_mid_now = projected_low->z
-                            + depth_low_mid_step * (y_start - (short)ceil(projected_low->y));
-
-    //if lower_bound > upper_bound, the direction of depth change should be reversed
-    if (projected_low->x > projected_mid->x){
-        double tmp = depth_low_mid_step;
-        depth_low_mid_step = depth_low_top_step;
-        depth_low_top_step = tmp;
-        tmp = depth_low_mid_now;
-        depth_low_mid_now = depth_low_top_now;
-        depth_low_top_now = tmp;
-    }
-
-    for (y = y_start; y <= y_end; y++,
-            depth_low_mid_now += depth_low_mid_step,
-            depth_low_top_now += depth_low_top_step) {
-        // Calculate the lower and upper bound of this horizontal line
-        x_lower = (short)round(linear_interpolate(
-                projected_low->x,
-                projected_top->x,
-                (y - projected_low->y) / (projected_top->y - projected_low->y)));
-        if (projected_mid->y - projected_low->y == 0) {
-            break;
-        }
-        x_upper = (short)round(linear_interpolate(
-                projected_low->x,
-                projected_mid->x,
-                (y - projected_low->y) / (projected_mid->y - projected_low->y)));
-
-        // If the middle point is to the left, swap the upper and the lower bound
-        if (x_lower > x_upper) {
-            register short tmp;
-            tmp = x_lower;
-            x_lower = x_upper;
-            x_upper = tmp;
-        }
-
-        // Skip the points out of the bound
-        int x_start = fmax(x_lower, 0), x_end = fmin(x_upper, canvas->width - 1);
-
-        //The depth of each pixel
-        double
-            //x_upper-x_lower may be zero
-            depth_step = (depth_low_mid_now - depth_low_top_now) / fmax(1, (x_upper - x_lower)),
-            depth_now = depth_low_top_now + depth_step * (x_start - x_lower);
-
-        for (x = x_start; x <= x_end; x++, depth_now += depth_step) {
-            if (depth_now < 0) continue;
-            vram_write(canvas, canvas->width * y + x, depth_now * depth_now);
-        }
-    }
-
-    // Upper part (slightly the same as above)
-    y_start = fmax((short)ceil(projected_mid->y), 0);
-    y_end = fmin((short)floor(projected_top->y), canvas->height - 1);
-
-    depth_low_top_step = (projected_top->z - projected_low->z)
-            / fmax(1, (floor(projected_top->y) - ceil(projected_low->y)));
-    depth_low_top_now = projected_low->z
-                        + depth_low_top_step * (y_start - (short)ceil(projected_low->y));
-
-    double
-        depth_mid_top_step = (projected_top->z - projected_mid->z)
-                / fmax(1, (floor(projected_top->y) - ceil(projected_mid->y))),
-        depth_mid_top_now = projected_mid->z
-                            + depth_mid_top_step * (y_start - (short)ceil(projected_mid->y));
-
-    if (projected_low->x > projected_mid->x){
-        double tmp = depth_low_top_step;
-        depth_low_top_step = depth_mid_top_step;
-        depth_mid_top_step = tmp;
-        tmp = depth_low_top_now;
-        depth_low_top_now = depth_mid_top_now;
-        depth_mid_top_now = tmp;
-    }
-
-    for (y = y_start; y <= y_end; y++,
-            depth_low_top_now += depth_low_top_step,
-            depth_mid_top_now += depth_mid_top_step) {
-
-        x_lower = (short)round(linear_interpolate(
-                projected_low->x,
-                projected_top->x,
-                (y - projected_low->y) / (projected_top->y - projected_low->y)));
-        if (projected_top->y - projected_mid->y == 0) {
-            break;
-        }
-        x_upper = (short)round(linear_interpolate( // Only here is different
-                projected_mid->x,
-                projected_top->x,
-                (y - projected_mid->y) / (projected_top->y - projected_mid->y)));
-
-        if (x_lower > x_upper) {
-            register short tmp;
-            tmp = x_lower;
-            x_lower = x_upper;
-            x_upper = tmp;
-        }
-
-        int x_start = fmax(x_lower, 0), x_end = fmin(x_upper, canvas->width - 1);
-        double
-                depth_step = (depth_mid_top_now - depth_low_top_now) / fmax(1, (x_upper - x_lower)),
-                depth_now = depth_low_top_now + depth_step * (x_start - x_lower);
-
-        for (x = x_start; x <= x_end; x++, depth_now += depth_step) {
-            if (depth_now < 0) continue;
-            vram_write(canvas, canvas->width * y + x, depth_now * depth_now);
-        }
     }
 }
 

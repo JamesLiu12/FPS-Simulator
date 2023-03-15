@@ -58,7 +58,6 @@ void move_cursor_top_left();
 
 void Canvas_DrawPoint(struct Canvas *canvas, struct Vector3 *point);
 void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle);
-void Canvas_DrawTriangleFront(struct Canvas *canvas, struct Triangle* triangle);
 
 // Move the position of canvas by adding displacement
 void Canvas_Move(struct Canvas *canvas, struct Vector3* displacement);

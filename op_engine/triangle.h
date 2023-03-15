@@ -10,6 +10,9 @@ struct Triangle {
 //The setter of Triangle
 void Triangle_Set(struct Triangle *triangle, struct Vector3 *p1, struct Vector3 *p2, struct Vector3 *p3);
 
+//Copy the value of "from" to "to"
+void Triangle_Copy(struct Triangle *from, struct Triangle *to);
+
 //Return true <=> the point is inside the triangle, but only considering x-axis and y-axis
 int Triangle_IsPointInTriangle2D(struct Triangle *triangle, struct Vector3 *point);
 

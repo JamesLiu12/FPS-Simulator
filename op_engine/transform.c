@@ -23,4 +23,3 @@ void Transform_RotationMatrixUpdate(struct Transform *transform) {
     Matrix3x3_FromEulerAngle(
             &transform->rotation_matrix, &transform->rotation, EULER_ANGLE_NORMAL);
 }
-

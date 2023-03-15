@@ -23,3 +23,7 @@ void del_Mesh(struct Mesh *model) {
     free(model->vertices);
     free(model);
 }
+
+void Mesh_Copy(struct Mesh *from, struct Mesh *to){
+    //TODO
+}

@@ -24,11 +24,11 @@ int double_IsZero(double a){
 }
 
 void Gaussian_Elimination(double **a, int number_row, int number_col){
-    for (register int i = 0, j = 0; i < number_row && j < number_col;){
+    for (int i = 0, j = 0; i < number_row && j < number_col;){
 
-        for (register int k = i; k < number_row; k++){
+        for (int k = i; k < number_row; k++){
             if (!double_IsZero(a[k][j])){
-                for (register int l = j; l < number_col; l++){
+                for (int l = j; l < number_col; l++){
                     swap(&a[k][l], &a[i][l], sizeof(double));
                 }
                 break;
@@ -41,12 +41,12 @@ void Gaussian_Elimination(double **a, int number_row, int number_col){
         }
 
         double tmp = a[i][j];
-        for (register int l = j; l < number_col; l++) a[i][l] /= tmp;
+        for (int l = j; l < number_col; l++) a[i][l] /= tmp;
 
-        for (register int k = 0; k < number_row; k++) {
+        for (int k = 0; k < number_row; k++) {
             if (k != i && !double_IsZero(a[k][j])){
                 tmp = a[k][j];
-                for (register int l = j; l < number_col; l++){
+                for (int l = j; l < number_col; l++){
                     a[k][l] -= a[i][l] * tmp;
                 }
             }

@@ -6,7 +6,7 @@ void Plane_LineIntersection(struct Plane *plane, struct Line *line, struct Vecto
 
     //The calculation of the intersection is basically solving a group of functions, using gaussian elimination
     double **gaussian_form = malloc(3 * sizeof(double*));
-    for (register int i = 0; i < 3; i++) gaussian_form[i] = malloc(4 * sizeof(double));
+    for (int i = 0; i < 3; i++) gaussian_form[i] = malloc(4 * sizeof(double));
 
         gaussian_form[0][0] = -line->direction.x,
         gaussian_form[0][1] = plane->direction1.x,
@@ -28,7 +28,7 @@ void Plane_LineIntersection(struct Plane *plane, struct Line *line, struct Vecto
     result->y = line->position.y + gaussian_form[0][3] * line->direction.y;
     result->z = line->position.z + gaussian_form[0][3] * line->direction.z;
 
-    for (register int i = 0; i < 3; i++) free(gaussian_form[i]);
+    for (int i = 0; i < 3; i++) free(gaussian_form[i]);
     free(gaussian_form);
 }
 

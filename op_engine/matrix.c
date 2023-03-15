@@ -4,7 +4,7 @@
 
 void Matrix3x3_Multiply(struct Matrix3x3 *m1, struct Matrix3x3 *m2){
     double results[3] = {0, 0, 0};
-    register int row, col, pt;
+    int row, col, pt;
 
     for (row = 0; row < 3; row++){
         for (col = 0; col < 3; col++){
@@ -20,7 +20,7 @@ void Matrix3x3_Multiply(struct Matrix3x3 *m1, struct Matrix3x3 *m2){
 
 void Matrix3x3_Transform(struct Matrix3x3 *m, struct Vector3 *v) {
     double result_x = 0, result_y = 0, result_z = 0;
-    register int col;
+    int col;
 
     result_x += m->data[0][0] * v->x;
     result_y += m->data[1][0] * v->x;

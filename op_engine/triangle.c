@@ -8,6 +8,10 @@ void Triangle_Set(struct Triangle *triangle, struct Vector3 *p1, struct Vector3 
     Vector3_Copy(p3, &triangle->v3);
 }
 
+void Triangle_Copy(struct Triangle *from, struct Triangle *to){
+    Triangle_Set(to, &from->v1, &from->v2, &from->v3);
+}
+
 int Triangle_IsPointInTriangle2D(struct Triangle *triangle, struct Vector3 *point){
     //The point is inside the triangle if for each side of triangle, the point is on the same side of another vertex
     double result1, result2, result3;
