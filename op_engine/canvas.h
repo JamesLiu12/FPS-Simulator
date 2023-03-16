@@ -32,6 +32,7 @@ struct Canvas {
 
     double field_of_view;
     struct ScreenProjection screen_projection;
+    double render_length;
 };
 
 //The function for construction of a new canvas

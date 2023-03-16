@@ -3,7 +3,7 @@
 #include <memory.h>
 #include "canvas.h"
 #include "vector.h"
-#include "math.h"
+#include <math.h>
 #include "transform.h"
 #include "segment.h"
 #include "../util/util.h"
