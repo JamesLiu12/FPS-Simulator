@@ -15,7 +15,7 @@ double linear_interpolate(double from, double to, double proportion) {
     return from + proportion * (to - from);
 }
 
-int double_equal(double a, double b){
+int double_Equal(double a, double b){
     return (a > b ? a - b : b - a) <= EPSILON;
 }
 

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdlib.h>
 #include "math.h"
+#include "../util/util.h"
 
 void Vector3_Copy(struct Vector3 *from, struct Vector3 *to) {
     to->x = from->x;
@@ -63,4 +64,18 @@ void Vector3_CrossProduct3D(struct Vector3 *v1, struct Vector3 *v2, struct Vecto
 
 double Vector3_DotProduct3D(struct Vector3 *v1, struct Vector3 *v2){
     return v1->x * v2->x + v1->y * v2->y + v1->z * v2->z;
+}
+
+double Vector3_DistanceSq3D(struct Vector3 *v1, struct Vector3 *v2){
+    return (v1->x - v2->x) * (v1->x - v2->x) + (v1->y - v2->y) * (v1->y - v2->y) + (v1->z - v2->z) * (v1->z - v2->z);
+}
+
+double Vector3_Distance3D(struct Vector3 *v1, struct Vector3 *v2){
+    return sqrt(Vector3_DistanceSq3D(v1, v2));
+}
+
+int Vector3_Equal(struct Vector3 *v1, struct Vector3 *v2){
+    return double_Equal(v1->x, v2->x)
+           && double_Equal(v1->y, v2->y)
+           && double_Equal(v1->z, v2->z);
 }

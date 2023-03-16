@@ -7,19 +7,21 @@ int main() {
     struct Canvas *canvas = new_Canvas(64, 64);
     struct Vector3 rotation;
     Vector3_Set(&rotation, 0.1, 0, 0);
-    struct Vector3 p1, p2, p3;
-    Vector3_Set(&p1, 0, 6, 6);
-    Vector3_Set(&p2, 0, -9, 5);
-    Vector3_Set(&p3, 9, 0, 5);
 
-    struct Triangle triangle;
-    triangle.v1 = p1;
-    triangle.v2 = p2;
-    triangle.v3 = p3;
+    struct Mesh *mesh = ModelCube_New();
+    struct Object *obj1 = Object_New(mesh, FLOOR), *obj2 = Object_New(mesh, WALL);
+    Vector3_Set(&obj1->transform.position, 0, 0, 5);
+    Vector3_Set(&obj2->transform.position, 3, 3, 8);
+    struct Vector3 rot;
+    Vector3_Set(&rot, -1, 0, 0);
+    Canvas_CameraRotate(canvas, &rot);
+
+
     for (int i = 0; i < 100; i++) {
         Canvas_clear(canvas);
+        Object_Show(obj1, canvas);
+        Object_Show(obj2, canvas);
         Canvas_CameraRotate(canvas, &rotation);
-        Canvas_DrawTriangle(canvas, &triangle);
         Canvas_flush(canvas);
 //        getchar();
     }
@@ -28,7 +30,7 @@ int main() {
 //        puts("");
 //    }
     printf("\x1b[38;2;%d;%d;%dm", 0xee, 0xee, 0xee);
-
+    printf("\x1b[48;2;%d;%d;%dm", 0, 0, 0);
     del_Canvas(canvas);
     return 0;
 }

@@ -5,6 +5,7 @@
 #include "triangle.h"
 #include "transform.h"
 #include "plane.h"
+#include "tag.h"
 
 struct ScreenProjection {
     double scale_factor;
@@ -21,6 +22,7 @@ struct Canvas {
 
     unsigned char *vram_red, *vram_green, *vram_blue;
     double *vram_depth;
+    enum Tag *vram_tag;
 
     struct Transform camera_transform;
     struct Transform transform;
@@ -32,7 +34,7 @@ struct Canvas {
 
     double field_of_view;
     struct ScreenProjection screen_projection;
-    double render_length;
+    double render_distance;
 };
 
 //The function for construction of a new canvas
@@ -42,7 +44,7 @@ struct Canvas* new_Canvas(short height, short width);
 void Canvas_InitView(struct Canvas *canvas);
 
 //Rasterize a polygon on the screen
-void Canvas_Rasterize(struct Canvas *canvas, struct Vector3* points, int size);
+void Canvas_Rasterize(struct Canvas *canvas, struct Vector3* points, int size, enum Tag tag);
 
 //The function for freeing the space of a canvas
 void del_Canvas(struct Canvas* canvas);
@@ -57,8 +59,8 @@ void terminal_clear();
 // Move the cursor to the top-left corner
 void move_cursor_top_left();
 
-void Canvas_DrawPoint(struct Canvas *canvas, struct Vector3 *point);
-void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle);
+void Canvas_DrawPoint(struct Canvas *canvas, struct Vector3 *point, enum Tag tag);
+void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle, enum Tag tag);
 
 // Move the position of canvas by adding displacement
 void Canvas_Move(struct Canvas *canvas, struct Vector3* displacement);

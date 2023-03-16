@@ -6,6 +6,7 @@
 #include "transform.h"
 #include "canvas.h"
 #include "tag.h"
+#include "collide_box.h"
 
 struct Object{
     struct Mesh *mesh;
@@ -13,8 +14,8 @@ struct Object{
     enum Tag tag;
 };
 
-void Object_Set(struct Object *object, struct Mesh *mesh, struct Transform *transform);
-struct Object* Object_New(struct Mesh*);
+void Object_Set(struct Object *object, struct Mesh *mesh, struct Transform *transform, enum Tag tag);
+struct Object* Object_New(struct Mesh*, enum Tag tag);
 void Object_Show(struct Object *object, struct Canvas *canvas);
 void Object_Rotation(struct Object *object, struct Vector3* rotation);
 

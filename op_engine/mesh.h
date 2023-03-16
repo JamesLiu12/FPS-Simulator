@@ -20,6 +20,8 @@ struct Mesh {
     struct Vector3 *vertices;
 };
 
+void Mesh_Set(unsigned int triangle_count, unsigned int vertex_count);
+
 //The newer of mesh
 struct Mesh *new_Mesh(unsigned int triangle_count, unsigned int vertex_count);
 

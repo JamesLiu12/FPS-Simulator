@@ -2,7 +2,7 @@
 
 void swap(void *a, void *b, size_t size);
 double linear_interpolate(double from, double to, double proportion);
-int double_equal(double a, double b);
+int double_Equal(double a, double b);
 int double_IsZero(double a);
 
 /*

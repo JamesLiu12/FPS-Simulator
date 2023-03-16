@@ -17,13 +17,15 @@ struct Canvas* new_Canvas(short height, short width) {
 
     // Using a 1D array instead of 2D to reduce indexing times.
 
-    int vram_size = height * width * (int)sizeof(unsigned char);
-    int depth_size = height * width * (int)sizeof(double);
+    unsigned int vram_size = height * width * sizeof(unsigned char);
+    unsigned int depth_size = height * width * sizeof(double);
+    unsigned int tag_size = height * width * sizeof(enum Tag);
 
-    canvas->vram_red = malloc(vram_size);
-    canvas->vram_green = malloc(vram_size);
-    canvas->vram_blue = malloc(vram_size);
-    canvas->vram_depth = malloc(depth_size);
+    canvas->vram_red = (unsigned char*)malloc(vram_size);
+    canvas->vram_green = (unsigned char*)malloc(vram_size);
+    canvas->vram_blue = (unsigned char*)malloc(vram_size);
+    canvas->vram_depth = (double*)malloc(depth_size);
+    canvas->vram_tag = (enum Tag*)malloc(tag_size);
 
     canvas->color.red = (char)255;
     canvas->color.green = (char)255;
@@ -35,6 +37,7 @@ struct Canvas* new_Canvas(short height, short width) {
 
     Canvas_CalculateScreenProjection(canvas);
     Canvas_InitView(canvas);
+    canvas->render_distance = 100;
     Canvas_clear(canvas);
 
     return canvas;
@@ -86,6 +89,16 @@ void del_Canvas(struct Canvas* canvas){
     free(canvas);
 }
 
+int get_brightness(double depth){
+    return (int)fmax(255 - 20 * depth, 10);
+}
+
+void print_pixel(enum Tag tag, int brightness){
+    if (tag == EMPTY) printf("  ");
+    else if (tag == WALL) printf("\x1b[38;2;%d;%d;%dm██", brightness, brightness, brightness);
+    else if (tag == FLOOR) printf("\x1b[38;2;%d;%d;%dm░░", brightness, brightness, brightness);
+}
+
 void Canvas_flush(struct Canvas* canvas){
     move_cursor_top_left();
 
@@ -116,34 +129,36 @@ void Canvas_flush(struct Canvas* canvas){
 //#endif
 
 //#ifndef OP_ENGINE_CHROMATIC
-            if (canvas->vram_red[vram_index] == 255) {
-                // Blocks of different brightness ░▒▓█ ▖ ▗ ▘ ▙ ▚ ▛ ▜ ▝ ▞ ▟
-                //faster version of printf("██");
-                putchar(0xe2);
-                putchar(0x96);
-                putchar(0x88);
-                putchar(0xe2);
-                putchar(0x96);
-                putchar(0x88);
-            } else {
-                putchar(' ');
-                putchar(' ');
-            }
+//            if (canvas->vram_tag[vram_index] != EMPTY) {
+//                // Blocks of different brightness ░▒▓█ ▖ ▗ ▘ ▙ ▚ ▛ ▜ ▝ ▞ ▟
+//                //faster version of printf("██");
+//                putchar(0xe2);
+//                putchar(0x96);
+//                putchar(0x88);
+//                putchar(0xe2);
+//                putchar(0x96);
+//                putchar(0x88);
+//            } else {
+//                putchar(' ');
+//                putchar(' ');
+//            }
 //#endif
+            print_pixel(canvas->vram_tag[vram_index], get_brightness(canvas->vram_depth[vram_index]));
         }
         putchar('\n');
     }
 }
 
 void Canvas_clear(struct Canvas* canvas){
-    int vram_size = canvas->height * canvas->width * sizeof(unsigned char);
-    int depth_size = canvas->height * canvas->width * sizeof(double);
+    unsigned int vram_size = canvas->height * canvas->width * sizeof(unsigned char);
+    unsigned int depth_size = canvas->height * canvas->width * sizeof(double);
 
     memset(canvas->vram_red, 0, vram_size);
     memset(canvas->vram_green, 0, vram_size);
     memset(canvas->vram_blue, 0, vram_size);
     for (int i = 0; i < canvas->height * canvas->width; i++) {
         canvas->vram_depth[i] = INFINITY;
+        canvas->vram_tag[i] = EMPTY;
     }
 }
 
@@ -188,17 +203,18 @@ void Canvas_ProjectFromWorldToScreen(struct Canvas *canvas, struct Vector3 *from
     Canvas_ProjectFromCameraToScreen(canvas, &vector_tmp, to);
 }
 
-void vram_write(struct Canvas *canvas, int vram_index, double distance2){
-    if (canvas->vram_depth[vram_index] < distance2) {
+void vram_write(struct Canvas *canvas, int vram_index, double distance, enum Tag tag){
+    if (canvas->vram_depth[vram_index] < distance) {
         return;
     }
-    canvas->vram_depth[vram_index] = distance2;
+    canvas->vram_depth[vram_index] = distance;
+    canvas->vram_tag[vram_index] = tag;
     canvas->vram_red[vram_index] = canvas->color.red;
     canvas->vram_green[vram_index] = canvas->color.green;
     canvas->vram_blue[vram_index] = canvas->color.blue;
 }
 
-void Canvas_DrawPoint(struct Canvas *canvas, struct Vector3 *point){
+void Canvas_DrawPoint(struct Canvas *canvas, struct Vector3 *point, enum Tag tag){
     struct Vector3 projected_p;
 
     Canvas_ProjectFromCameraToScreen(canvas, point, &projected_p);
@@ -215,7 +231,7 @@ void Canvas_DrawPoint(struct Canvas *canvas, struct Vector3 *point){
     }
     int vram_index = row * canvas->width + column;
     double distance2 = Vector3_MagnitudeSq(point);
-    vram_write(canvas, vram_index, distance2);
+    vram_write(canvas, vram_index, distance2, tag);
 }
 
 /*
@@ -230,7 +246,7 @@ int Canvas_IsPointInCamera(struct Canvas *canvas, struct Vector3 *camera_point){
            && 0 <= screen_point.y + EPSILON && screen_point.y - EPSILON < canvas->height;
 }
 
-void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle){
+void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle, enum Tag tag){
     //The position of the points respective to camera
     struct Vector3 camera_p1, camera_p2, camera_p3;
 
@@ -242,7 +258,7 @@ void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle){
 
     //At most 6 points could appear in view
     int number_in_view = 0;
-    struct Vector3 *points_in_view = malloc(6 * sizeof(struct Vector3));
+    struct Vector3 *points_in_view = malloc(9 * sizeof(struct Vector3));
 
     //If the points are in the view, add them into the list
     if (Canvas_IsPointInCamera(canvas, &camera_p1)){
@@ -292,7 +308,8 @@ void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle){
         Plane_LineIntersection(&canvas->view_planes[i], &line1, &intersection);
 
         if (Segment_IsPointOnSegment(&segment1, &intersection)
-            && Canvas_IsPointInCamera(canvas, &intersection)){
+            && Canvas_IsPointInCamera(canvas, &intersection)
+            && !Vector3_Equal(&intersection, &camera_p1) && !Vector3_Equal(&intersection, &camera_p2)){
             struct Vector3 screen_p;
             Canvas_ProjectFromCameraToScreen(canvas, &intersection, &screen_p);
             Vector3_Copy(&screen_p, &points_in_view[number_in_view]);
@@ -301,7 +318,8 @@ void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle){
 
         Plane_LineIntersection(&canvas->view_planes[i], &line2, &intersection);
         if (Segment_IsPointOnSegment(&segment2, &intersection)
-            && Canvas_IsPointInCamera(canvas, &intersection)){
+            && Canvas_IsPointInCamera(canvas, &intersection)
+            && !Vector3_Equal(&intersection, &camera_p1) && !Vector3_Equal(&intersection, &camera_p3)){
             struct Vector3 screen_p;
             Canvas_ProjectFromCameraToScreen(canvas, &intersection, &screen_p);
             Vector3_Copy(&screen_p, &points_in_view[number_in_view]);
@@ -310,7 +328,8 @@ void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle){
 
         Plane_LineIntersection(&canvas->view_planes[i], &line3, &intersection);
         if (Segment_IsPointOnSegment(&segment3, &intersection)
-            && Canvas_IsPointInCamera(canvas, &intersection)){
+            && Canvas_IsPointInCamera(canvas, &intersection)
+            && !Vector3_Equal(&intersection, &camera_p2) && !Vector3_Equal(&intersection, &camera_p3)){
             struct Vector3 screen_p;
             Canvas_ProjectFromCameraToScreen(canvas, &intersection, &screen_p);
             Vector3_Copy(&screen_p, &points_in_view[number_in_view]);
@@ -335,7 +354,7 @@ void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle){
         }
     }
 
-    Canvas_Rasterize(canvas, points_in_view, number_in_view);
+    Canvas_Rasterize(canvas, points_in_view, number_in_view, tag);
 
     //Free the memory from heap
     free(points_in_view);
@@ -348,7 +367,7 @@ int cmp_SortInCircle(const void *first, const void *second){
         < atan((first_point_position.y - b->y) / (b->x - first_point_position.x));
 }
 
-void Canvas_Rasterize(struct Canvas *canvas, struct Vector3* points, int size){
+void Canvas_Rasterize(struct Canvas *canvas, struct Vector3* points, int size, enum Tag tag){
     //no triangle needs to be rasterized
     if (size == 0) return;
 
@@ -383,7 +402,7 @@ void Canvas_Rasterize(struct Canvas *canvas, struct Vector3* points, int size){
                 if (Triangle_IsPointInTriangle2D(&triangle_screen, &point_screen)){
                     double depth = Triangle_PerspectiveCorrectInterpolation(&triangle_screen, &point_screen);
                     if (depth < 0) continue;
-                    vram_write(canvas, canvas->width * y + x, depth * depth);
+                    vram_write(canvas, canvas->width * y + x, depth, tag);
                 }
             }
         }

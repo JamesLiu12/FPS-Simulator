@@ -23,6 +23,7 @@ void ModelCube_Init(struct Mesh *cube) {
     Vector3_Set(&cube->vertices[5], .5, .5, -.5);
     Vector3_Set(&cube->vertices[6], .5, .5, .5);
     Vector3_Set(&cube->vertices[7], -.5, .5, .5);
+
 }
 
 struct Mesh* ModelCube_New() {

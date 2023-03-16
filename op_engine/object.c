@@ -2,20 +2,26 @@
 #include "canvas.h"
 #include "triangle.h"
 #include "matrix.h"
+#include "vector.h"
 
-void Object_Set(struct Object *object, struct Mesh *mesh, struct Transform *transform) {
+void Object_Set(struct Object *object, struct Mesh *mesh, struct Transform *transform, enum Tag tag) {
     object->mesh = mesh;
     object->transform = *transform;
+    object->tag = tag;
 }
 
-struct Object* Object_New(struct Mesh* mesh) {
+struct Object* Object_New(struct Mesh* mesh, enum Tag tag) {
     struct Object *object = malloc(sizeof (struct Object));
     object->mesh = mesh;
     Transform_Init(&object->transform);
+    object->tag = tag;
     return object;
 }
 
 void Object_Show(struct Object *object, struct Canvas *canvas) {
+    if (Vector3_Distance3D(&object->transform.position, &canvas->camera_transform.position)
+        > canvas->render_distance) return;
+
     for (int face_index = 0; face_index < object->mesh->triangle_count; face_index++){
         struct Triangle triangle;
 
@@ -39,7 +45,7 @@ void Object_Show(struct Object *object, struct Canvas *canvas) {
 
 
         Triangle_Set(&triangle, &v1, &v2, &v3);
-        Canvas_DrawTriangle(canvas, &triangle);
+        Canvas_DrawTriangle(canvas, &triangle, object->tag);
     }
 }
 

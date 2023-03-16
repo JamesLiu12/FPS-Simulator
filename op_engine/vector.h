@@ -46,5 +46,9 @@ double Vector3_DistanceSq2D(struct Vector3 *v1, struct Vector3 *v2);
 
 //Return the distance between v1 and v2, only considering the x and y
 double Vector3_Distance2D(struct Vector3 *v1, struct Vector3 *v2);
+
+//Return True <=> the value of v1 equal to that of v2
+int Vector3_Equal(struct Vector3 *v1, struct Vector3 *v2);
+
 #define OP_VECTOR
 #endif

@@ -48,5 +48,5 @@ int Plane_isPointOnPlane(struct Plane *plane, struct Vector3 *point){
         c2 = point->y - plane->position.y,
         alpha = (c1 * b2 - c2 * b1) / (a1 * b2 - a2 * b1),
         beta = (c1 * a2 - c2 * a1) / (b1 * a2 - b2 * a1);
-    return double_equal(plane->position.z + alpha * plane->direction1.z + beta * plane->direction2.z, point->z);
+    return double_Equal(plane->position.z + alpha * plane->direction1.z + beta * plane->direction2.z, point->z);
 }

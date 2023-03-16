@@ -19,15 +19,15 @@ int Line_IsPointOnLine(struct Line *line, struct Vector3 *point){
 
     //Some value in direction vector may be 0, should be considered separately
     if (double_IsZero(line->direction.x)) {
-        if (!double_equal(line->position.x, point->x)) return FALSE;
+        if (!double_Equal(line->position.x, point->x)) return FALSE;
         number_direction--;
     }
     if (double_IsZero(line->direction.y)) {
-        if (!double_equal(line->position.y, point->y)) return FALSE;
+        if (!double_Equal(line->position.y, point->y)) return FALSE;
         number_direction--;
     }
     if (double_IsZero(line->direction.z)) {
-        if (!double_equal(line->position.z, point->z)) return FALSE;
+        if (!double_Equal(line->position.z, point->z)) return FALSE;
         number_direction--;
     }
 
@@ -36,20 +36,20 @@ int Line_IsPointOnLine(struct Line *line, struct Vector3 *point){
     if (number_direction == 2){
         if (double_IsZero(line->direction.x)){
             double alpha = (point->y - line->position.y) / line->direction.y;
-            return double_equal(point->z, line->position.z + alpha * line->direction.z);
+            return double_Equal(point->z, line->position.z + alpha * line->direction.z);
         }
         if (double_IsZero(line->direction.y)){
             double alpha = (point->x - line->position.x) / line->direction.x;
-            return double_equal(point->z, line->position.z + alpha * line->direction.z);
+            return double_Equal(point->z, line->position.z + alpha * line->direction.z);
         }
         if (double_IsZero(line->direction.z)){
             double alpha = (point->x - line->position.x) / line->direction.x;
-            return double_equal(point->y, line->position.y + alpha * line->direction.y);
+            return double_Equal(point->y, line->position.y + alpha * line->direction.y);
         }
     }
     else{
         double alpha = (point->x - line->position.x) / line->direction.x;
-        return double_equal(point->y, line->position.y + alpha * line->direction.y)
-            && double_equal(point->z, line->position.z + alpha * line->direction.z);
+        return double_Equal(point->y, line->position.y + alpha * line->direction.y)
+               && double_Equal(point->z, line->position.z + alpha * line->direction.z);
     }
 }
