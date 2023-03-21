@@ -39,6 +39,10 @@ void Object_Show(struct Object *object, struct Canvas *canvas) {
         Matrix3x3_Transform(&object->transform.rotation_matrix, &v2);
         Matrix3x3_Transform(&object->transform.rotation_matrix, &v3);
 
+        Vector3_Scale(&v1, &object->transform.scale);
+        Vector3_Scale(&v2, &object->transform.scale);
+        Vector3_Scale(&v3, &object->transform.scale);
+
         Vector3_Add(&v1, &object->transform.position);
         Vector3_Add(&v2, &object->transform.position);
         Vector3_Add(&v3, &object->transform.position);

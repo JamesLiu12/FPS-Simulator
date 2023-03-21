@@ -15,3 +15,4 @@ void Gaussian_Elimination(double **a, int number_row, int number_col);
 #define FALSE 0
 #define EPSILON 1e-6
 #define DEPTH_LIMIT 0.05
+typedef int bool;

@@ -3,7 +3,6 @@
 #include "triangle.h"
 #include "vector.h"
 #include "transform.h"
-#include "scene.h"
 #include "plane.h"
 #include "scene.h"
 #include "tag.h"
