@@ -37,8 +37,11 @@ struct Canvas {
     double render_distance;
 };
 
+//Initializer of canvas
+void Canvas_Init(struct Canvas *canvas, short height, short width);
+
 //The function for construction of a new canvas
-struct Canvas* new_Canvas(short height, short width);
+struct Canvas* New_Canvas(short height, short width);
 
 //The function for initializing the planes and rays of the view
 void Canvas_InitView(struct Canvas *canvas);

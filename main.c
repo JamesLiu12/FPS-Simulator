@@ -4,7 +4,7 @@
 #include <math.h>
 
 int main() {
-    struct Canvas *canvas = new_Canvas(64, 64);
+    struct Canvas *canvas = New_Canvas(64, 64);
     struct Vector3 rotation;
     Vector3_Set(&rotation, 0.1, 0, 0);
 

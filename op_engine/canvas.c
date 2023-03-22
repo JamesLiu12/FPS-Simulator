@@ -8,9 +8,7 @@
 #include "segment.h"
 #include "../util/util.h"
 
-struct Canvas* new_Canvas(short height, short width) {
-    struct Canvas* canvas = malloc(sizeof(struct Canvas));
-
+void Canvas_Init(struct Canvas *canvas, short height, short width){
     canvas->height = height;
     canvas->width = width;
     canvas->field_of_view = M_PI / 2;
@@ -39,7 +37,11 @@ struct Canvas* new_Canvas(short height, short width) {
     Canvas_InitView(canvas);
     canvas->render_distance = 100;
     Canvas_clear(canvas);
+}
 
+struct Canvas* New_Canvas(short height, short width) {
+    struct Canvas* canvas = malloc(sizeof(struct Canvas));
+    Canvas_Init(canvas, height, width);
     return canvas;
 }
 
