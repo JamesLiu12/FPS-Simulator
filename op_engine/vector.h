@@ -50,5 +50,8 @@ double Vector3_Distance2D(struct Vector3 *v1, struct Vector3 *v2);
 //Return True <=> the value of v1 equal to that of v2
 int Vector3_Equal(struct Vector3 *v1, struct Vector3 *v2);
 
+//Multiply the value of each x, y, z
+void Vector3_Multiply(struct Vector3 *v1, struct Vector3 *v2);
+
 #define OP_VECTOR
 #endif

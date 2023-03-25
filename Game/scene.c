@@ -1,5 +1,5 @@
 #include "scene.h"
-#include "object.h"
+#include "../op_engine/object.h"
 
 void Scene_Init(struct Scene *scene, struct Canvas *canvas){
     scene->canvas = canvas;
