@@ -76,9 +76,22 @@ void Canvas_CameraMove(struct Canvas *canvas, struct Vector3 *displacement);
 void Canvas_CameraRotate(struct Canvas *canvas, struct Vector3 *rotation);
 
 void Canvas_CalculateScreenProjection(struct Canvas* canvas);
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 void Canvas_CameraRotateLeft(struct Canvas *canvas, double RotationSpeed);
 void Canvas_CameraRotateRight(struct Canvas *canvas, double RotationSpeed);
 void Canvas_CameraRotateUp(struct Canvas *canvas, double RotationSpeed);
 void Canvas_CameraRotateDown(struct Canvas *canvas, double RotationSpeed);
+<<<<<<< Updated upstream
+=======
+
+void Canvas_CameraMoveForward(struct Canvas *canvas, double MoveSpeed);
+void Canvas_CameraMoveBackward(struct Canvas *canvas, double MoveSpeed);
+void Canvas_CameraMoveLeft(struct Canvas *canvas, double MoveSpeed);
+void Canvas_CameraMoveRight(struct Canvas *canvas, double MoveSpeed);
+
+>>>>>>> Stashed changes
 #define OP_CANVAS
 #endif

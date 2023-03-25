@@ -473,6 +473,7 @@ void Canvas_CameraRotateUp(struct Canvas *canvas, double RotationSpeed){
     Vector3_Normalize(&RotationAxis);
     Vector3_EqualRatioScale(&RotationAxis,RotationSpeed);
     Canvas_CameraRotate(canvas,&RotationAxis);
+<<<<<<< Updated upstream
 }
 void Canvas_CameraRotateDown(struct Canvas *canvas, double RotationSpeed){
     struct Vector3 RotationAxis;
@@ -487,4 +488,66 @@ void Canvas_CameraRotateDown(struct Canvas *canvas, double RotationSpeed){
     Vector3_Normalize(&RotationAxis);
     Vector3_EqualRatioScale(&RotationAxis,RotationSpeed);
     Canvas_CameraRotate(canvas,&RotationAxis);
+=======
+}
+void Canvas_CameraRotateDown(struct Canvas *canvas, double RotationSpeed){
+    struct Vector3 RotationAxis;
+    struct Vector3 RoRight;
+    Vector3_Set(&RoRight,0,M_PI_2,0);
+    struct Matrix3x3 Right90Matrix;
+    Vector3_Copy(&canvas->facing,&RotationAxis);
+    Vector3_Set(&RotationAxis,RotationAxis.x,0,RotationAxis.z);
+    
+    Matrix3x3_FromEulerAngle(&Right90Matrix,&RoRight,EULER_ANGLE_NORMAL);
+    Matrix3x3_Transform(&Right90Matrix,&RotationAxis);
+    Vector3_Normalize(&RotationAxis);
+    Vector3_EqualRatioScale(&RotationAxis,RotationSpeed);
+
+    Canvas_CameraRotate(canvas,&RotationAxis);
+}
+void Canvas_CameraMoveForward(struct Canvas *canvas, double MoveSpeed){
+    struct Vector3 movement;
+    Vector3_Set(&movement,canvas->facing.x,0,canvas->facing.z);
+    Vector3_Normalize(&movement);
+    Vector3_EqualRatioScale(&movement,MoveSpeed);
+    Canvas_CameraMove(canvas,&movement);
+}
+void Canvas_CameraMoveBackward(struct Canvas *canvas, double MoveSpeed){
+    struct Vector3 movement;
+    Vector3_Set(&movement,-canvas->facing.x,0,-canvas->facing.z);
+    Vector3_Normalize(&movement);
+    Vector3_EqualRatioScale(&movement,MoveSpeed);
+    Canvas_CameraMove(canvas,&movement);
+}
+void Canvas_CameraMoveLeft(struct Canvas *canvas, double MoveSpeed){
+    struct Vector3 movement;
+    struct Vector3 RoRight;
+    Vector3_Set(&RoRight,0,M_PI_2,0);
+    struct Matrix3x3 Right90Matrix;
+    Vector3_Copy(&canvas->facing,&movement);
+    Vector3_Set(&movement,movement.x,0,movement.z);
+    
+    Matrix3x3_FromEulerAngle(&Right90Matrix,&RoRight,EULER_ANGLE_REVERSED);
+    Matrix3x3_Transform(&Right90Matrix,&movement);
+    Vector3_Normalize(&movement);
+    Vector3_EqualRatioScale(&movement,MoveSpeed);
+
+    Canvas_CameraMove(canvas,&movement);
+
+}
+void Canvas_CameraMoveRight(struct Canvas *canvas, double MoveSpeed){
+    struct Vector3 movement;
+    struct Vector3 RoRight;
+    Vector3_Set(&RoRight,0,M_PI_2,0);
+    struct Matrix3x3 Right90Matrix;
+    Vector3_Copy(&canvas->facing,&movement);
+    Vector3_Set(&movement,movement.x,0,movement.z);
+    
+    Matrix3x3_FromEulerAngle(&Right90Matrix,&RoRight,EULER_ANGLE_NORMAL);
+    Matrix3x3_Transform(&Right90Matrix,&movement);
+    Vector3_Normalize(&movement);
+    Vector3_EqualRatioScale(&movement,MoveSpeed);
+
+    Canvas_CameraMove(canvas,&movement);
+>>>>>>> Stashed changes
 }

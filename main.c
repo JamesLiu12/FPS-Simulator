@@ -4,7 +4,10 @@
 #include <math.h>
 #include <termios.h>
 #include "op_engine/input.h"
+<<<<<<< Updated upstream
 #include "player/player.h"
+=======
+>>>>>>> Stashed changes
 const double RotationSpeed=0.1;
 const double MoveSpeed=1;
 
@@ -62,6 +65,7 @@ int main() {
             if(input==91)isarrow=1;
             if(isarrow){
             if(input==68){
+<<<<<<< Updated upstream
                 Vector3_Set(&movement, -MoveSpeed, 0, 0);
                 Canvas_CameraMove(canvas,&movement);
                 isarrow=0;}
@@ -76,6 +80,26 @@ int main() {
             if(input==66){
                 Vector3_Set(&movement, 0, 0, -MoveSpeed);
                 Canvas_CameraMove(canvas,&movement);
+=======
+                //Vector3_Set(&movement, -MoveSpeed, 0, 0);
+                //Canvas_CameraMove(canvas,&movement);
+                Canvas_CameraMoveLeft(canvas,MoveSpeed);
+                isarrow=0;}
+            if(input==67){
+                //Vector3_Set(&movement, MoveSpeed, 0, 0);
+                //Canvas_CameraMove(canvas,&movement);
+                Canvas_CameraMoveRight(canvas,MoveSpeed);
+                isarrow=0;}
+            if(input==65){
+                //Vector3_Set(&movement, 0, 0,MoveSpeed);
+                //Canvas_CameraMove(canvas,&movement);
+                Canvas_CameraMoveForward(canvas,MoveSpeed);
+                isarrow=0;}
+            if(input==66){
+                //Vector3_Set(&movement, 0, 0, -MoveSpeed);
+                //Canvas_CameraMove(canvas,&movement);
+                Canvas_CameraMoveBackward(canvas,MoveSpeed);
+>>>>>>> Stashed changes
                 isarrow=0;}
             }
             
