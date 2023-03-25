@@ -5,10 +5,10 @@
 #include "canvas.h"
 
 struct Scene{
-    struct Canvas canvas;
-    struct ArrayList list_object;
+    struct Canvas *canvas;
+    struct ArrayList list_StaticObject, list_MovableObject;
 };
 
-void Scene_Init(struct Scene *scene, short canvas_height, short canvas_width);
+void Scene_Init(struct Scene *scene, struct Canvas *canvas);
 
 #endif //FPS_SIMULATOR_SCENE_H

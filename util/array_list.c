@@ -25,12 +25,12 @@ bool ArrayList_Empty(struct ArrayList *list){
     return list->size == 0;
 }
 
-char ArrayList_Append(struct ArrayList* list, void *element) {
+void ArrayList_Append(struct ArrayList* list, void *element) {
     if (list->size >= list->capacity){
         list->capacity *= 2;
         list->data = realloc(list->data, list->element_size * list->capacity);
     }
-    memcpy(list->data + list->size, element, list->element_size);
+    memcpy(list->data + list->size * list->element_size, element, list->element_size);
     list->size++;
 }
 
