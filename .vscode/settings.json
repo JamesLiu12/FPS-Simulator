@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "ncurses.h": "c",
+        "conio.h": "c",
+        "op_engine.h": "c",
+        "termios.h": "c",
+        "conio_am.h": "c",
+        "input.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
+}

@@ -31,6 +31,7 @@ void Canvas_Init(struct Canvas *canvas, short height, short width){
 
     Transform_Init(&canvas->transform);
     Transform_Init(&canvas->camera_transform);
+    Vector3_Set(&canvas->facing,0,0,1);
 
 
     Canvas_CalculateScreenProjection(canvas);
@@ -144,8 +145,9 @@ void Canvas_flush(struct Canvas* canvas){
 //                putchar(' ');
 //                putchar(' ');
 //            }
-//#endif
-            print_pixel(canvas->vram_tag[vram_index], get_brightness(canvas->vram_depth[vram_index]));
+//#endif   
+            if(height==canvas->height/2 &&width==canvas->width/2)printf("O");
+            else print_pixel(canvas->vram_tag[vram_index], get_brightness(canvas->vram_depth[vram_index]));
         }
         putchar('\n');
     }
@@ -436,9 +438,53 @@ void Canvas_CameraMove(struct Canvas *canvas, struct Vector3 *displacement) {
 }
 
 void Canvas_CameraRotate(struct Canvas *canvas, struct Vector3 *rotation) {
+    struct Matrix3x3 Rmatrix;
     Vector3_Add(&canvas->camera_transform.rotation, rotation);
     Matrix3x3_FromEulerAngle(
             &canvas->camera_transform.rotation_matrix,
             &canvas->camera_transform.rotation,
             EULER_ANGLE_REVERSED);
+    Matrix3x3_FromEulerAngle(
+            &Rmatrix,
+            rotation,
+            EULER_ANGLE_NORMAL);
+    Matrix3x3_Transform(&Rmatrix, &canvas->facing);
+}
+void Canvas_CameraRotateLeft(struct Canvas *canvas, double RotationSpeed){
+    struct Vector3 rotation;
+    Vector3_Set(&rotation, 0, -RotationSpeed, 0);
+    Canvas_CameraRotate(canvas,&rotation);
+}
+void Canvas_CameraRotateRight(struct Canvas *canvas, double RotationSpeed){
+    struct Vector3 rotation;
+    Vector3_Set(&rotation, 0, RotationSpeed, 0);
+    Canvas_CameraRotate(canvas,&rotation);
+}
+void Canvas_CameraRotateUp(struct Canvas *canvas, double RotationSpeed){
+    struct Vector3 RotationAxis;
+    struct Vector3 RoRight;
+    Vector3_Set(&RoRight,0,M_PI_2,0);
+    struct Matrix3x3 Right90Matrix;
+    Vector3_Copy(&canvas->facing,&RotationAxis);
+    Vector3_Set(&RotationAxis,RotationAxis.x,0,RotationAxis.z);
+    
+    Matrix3x3_FromEulerAngle(&Right90Matrix,&RoRight,EULER_ANGLE_REVERSED);
+    Matrix3x3_Transform(&Right90Matrix,&RotationAxis);
+    Vector3_Normalize(&RotationAxis);
+    Vector3_EqualRatioScale(&RotationAxis,RotationSpeed);
+    Canvas_CameraRotate(canvas,&RotationAxis);
+}
+void Canvas_CameraRotateDown(struct Canvas *canvas, double RotationSpeed){
+    struct Vector3 RotationAxis;
+    struct Vector3 RoRight;
+    Vector3_Set(&RoRight,0,M_PI_2,0);
+    struct Matrix3x3 Right90Matrix;
+    Vector3_Copy(&canvas->facing,&RotationAxis);
+    Vector3_Set(&RotationAxis,RotationAxis.x,0,RotationAxis.z);
+    
+    Matrix3x3_FromEulerAngle(&Right90Matrix,&RoRight,EULER_ANGLE_NORMAL);
+    Matrix3x3_Transform(&Right90Matrix,&RotationAxis);
+    Vector3_Normalize(&RotationAxis);
+    Vector3_EqualRatioScale(&RotationAxis,RotationSpeed);
+    Canvas_CameraRotate(canvas,&RotationAxis);
 }

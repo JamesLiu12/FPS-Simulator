@@ -39,11 +39,19 @@ void Vector3_Scale(struct Vector3 *v, struct Vector3 *factor){
     v->y *= factor->y;
     v->z *= factor->z;
 }
-
+void Vector3_EqualRatioScale(struct Vector3 *v, double factor){
+    struct Vector3 Scalefactor;
+    Vector3_Set(&Scalefactor,factor,factor,factor);
+    Vector3_Scale(v,&Scalefactor);
+}
 double Vector3_MagnitudeSq(struct Vector3 *v){
     return v->x * v->x + v->y * v->y + v->z * v->z;
 }
-
+void Vector3_Normalize(struct Vector3 *v){
+    v->x/=sqrt(Vector3_MagnitudeSq(v));
+    v->y/=sqrt(Vector3_MagnitudeSq(v));
+    v->z/=sqrt(Vector3_MagnitudeSq(v));
+}
 double Vector3_CrossProduct2D(struct Vector3 *v1, struct Vector3 *v2){
     return v1->x * v2->y - v2->x * v1->y;
 }

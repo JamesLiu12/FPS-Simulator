@@ -6,6 +6,7 @@
 #include "transform.h"
 #include "plane.h"
 #include "tag.h"
+#include <math.h>
 
 struct ScreenProjection {
     double scale_factor;
@@ -26,6 +27,7 @@ struct Canvas {
 
     struct Transform camera_transform;
     struct Transform transform;
+    struct Vector3 facing;
 
     struct Plane view_planes[4];
     struct Line view_rays[4];
@@ -74,6 +76,9 @@ void Canvas_CameraMove(struct Canvas *canvas, struct Vector3 *displacement);
 void Canvas_CameraRotate(struct Canvas *canvas, struct Vector3 *rotation);
 
 void Canvas_CalculateScreenProjection(struct Canvas* canvas);
-
+void Canvas_CameraRotateLeft(struct Canvas *canvas, double RotationSpeed);
+void Canvas_CameraRotateRight(struct Canvas *canvas, double RotationSpeed);
+void Canvas_CameraRotateUp(struct Canvas *canvas, double RotationSpeed);
+void Canvas_CameraRotateDown(struct Canvas *canvas, double RotationSpeed);
 #define OP_CANVAS
 #endif
