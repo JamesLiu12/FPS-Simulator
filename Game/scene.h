@@ -7,12 +7,13 @@
 #include "enemy.h"
 
 struct Scene{
-    struct Canvas *canvas;
     struct ArrayList list_Object;
     struct ArrayList list_Enemy;
     struct Player player;
 };
 
-void Scene_Init(struct Scene *scene, struct Canvas *canvas);
+void Scene_Init(struct Scene *scene);
+
+void Del_Scene(struct Scene *scene);
 
 #endif //FPS_SIMULATOR_SCENE_H

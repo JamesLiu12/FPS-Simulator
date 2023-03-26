@@ -31,6 +31,6 @@ int main() {
 //    }
     printf("\x1b[38;2;%d;%d;%dm", 0xee, 0xee, 0xee);
     printf("\x1b[48;2;%d;%d;%dm", 0, 0, 0);
-    del_Canvas(canvas);
+    Del_Canvas(canvas);
     return 0;
 }

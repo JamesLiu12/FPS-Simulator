@@ -50,7 +50,7 @@ void Canvas_InitView(struct Canvas *canvas);
 void Canvas_Rasterize(struct Canvas *canvas, struct Vector3* points, int size, enum Tag tag);
 
 //The function for freeing the space of a canvas
-void del_Canvas(struct Canvas* canvas);
+void Del_Canvas(struct Canvas* canvas);
 
 //Displaying the current frame.
 void Canvas_flush(struct Canvas* canvas);

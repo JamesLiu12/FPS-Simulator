@@ -83,7 +83,7 @@ void Canvas_InitView(struct Canvas *canvas){
     Plane_Set(&canvas->view_planes[3], &position, &direction1, &direction2);
 }
 
-void del_Canvas(struct Canvas* canvas){
+void Del_Canvas(struct Canvas* canvas){
     free(canvas->vram_red);
     free(canvas->vram_green);
     free(canvas->vram_blue);
