@@ -56,3 +56,9 @@ void Object_Rotation(struct Object *object, struct Vector3* rotation) {
 
     Transform_RotationMatrixUpdate(&object->transform);
 }
+
+void Object_Move(struct Object *object, struct Vector3* move){
+    object->transform.position.x += move->x;
+    object->transform.position.y += move->y;
+    object->transform.position.z += move->z;
+}
