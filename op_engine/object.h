@@ -21,23 +21,13 @@ struct Object{
 
     //Collide box of object
     struct CollideBox collide_box;
-
-    int number_of_child;
-
-    //A list of the child objects, equals to NULL if no child
-    struct Object* childList;
-
-    //The father object, equals to NULL if this is the root object
-    struct Object* father;
 };
 
 //Setter of object
-void Object_Set(struct Object *object, struct Mesh *mesh, struct Transform *transform, enum Tag tag,
-        int number_of_child, struct Object* child, struct Object* father);
+void Object_Set(struct Object *object, struct Mesh *mesh, struct Transform *transform, enum Tag tag);
 
 //Newer of object
-struct Object* Object_New(struct Mesh *mesh, struct Transform *transform, enum Tag tag,
-        int number_of_child, struct Object* child, struct Object* father);
+struct Object* Object_New(struct Mesh *mesh, struct Transform *transform, enum Tag tag);
 
 //Free the memory of object
 void Del_Object(struct Object *object);

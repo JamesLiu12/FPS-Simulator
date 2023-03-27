@@ -4,27 +4,19 @@
 #include "matrix.h"
 #include "vector.h"
 
-void Object_Set(struct Object *object, struct Mesh *mesh, struct Transform *transform, enum Tag tag,
-        int number_of_child, struct Object* child, struct Object* father) {
+void Object_Set(struct Object *object, struct Mesh *mesh, struct Transform *transform, enum Tag tag) {
     object->mesh = mesh;
     object->transform = *transform;
     object->tag = tag;
-    object->number_of_child = number_of_child;
-    object->childList = child;
-    object->father = father;
 }
 
-struct Object* Object_New(struct Mesh *mesh, struct Transform *transform, enum Tag tag,
-        int number_of_child, struct Object* child, struct Object* father) {
+struct Object* Object_New(struct Mesh *mesh, struct Transform *transform, enum Tag tag) {
     struct Object *object = malloc(sizeof (struct Object));
-    Object_Set(object, mesh, transform, tag, number_of_child, child, father);
+    Object_Set(object, mesh, transform, tag);
     return object;
 }
 
 void Del_Object(struct Object *object){
-    for (int i = 0; i < object->number_of_child; i++){
-        Del_Object(&object->childList[i]);
-    }
     free(object);
 }
 
@@ -32,22 +24,9 @@ void Object_Show(struct Object *object, struct Canvas *canvas, struct Transform 
     if (Vector3_Distance3D(&object->transform.position, &canvas->camera_transform.position)
         > canvas->render_distance) return;
 
-    struct Transform transform;
-    Transform_Init(&transform);
-
-    if (transform_father != NULL){
-        transform.position = transform_father->position;
-        transform.rotation = transform_father->rotation;
-        Transform_RotationMatrixUpdate(&transform);
-        transform.scale = transform_father->scale;
-    }
+    Transform_UpdateGlobal(&object->transform);
 
     if (object->mesh != NULL){
-
-        Vector3_Add(&transform.position, &object->transform.position);
-        Vector3_Add(&transform.rotation, &object->transform.rotation);
-        Transform_RotationMatrixUpdate(&transform);
-        Vector3_Multiply(&transform.scale, &object->transform.scale);
 
         for (int face_index = 0; face_index < object->mesh->triangle_count; face_index++){
             struct Triangle triangle;
@@ -62,26 +41,21 @@ void Object_Show(struct Object *object, struct Canvas *canvas, struct Transform 
             v2 = object->mesh->vertices[vertex_index2];
             v3 = object->mesh->vertices[vertex_index3];
 
-            Matrix3x3_Transform(&transform.rotation_matrix, &v1);
-            Matrix3x3_Transform(&transform.rotation_matrix, &v2);
-            Matrix3x3_Transform(&transform.rotation_matrix, &v3);
+            Matrix3x3_Transform(&object->transform.globalRotationMatrix, &v1);
+            Matrix3x3_Transform(&object->transform.globalRotationMatrix, &v2);
+            Matrix3x3_Transform(&object->transform.globalRotationMatrix, &v3);
 
-            Vector3_Scale(&v1, &transform.scale);
-            Vector3_Scale(&v2, &transform.scale);
-            Vector3_Scale(&v3, &transform.scale);
+            Vector3_Scale(&v1, &object->transform.globalScale);
+            Vector3_Scale(&v2, &object->transform.globalScale);
+            Vector3_Scale(&v3, &object->transform.globalScale);
 
-            Vector3_Add(&v1, &transform.position);
-            Vector3_Add(&v2, &transform.position);
-            Vector3_Add(&v3, &transform.position);
+            Vector3_Add(&v1, &object->transform.globalPosition);
+            Vector3_Add(&v2, &object->transform.globalPosition);
+            Vector3_Add(&v3, &object->transform.globalPosition);
 
 
             Triangle_Set(&triangle, &v1, &v2, &v3);
             Canvas_DrawTriangle(canvas, &triangle, object->tag);
-        }
-    }
-    if (object->childList != NULL){
-        for (int i = 0; i < object->number_of_child; i++){
-            Object_Show(&object->childList[i], canvas, &transform);
         }
     }
 }

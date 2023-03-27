@@ -4,7 +4,7 @@
 #include "../op_engine/op_engine.h"
 
 struct Enemy{
-    struct Object object;
+    struct Object head, body, leg;
     double health, atk, speed;
     struct Transform transform;
 };

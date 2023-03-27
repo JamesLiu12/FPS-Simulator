@@ -7,7 +7,7 @@ void Player_Init(struct Player *player){
     player->atk = 1;
     player->speed = 1;
 
-    Transform_Init(&player->transform);
+    Transform_Init(&player->transform, NULL);
 
     struct Vector3 v1, v2;
     Vector3_Set(&v1, -0.5, -1, -0.5);
