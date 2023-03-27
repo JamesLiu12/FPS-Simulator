@@ -37,8 +37,11 @@ struct Canvas {
     double render_distance;
 };
 
+//Initializer of canvas
+void Canvas_Init(struct Canvas *canvas, short height, short width);
+
 //The function for construction of a new canvas
-struct Canvas* new_Canvas(short height, short width);
+struct Canvas* New_Canvas(short height, short width);
 
 //The function for initializing the planes and rays of the view
 void Canvas_InitView(struct Canvas *canvas);
@@ -47,7 +50,7 @@ void Canvas_InitView(struct Canvas *canvas);
 void Canvas_Rasterize(struct Canvas *canvas, struct Vector3* points, int size, enum Tag tag);
 
 //The function for freeing the space of a canvas
-void del_Canvas(struct Canvas* canvas);
+void Del_Canvas(struct Canvas* canvas);
 
 //Displaying the current frame.
 void Canvas_flush(struct Canvas* canvas);

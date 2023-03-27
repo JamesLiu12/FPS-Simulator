@@ -21,7 +21,7 @@ struct Vector3* Vector3_New(double x, double y, double z);
 //The basic operations for Vector3
 void Vector3_Add(struct Vector3 *v1, struct Vector3 *v2);
 void Vector3_Subtract(struct Vector3 *v1, struct Vector3 *v2);
-void Vector3_Scale(struct Vector3 *v, double factor);
+void Vector3_Scale(struct Vector3 *v, struct Vector3 *factor);
 
 //Return the square of module length of v
 double Vector3_MagnitudeSq(struct Vector3 *v);
@@ -49,6 +49,9 @@ double Vector3_Distance2D(struct Vector3 *v1, struct Vector3 *v2);
 
 //Return True <=> the value of v1 equal to that of v2
 int Vector3_Equal(struct Vector3 *v1, struct Vector3 *v2);
+
+//Multiply the value of each x, y, z
+void Vector3_Multiply(struct Vector3 *v1, struct Vector3 *v2);
 
 #define OP_VECTOR
 #endif

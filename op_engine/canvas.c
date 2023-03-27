@@ -8,9 +8,7 @@
 #include "segment.h"
 #include "../util/util.h"
 
-struct Canvas* new_Canvas(short height, short width) {
-    struct Canvas* canvas = malloc(sizeof(struct Canvas));
-
+void Canvas_Init(struct Canvas *canvas, short height, short width){
     canvas->height = height;
     canvas->width = width;
     canvas->field_of_view = M_PI / 2;
@@ -31,15 +29,19 @@ struct Canvas* new_Canvas(short height, short width) {
     canvas->color.green = (char)255;
     canvas->color.blue = (char)255;
 
-    Transform_Init(&canvas->transform);
-    Transform_Init(&canvas->camera_transform);
+    Transform_Init(&canvas->transform, NULL);
+    Transform_Init(&canvas->camera_transform, NULL);
 
 
     Canvas_CalculateScreenProjection(canvas);
     Canvas_InitView(canvas);
     canvas->render_distance = 100;
     Canvas_clear(canvas);
+}
 
+struct Canvas* New_Canvas(short height, short width) {
+    struct Canvas* canvas = malloc(sizeof(struct Canvas));
+    Canvas_Init(canvas, height, width);
     return canvas;
 }
 
@@ -81,7 +83,7 @@ void Canvas_InitView(struct Canvas *canvas){
     Plane_Set(&canvas->view_planes[3], &position, &direction1, &direction2);
 }
 
-void del_Canvas(struct Canvas* canvas){
+void Del_Canvas(struct Canvas* canvas){
     free(canvas->vram_red);
     free(canvas->vram_green);
     free(canvas->vram_blue);
@@ -182,7 +184,7 @@ void Canvas_CalculateScreenProjection(struct Canvas* canvas) {
 void Canvas_ProjectFromWorldToCamera(struct Canvas *canvas, struct Vector3 *from, struct Vector3 *to) {
     Vector3_Copy(from, to);
     Vector3_Subtract(to, &canvas->camera_transform.position);
-    Matrix3x3_Transform(&canvas->camera_transform.rotation_matrix, to);
+    Matrix3x3_Transform(&canvas->camera_transform.rotationMatrix, to);
 }
 
 void Canvas_ProjectFromCameraToScreen(struct Canvas *canvas, struct Vector3 *from, struct Vector3 *to) {
@@ -436,7 +438,7 @@ void Canvas_CameraMove(struct Canvas *canvas, struct Vector3 *displacement) {
 void Canvas_CameraRotate(struct Canvas *canvas, struct Vector3 *rotation) {
     Vector3_Add(&canvas->camera_transform.rotation, rotation);
     Matrix3x3_FromEulerAngle(
-            &canvas->camera_transform.rotation_matrix,
+            &canvas->camera_transform.rotationMatrix,
             &canvas->camera_transform.rotation,
             EULER_ANGLE_REVERSED);
 }
