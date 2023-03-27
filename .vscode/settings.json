@@ -5,7 +5,9 @@
         "op_engine.h": "c",
         "termios.h": "c",
         "conio_am.h": "c",
-        "input.h": "c"
+        "input.h": "c",
+        "player.h": "c",
+        "string.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

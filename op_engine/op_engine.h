@@ -8,3 +8,5 @@
 #include "tag.h"
 #include "object.h"
 #include "mesh.h"
+#include "linux-kbhit.h"
+#include "input.h"

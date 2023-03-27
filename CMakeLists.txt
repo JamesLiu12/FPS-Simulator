@@ -22,6 +22,10 @@ add_executable(
     op_engine/collide_box.h
         op_engine/scene.h
         op_engine/triangle.c
+        op_engine/linux-kbhit.h
+        op_engine/linux-kbhit.c
+        Game/player.h
+        Game/player.c
 
     op_engine/models/cube.c
     op_engine/input.h
