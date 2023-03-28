@@ -18,10 +18,10 @@ struct Mesh *new_Mesh(unsigned int triangle_count, unsigned int vertex_count) {
     return model;
 }
 
-void del_Mesh(struct Mesh *model) {
+void Del_Mesh(struct Mesh *model) {
     free(model->triangles);
     free(model->vertices);
-    free(model);
+//    free(model);
 }
 
 void Mesh_Copy(struct Mesh *from, struct Mesh *to){

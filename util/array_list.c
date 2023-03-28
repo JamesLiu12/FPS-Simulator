@@ -18,14 +18,14 @@ struct ArrayList *New_ArrayList(unsigned int element_size) {
 
 void Del_ArrayList(struct ArrayList *list) {
     free(list->data);
-    free(list);
+//    free(list);
 }
 
 bool ArrayList_Empty(struct ArrayList *list){
     return list->size == 0;
 }
 
-void ArrayList_Append(struct ArrayList* list, void *element) {
+void ArrayList_PushBack(struct ArrayList* list, void *element) {
     if (list->size >= list->capacity){
         list->capacity *= 2;
         list->data = realloc(list->data, list->element_size * list->capacity);

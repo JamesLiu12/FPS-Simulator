@@ -17,7 +17,8 @@ struct Object* Object_New(struct Mesh *mesh, struct Transform *transform, enum T
 }
 
 void Del_Object(struct Object *object){
-    free(object);
+    Del_Transform(&object->transform);
+//    free(object);
 }
 
 void Object_Show(struct Object *object, struct Canvas *canvas, struct Transform *transform_father) {
@@ -41,18 +42,9 @@ void Object_Show(struct Object *object, struct Canvas *canvas, struct Transform 
             v2 = object->mesh->vertices[vertex_index2];
             v3 = object->mesh->vertices[vertex_index3];
 
-            Matrix3x3_Transform(&object->transform.globalRotationMatrix, &v1);
-            Matrix3x3_Transform(&object->transform.globalRotationMatrix, &v2);
-            Matrix3x3_Transform(&object->transform.globalRotationMatrix, &v3);
-
-            Vector3_Scale(&v1, &object->transform.globalScale);
-            Vector3_Scale(&v2, &object->transform.globalScale);
-            Vector3_Scale(&v3, &object->transform.globalScale);
-
-            Vector3_Add(&v1, &object->transform.globalPosition);
-            Vector3_Add(&v2, &object->transform.globalPosition);
-            Vector3_Add(&v3, &object->transform.globalPosition);
-
+            Transform_ToGlobal(&object->transform, &v1);
+            Transform_ToGlobal(&object->transform, &v2);
+            Transform_ToGlobal(&object->transform, &v3);
 
             Triangle_Set(&triangle, &v1, &v2, &v3);
             Canvas_DrawTriangle(canvas, &triangle, object->tag);

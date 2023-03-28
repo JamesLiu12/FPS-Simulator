@@ -34,10 +34,10 @@ void Vector3_Subtract(struct Vector3 *v1, struct Vector3 *v2) {
     v1->z -= v2->z;
 }
 
-void Vector3_Scale(struct Vector3 *v, struct Vector3 *factor){
-    v->x *= factor->x;
-    v->y *= factor->y;
-    v->z *= factor->z;
+void Vector3_Scale(struct Vector3 *v, double factor){
+    v->x *= factor;
+    v->y *= factor;
+    v->z *= factor;
 }
 
 double Vector3_MagnitudeSq(struct Vector3 *v){

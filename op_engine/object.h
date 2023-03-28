@@ -40,6 +40,6 @@ void Object_Rotation(struct Object *object, struct Vector3* rotation);
 
 //Move an object by a vector move
 void Object_Move(struct Object *object, struct Vector3 *move);
-;
+
 
 #endif //FPS_SIMULATOR_OBJECT_H

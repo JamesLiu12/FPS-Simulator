@@ -88,7 +88,7 @@ void Del_Canvas(struct Canvas* canvas){
     free(canvas->vram_green);
     free(canvas->vram_blue);
     free(canvas->vram_depth);
-    free(canvas);
+//    free(canvas);
 }
 
 int get_brightness(double depth){
@@ -183,8 +183,9 @@ void Canvas_CalculateScreenProjection(struct Canvas* canvas) {
 
 void Canvas_ProjectFromWorldToCamera(struct Canvas *canvas, struct Vector3 *from, struct Vector3 *to) {
     Vector3_Copy(from, to);
-    Vector3_Subtract(to, &canvas->camera_transform.position);
-    Matrix3x3_Transform(&canvas->camera_transform.rotationMatrix, to);
+    Transform_UpdateGlobal(&canvas->camera_transform);
+    Vector3_Subtract(to, &canvas->camera_transform.globalPosition);
+    Matrix3x3_Transform(&canvas->camera_transform.globalRotationMatrix, to);
 }
 
 void Canvas_ProjectFromCameraToScreen(struct Canvas *canvas, struct Vector3 *from, struct Vector3 *to) {

@@ -26,7 +26,7 @@ void Mesh_Set(unsigned int triangle_count, unsigned int vertex_count);
 struct Mesh *new_Mesh(unsigned int triangle_count, unsigned int vertex_count);
 
 //Freeing the memory of mesh from heap
-void del_Mesh(struct Mesh *model);
+void Del_Mesh(struct Mesh *model);
 
 void Mesh_Copy(struct Mesh *from, struct Mesh *to);
 
