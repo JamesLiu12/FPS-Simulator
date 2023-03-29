@@ -56,3 +56,7 @@ void Gaussian_Elimination(double **a, int number_row, int number_col){
         j++;
     }
 }
+
+bool double_IsSameSign(double a, double b){
+    return (a < 0 && b < 0) || (a == 0 && b == 0) || (a > 0 && b > 0);
+}

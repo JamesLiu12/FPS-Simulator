@@ -14,6 +14,6 @@ struct CollideBox{
 void CollideBox_Set(struct CollideBox *box, struct Vector3 *minVertex, struct Vector3 *maxVertex);
 
 //Return the distance between ray and box, return INFINITY if the ray does not hit
-int CollideBox_RayDistance(struct CollideBox *box, struct Transform *transform, struct Line *ray);
+double CollideBox_RayDistance(struct CollideBox *box, struct Transform *transform, struct Line *ray);
 
 #endif //FPS_SIMULATOR_COLLIDE_BOX_H

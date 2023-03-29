@@ -19,7 +19,7 @@ void Del_ArrayList(struct ArrayList* list);
 bool ArrayList_Empty(struct ArrayList *list);
 
 //Append the element to the back of the list
-void ArrayList_Append(struct ArrayList *list, void *element);
+void ArrayList_PushBack(struct ArrayList *list, void *element);
 
 //Delete the element at the back of the list
 void ArrayList_PopBack(struct ArrayList *list);

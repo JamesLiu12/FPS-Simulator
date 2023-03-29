@@ -20,6 +20,7 @@ void Transform_Init(struct Transform *transform, struct Transform *father_transf
             &transform->rotationMatrix, &transform->rotation, EULER_ANGLE_NORMAL);
 
     transform->father = father_transform;
+    if (transform->father != NULL) Transform_AddChild(father_transform, transform);
     Transform_UpdateGlobal(transform);
     transform->childCount = 0;
     ArrayList_Init(&transform->list_child, sizeof(struct Transform*));
@@ -27,7 +28,7 @@ void Transform_Init(struct Transform *transform, struct Transform *father_transf
 
 void Del_Transform(struct Transform *transform){
     Del_ArrayList(&transform->list_child);
-    free(transform);
+//    free(transform);
 }
 
 void Transform_RotationMatrixUpdate(struct Transform *transform) {
@@ -43,14 +44,32 @@ void Transform_UpdateGlobal(struct Transform *transform){
     if (transform->father == NULL) return;
     Transform_UpdateGlobal(transform->father);
 
-    Vector3_Add(&transform->globalPosition, &transform->father->globalPosition);
     Vector3_Add(&transform->globalRotation, &transform->father->globalRotation);
-    Vector3_Add(&transform->globalScale, &transform->father->globalScale);
+    Vector3_Multiply(&transform->globalScale, &transform->father->globalScale);
+
+    Matrix3x3_Transform(&transform->father->globalRotationMatrix, &transform->globalPosition);
+    Vector3_Multiply(&transform->globalPosition, &transform->father->globalScale);
+    Vector3_Add(&transform->globalPosition, &transform->father->globalPosition);
 
     Matrix3x3_FromEulerAngle(
             &transform->globalRotationMatrix, &transform->globalRotation, EULER_ANGLE_NORMAL);
 }
 
-void Transform_addChild(struct Transform *transform, struct Transform *child){
-    ArrayList_Append(&transform->list_child, child);
+void Transform_AddChild(struct Transform *transform, struct Transform *child){
+    ArrayList_PushBack(&transform->list_child, child);
+    transform->childCount++;
+}
+
+void Transform_ToGlobal(struct Transform *transform, struct Vector3 *vector){
+    Matrix3x3_Transform(&transform->globalRotationMatrix, vector);
+    Vector3_Multiply(vector, &transform->globalScale);
+    Vector3_Add(vector, &transform->globalPosition);
+}
+
+void Transform_AddPosition(struct Transform *transform, struct Vector3 *position){
+    Vector3_Add(&transform->position, position);
+}
+
+void Transform_AddRotation(struct Transform *transform, struct Vector3 *rotation){
+    Vector3_Add(&transform->rotation, rotation);
 }

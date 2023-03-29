@@ -32,7 +32,13 @@ void Transform_RotationMatrixUpdate(struct Transform *transform);
 void Transform_UpdateGlobal(struct Transform *transform);
 
 //Add a child transform to transform
-void Transform_addChild(struct Transform *transform, struct Transform *child);
+void Transform_AddChild(struct Transform *transform, struct Transform *child);
+
+void Transform_ToGlobal(struct Transform *transform, struct Vector3 *vector);
+
+void Transform_AddPosition(struct Transform *transform, struct Vector3 *position);
+
+void Transform_AddRotation(struct Transform *transform, struct Vector3 *rotation);
 
 #define OP_ENGINE_TRANSFORMATION
 #endif
