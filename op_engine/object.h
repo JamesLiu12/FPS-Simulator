@@ -33,7 +33,7 @@ struct Object* Object_New(struct Mesh *mesh, struct Transform *transform, enum T
 void Del_Object(struct Object *object);
 
 //Showing an object on the screen
-void Object_Show(struct Object *object, struct Canvas *canvas, struct Transform *transform_father);
+void Object_Show(struct Object *object, struct Canvas *canvas);
 
 //Rotate an object by an Eular angle rotation
 void Object_Rotation(struct Object *object, struct Vector3* rotation);

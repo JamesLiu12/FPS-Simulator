@@ -21,7 +21,7 @@ void Del_Object(struct Object *object){
 //    free(object);
 }
 
-void Object_Show(struct Object *object, struct Canvas *canvas, struct Transform *transform_father) {
+void Object_Show(struct Object *object, struct Canvas *canvas) {
     if (Vector3_Distance3D(&object->transform.position, &canvas->camera_transform.position)
         > canvas->render_distance) return;
 

@@ -41,6 +41,9 @@ void Transform_UpdateGlobal(struct Transform *transform){
     transform->globalRotation = transform->rotation;
     transform->globalScale = transform->scale;
 
+    Matrix3x3_FromEulerAngle(
+            &transform->globalRotationMatrix, &transform->globalRotation, EULER_ANGLE_NORMAL);
+
     if (transform->father == NULL) return;
     Transform_UpdateGlobal(transform->father);
 
@@ -51,8 +54,6 @@ void Transform_UpdateGlobal(struct Transform *transform){
     Vector3_Multiply(&transform->globalPosition, &transform->father->globalScale);
     Vector3_Add(&transform->globalPosition, &transform->father->globalPosition);
 
-    Matrix3x3_FromEulerAngle(
-            &transform->globalRotationMatrix, &transform->globalRotation, EULER_ANGLE_NORMAL);
 }
 
 void Transform_AddChild(struct Transform *transform, struct Transform *child){
