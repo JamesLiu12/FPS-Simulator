@@ -5,7 +5,7 @@
 
 struct Player{
     struct Canvas canvas;
-    double health, atk, speed;
+    double health, atk, speed, defence;
     struct Transform transform;
     struct CollideBox collideBox;
 };

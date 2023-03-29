@@ -4,7 +4,7 @@
 #include "../util/array_list.h"
 #include "../op_engine/canvas.h"
 #include "player.h"
-#include "enemy.h"
+#include "./enemy/property.h"
 
 struct Scene{
     struct ArrayList list_Object;

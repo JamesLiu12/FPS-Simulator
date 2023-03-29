@@ -6,6 +6,7 @@ void Player_Init(struct Player *player){
     player->health = 100;
     player->atk = 1;
     player->speed = 1;
+	player->defence = 5;
 
     Transform_Init(&player->transform, NULL);
 

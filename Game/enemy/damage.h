@@ -4,8 +4,9 @@
 
 #include "behaviour.h"
 
-int Damage_Determination(struct CollideBox *box, struct Vector3 *collide);
-void Damage_Calculation(struct Enemy *enemy, );
+bool Damage_Determination(struct Player *player,struct Enemy *enemy);
+
+double Damage_Calculation(struct Scene *scene,struct Enemy *enemy);
 
 
 #endif //FPS_SIMULATOR_DAMAGE_H
