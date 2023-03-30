@@ -9,7 +9,9 @@ int main() {
     Vector3_Set(&rotation, 0.1, 0, 0);
 
     struct Mesh *mesh = ModelCube_New();
-    struct Object *obj1 = Object_New(mesh, FLOOR), *obj2 = Object_New(mesh, WALL);
+    struct Transform transform;
+    Transform_Init(&transform, NULL);
+    struct Object *obj1 = Object_New(mesh, &transform, FLOOR), *obj2 = Object_New(mesh, &transform, WALL);
     Vector3_Set(&obj1->transform.position, 0, 0, 5);
     Vector3_Set(&obj2->transform.position, 3, 3, 8);
     struct Vector3 rot;
