@@ -7,7 +7,6 @@
 #include <signal.h>
 #include <termios.h>
 #include <sys/ioctl.h>
-#include <stdbool.h>
 static struct termios oldtio;
 static struct termios curtio;
 
@@ -45,7 +44,7 @@ void term_restore(){
 }
 
 static char get[4]= {0};
-bool kbhit(){
+int kbhit(){
     struct pollfd pfds[1];
     int ret;
     memset(get, 0, sizeof(char) * 4);
@@ -60,9 +59,9 @@ bool kbhit(){
         read(0, get, 3);
         return strlen(get) > 0;
     }
-    return false;
+    return 0;
 }
 
-bool keydown(const char* key){
+int keydown(const char* key){
     return !strcmp(get, key);
 }

@@ -5,14 +5,15 @@
 
 struct Player{
     struct Canvas canvas;
-    double health, atk, speed;
+    double health, atk, movespeed, rotationspeed;
     struct Transform transform;
     struct CollideBox collideBox;
+    struct Vector3 facing;
 };
 
 //Initializer of player
 void Player_Init(struct Player *player);
-
+struct Player* New_Player();
 //Free the memory of player
 void Del_Player(struct Player *player);
 

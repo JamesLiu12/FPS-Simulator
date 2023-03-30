@@ -5,7 +5,9 @@ void Player_Init(struct Player *player){
 
     player->health = 100;
     player->atk = 1;
-    player->speed = 1;
+    player->movespeed = 0.5;
+    player->rotationspeed=0.1;
+    Vector3_Set(&player->facing,0,0,1);
 
     Transform_Init(&player->transform, NULL);
 
@@ -15,6 +17,12 @@ void Player_Init(struct Player *player){
     CollideBox_Set(&player->collideBox, &v1, &v2);
 }
 
+struct Player* New_Player() {
+    struct Player* player = malloc(sizeof(struct Player));
+    Player_Init(player);
+    return player;
+}
+
 void Del_Player(struct Player *player){
     Del_Canvas(&player->canvas);
     free(player);
@@ -22,11 +30,13 @@ void Del_Player(struct Player *player){
 
 void Player_Move(struct Player *player, struct Vector3* move){
     Vector3_Add(&player->transform.position, move);
+    Canvas_CameraMove(&player->canvas,move);
 }
 
 void Player_Rotate(struct Player *player, struct Vector3* angle){
     Vector3_Add(&player->transform.rotation, angle);
     Transform_RotationMatrixUpdate(&player->transform);
+    Canvas_CameraRotate(&player->canvas,angle);
 }
 
 void Player_Start(struct Player *player){
