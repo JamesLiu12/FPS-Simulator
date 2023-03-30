@@ -2,8 +2,21 @@
 #include <stdio.h>
 #include "op_engine/op_engine.h"
 #include <math.h>
-
+#include <stdlib.h>
+#include <string.h>
+#include <signal.h>
+#include <unistd.h>
+#include "Game/player.h"
+static sig_atomic_t end = 0;
+static void sighandler(int signo)
+{
+    end = 1;
+    //printf("good beye!\n");
+}
 int main() {
+
+    term_setup(sighandler);
+
     struct Canvas *canvas = New_Canvas(64, 64);
     struct Vector3 rotation;
     Vector3_Set(&rotation, 0.1, 0, 0);
@@ -35,5 +48,9 @@ int main() {
     printf("\x1b[48;2;%d;%d;%dm", 0, 0, 0);
     Del_Canvas(canvas);
     free(canvas);
+    system("clear");
+    printf("Goodbye!\n");
+    term_restore();
+	sleep(1);
     return 0;
 }
