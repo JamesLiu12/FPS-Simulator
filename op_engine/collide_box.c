@@ -97,3 +97,22 @@ double CollideBox_RayDistance(struct CollideBox *box, struct Transform *transfor
     }
     return result;
 }
+
+double CollideBox_IsCollide(struct CollideBox *b1, struct Transform *t1, struct CollideBox *b2, struct Transform *t2){
+    Transform_UpdateGlobal(t1);
+    Transform_UpdateGlobal(t2);
+
+    struct Vector3 b1_minV = b1->minVertex;
+    struct Vector3 b1_maxV = b1->maxVertex;
+    struct Vector3 b2_minV = b2->minVertex;
+    struct Vector3 b2_maxV = b2->maxVertex;
+
+    Transform_ToGlobal(t1, &b1_minV);
+    Transform_ToGlobal(t1, &b1_maxV);
+    Transform_ToGlobal(t2, &b2_minV);
+    Transform_ToGlobal(t2, &b2_maxV);
+
+    return (b1_minV.x >= b2_maxV.x || b2_minV.x >= b1_maxV.x)
+        && (b1_minV.y >= b2_maxV.y || b2_minV.y >= b1_maxV.y)
+        && (b1_minV.z >= b2_maxV.z || b2_minV.z >= b1_maxV.z);
+}
