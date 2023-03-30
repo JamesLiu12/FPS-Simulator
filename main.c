@@ -7,6 +7,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include "Game/player.h"
+const int FPS=60;
 static sig_atomic_t end = 0;
 static void sighandler(int signo)
 {
@@ -28,6 +29,10 @@ int main() {
     struct Object *obj1 = Object_New(mesh, &transform, FLOOR), *obj2 = Object_New(mesh, &transform, WALL);
     Vector3_Set(&obj1->transform.position, 0, 0, 5);
     Vector3_Set(&obj2->transform.position, 3, 3, 8);
+    struct Object *obj3 = Object_New(mesh, &transform, FLOOR);
+    Vector3_Set(&obj3->transform.position, 5, 0, 0);
+    struct Object *obj4 = Object_New(mesh, &transform, FLOOR);
+    Vector3_Set(&obj4->transform.position, -5, -2, 0);
     //struct Vector3 rot;
     //Vector3_Set(&rot, -1, 0, 0);
     //Canvas_CameraRotate(&player->canvas, &rot);
@@ -46,21 +51,22 @@ int main() {
     while(1){
         count++;
         if(kbhit()){
-            if(keydown(W))printf("W down\n");
-            if(keydown(A))printf("A DOWN\n");
-            if(keydown(S))printf("S DOWN\n");
-            if(keydown(D))printf("D DOWN\n");
-            if(keydown(UP))printf("UP down\n");
-            if(keydown(DOWN))printf("DOWN DOWN\n");
-            if(keydown(LEFT))printf("LEFT DOWN\n");
-            if(keydown(RIGHT))printf("RIGHT DOWN\n");
-            if(keydown(ESC))printf("ESC down\n");
+            Player_Control(player);
+            if(keydown(ESC))break;
             //if(keydown(SPACE))break;
+            
         }
-        
-        printf("count:  %d\n",count);
-        sleep(1);
-        system("clear");
+            Canvas_clear(&player->canvas);
+            Object_Show(obj1, &player->canvas);
+            Object_Show(obj2, &player->canvas);
+            Object_Show(obj3, &player->canvas);
+            Object_Show(obj4, &player->canvas);
+            Canvas_flush(&player->canvas);
+            printf("%lf %lf %lf\n",player->facing.x,player->facing.y,player->facing.z);
+            usleep(1000000/FPS);
+        //printf("count:  %d\n",count);
+        //usleep(5000);
+        //system("clear");
     }
 //    for (int i = 0; i < canvas->height; i++){
 //        for (int j = 0; j < canvas->width; j++) printf("%f ", canvas->vram_depth[i * canvas->width + j]);

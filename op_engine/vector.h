@@ -22,7 +22,7 @@ struct Vector3* Vector3_New(double x, double y, double z);
 void Vector3_Add(struct Vector3 *v1, struct Vector3 *v2);
 void Vector3_Subtract(struct Vector3 *v1, struct Vector3 *v2);
 void Vector3_Scale(struct Vector3 *v, double factor);
-
+void Vector3_Normalize(struct Vector3 *v);
 //Return the square of module length of v
 double Vector3_MagnitudeSq(struct Vector3 *v);
 

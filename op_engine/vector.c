@@ -39,7 +39,11 @@ void Vector3_Scale(struct Vector3 *v, double factor){
     v->y *= factor;
     v->z *= factor;
 }
-
+void Vector3_Normalize(struct Vector3 *v){
+    v->x /= sqrt(Vector3_MagnitudeSq(v));
+    v->y /= sqrt(Vector3_MagnitudeSq(v));
+    v->z /= sqrt(Vector3_MagnitudeSq(v));
+}
 double Vector3_MagnitudeSq(struct Vector3 *v){
     return v->x * v->x + v->y * v->y + v->z * v->z;
 }
