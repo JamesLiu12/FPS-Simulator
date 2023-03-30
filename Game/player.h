@@ -5,14 +5,15 @@
 
 struct Player{
     struct Canvas canvas;
-    double health, atk, speed;
+    double health, atk, movespeed, rotationspeed;
     struct Transform transform;
     struct CollideBox collideBox;
+    struct Vector3 facing;
 };
 
 //Initializer of player
 void Player_Init(struct Player *player);
-
+struct Player* New_Player();
 //Free the memory of player
 void Del_Player(struct Player *player);
 
@@ -26,4 +27,15 @@ void Player_Start(struct Player *player);
 //What player does each frame
 void Player_Update(struct Player *player);
 
+void Player_Control(struct Player *player);
+
+void Player_MoveForward(struct Player *player);
+void Player_MoveBackward(struct Player *player);
+void Player_MoveLeft(struct Player *player);
+void Player_MoveRight(struct Player *player);
+
+void Player_RotateUp(struct Player *player);
+void Player_RotateDown(struct Player *player);
+void Player_RotateLeft(struct Player *player);
+void Player_RotateRight(struct Player *player);
 #endif //FPS_SIMULATOR_PLAYER_H
