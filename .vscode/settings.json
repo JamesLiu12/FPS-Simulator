@@ -1,6 +1,0 @@
-{
-    "files.associations": {
-        "op_engine.h": "c",
-        "termios.h": "c"
-    }
-}
