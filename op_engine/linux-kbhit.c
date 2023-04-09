@@ -1,3 +1,4 @@
+#ifdef __linux__
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -65,3 +66,4 @@ int kbhit(){
 int keydown(const char* key){
     return !strcmp(get, key);
 }
+#endif

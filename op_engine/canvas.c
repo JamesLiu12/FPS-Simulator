@@ -29,7 +29,6 @@ void Canvas_Init(struct Canvas *canvas, short height, short width){
     canvas->color.green = (char)255;
     canvas->color.blue = (char)255;
 
-    Transform_Init(&canvas->transform, NULL);
     Transform_Init(&canvas->camera_transform, NULL);
 
 
@@ -97,8 +96,10 @@ int get_brightness(double depth){
 
 void print_pixel(enum Tag tag, int brightness){
     if (tag == EMPTY) printf("  ");
-    else if (tag == WALL) printf("\x1b[38;2;%d;%d;%dm██", brightness, brightness, brightness);
-    else if (tag == FLOOR) printf("\x1b[38;2;%d;%d;%dm░░", brightness, brightness, brightness);
+//    else if (tag == WALL) printf("\x1b[38;2;%d;%d;%dm██", brightness, brightness, brightness);
+//    else if (tag == FLOOR) printf("\x1b[38;2;%d;%d;%dm░░", brightness, brightness, brightness);
+    else if (tag == WALL) printf("██");
+    else if (tag == FLOOR) printf("░░");
 }
 
 void Canvas_flush(struct Canvas* canvas){
@@ -412,24 +413,6 @@ void Canvas_Rasterize(struct Canvas *canvas, struct Vector3* points, int size, e
 
         Vector3_Copy(&p3, &p2);
     }
-}
-
-void Canvas_Move(struct Canvas *canvas, struct Vector3* displacement){
-    Vector3_Add(&canvas->transform.position, displacement);
-}
-
-void Canvas_Rotation(struct Canvas *canvas, struct Vector3* rotation){
-    canvas->transform.rotation.x += rotation->x;
-    canvas->transform.rotation.y += rotation->y;
-    canvas->transform.rotation.z += rotation->z;
-
-    Transform_RotationMatrixUpdate(&canvas->transform);
-}
-
-void Canvas_Stretch(struct Canvas *canvas, struct Vector3* scale){
-    canvas->transform.scale.x *= scale->x;
-    canvas->transform.scale.y *= scale->y;
-    canvas->transform.scale.z *= scale->z;
 }
 
 void Canvas_CameraMove(struct Canvas *canvas, struct Vector3 *displacement) {

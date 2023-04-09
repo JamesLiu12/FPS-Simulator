@@ -10,6 +10,7 @@ void Player_Init(struct Player *player){
     Vector3_Set(&player->facing,0,0,1);
 
     Transform_Init(&player->transform, NULL);
+    Transform_Init(&player->canvas.camera_transform, &player->transform);
 
     struct Vector3 v1, v2;
     Vector3_Set(&v1, -0.5, -1, -0.5);
@@ -25,12 +26,12 @@ struct Player* New_Player() {
 
 void Del_Player(struct Player *player){
     Del_Canvas(&player->canvas);
-    free(player);
+//    free(player);
 }
 
 void Player_Move(struct Player *player, struct Vector3* move){
     Vector3_Add(&player->transform.position, move);
-    Canvas_CameraMove(&player->canvas,move);
+//    Canvas_CameraMove(&player->canvas,move);
 }
 
 void Player_Rotate(struct Player *player, struct Vector3* angle){
@@ -52,6 +53,8 @@ void Player_Start(struct Player *player){
 void Player_Update(struct Player *player){
     //TODO
 }
+
+/*
 void Player_Control(struct Player *player){
     if(keydown(W))Player_RotateUp(player);
     if(keydown(S))Player_RotateDown(player);
@@ -63,6 +66,7 @@ void Player_Control(struct Player *player){
     if(keydown(LEFT))Player_MoveLeft(player);
     if(keydown(RIGHT))Player_MoveRight(player);
 }
+*/
 
 void Player_MoveForward(struct Player *player){
     struct Vector3 movement;
