@@ -31,7 +31,8 @@ void Object_Set(struct Object *object, struct Mesh *mesh, struct Transform *tran
                 struct CollideBox *collideBoxes, int collideBoxCount);
 
 //Newer of object
-struct Object* Object_New(struct Mesh *mesh, struct Transform *transform, enum Tag tag);
+struct Object* Object_New(struct Mesh *mesh, struct Transform *transform, enum Tag tag,
+                          struct CollideBox *collideBoxes, int collideBoxCount);
 
 //Free the memory of object
 void Del_Object(struct Object *object);

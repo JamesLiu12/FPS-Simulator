@@ -25,7 +25,7 @@ add_executable(
     op_engine/linux-kbhit.h
     op_engine/linux-kbhit.c
 
-    op_engine/models/cube.c
+        Game/models/cube.c
 
     util/util.h
     util/util.c
@@ -37,7 +37,7 @@ add_executable(
     op_engine/segment.c
     op_engine/plane.c
     op_engine/line.c
-    op_engine/models/clock.c
+        Game/models/clock.c
     op_engine/object.h
     op_engine/object.c
     op_engine/tag.h
@@ -50,5 +50,5 @@ add_executable(
     Game/player.c
     Game/runner.h
     Game/runner.c
-        playground.h op_engine/input.h op_engine/input.c)
+        playground.h op_engine/input.h op_engine/input.c Game/models/clock.h Game/models/clock.h playground.h)
 target_link_libraries(FPS_Simulator m)

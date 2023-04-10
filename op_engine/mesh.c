@@ -6,7 +6,7 @@ void Face_Set(struct Face* face, unsigned int f1, unsigned int f2, unsigned int 
     face->f3 = f3;
 }
 
-struct Mesh *new_Mesh(unsigned int triangle_count, unsigned int vertex_count) {
+struct Mesh *New_Mesh(unsigned int triangle_count, unsigned int vertex_count) {
     struct Mesh *model = malloc(sizeof(struct Mesh));
 
     model->triangle_count = triangle_count;
