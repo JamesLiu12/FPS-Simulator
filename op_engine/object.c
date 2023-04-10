@@ -4,10 +4,13 @@
 #include "matrix.h"
 #include "vector.h"
 
-void Object_Set(struct Object *object, struct Mesh *mesh, struct Transform *transform, enum Tag tag) {
+void Object_Set(struct Object *object, struct Mesh *mesh, struct Transform *transform, enum Tag tag,
+                struct CollideBox *collideBoxes, int collideBoxCount) {
     object->mesh = mesh;
     object->transform = *transform;
     object->tag = tag;
+    object->collideBoxes = collideBoxes;
+    object->collideBoxCount = collideBoxCount;
 }
 
 struct Object* Object_New(struct Mesh *mesh, struct Transform *transform, enum Tag tag) {
