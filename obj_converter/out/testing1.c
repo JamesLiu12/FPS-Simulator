@@ -171,7 +171,7 @@ void ModelTesting1_Init(struct Mesh *testing1) {
 }
 
 struct Mesh* ModelTesting1_New() {
-	struct Mesh *testing1= new_Mesh(98, 68);
+	struct Mesh *testing1= New_Mesh(98, 68);
 	ModelTesting1_Init(testing1);
 	return testing1;
 }
