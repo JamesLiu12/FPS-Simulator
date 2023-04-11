@@ -3,12 +3,20 @@
 
 #include "../op_engine/op_engine.h"
 
+struct Weapon{
+	double speed, damage;
+};
+
 struct Player{
     struct Canvas canvas;
     double health, atk, speed, defence;
     struct Transform transform;
     struct CollideBox collideBox;
+	struct Weapon weapon;
 };
+
+//Initializer of weapon (corresponding to player)
+void Weapon_Init(struct Weapon *weapon);
 
 //Initializer of player
 void Player_Init(struct Player *player);

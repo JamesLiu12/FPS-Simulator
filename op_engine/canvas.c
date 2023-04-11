@@ -99,6 +99,10 @@ void print_pixel(enum Tag tag, int brightness){
     if (tag == EMPTY) printf("  ");
     else if (tag == WALL) printf("\x1b[38;2;%d;%d;%dm██", brightness, brightness, brightness);
     else if (tag == FLOOR) printf("\x1b[38;2;%d;%d;%dm░░", brightness, brightness, brightness);
+	//TODO render enemy
+	else if (tag == LEG) printf("\x1b[38;2;%d;%d;%dm░░", 11, 45, 14);
+	else if (tag == FACE) printf("\x1b[38;2;%d;%d;%dm░░", 11, 45, 14);
+	else if (tag == BODY) printf("\x1b[38;2;%d;%d;%dm░░", 11, 45, 14);
 }
 
 void Canvas_flush(struct Canvas* canvas){

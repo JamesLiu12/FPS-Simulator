@@ -2,7 +2,8 @@
 #define FPS_SIMULATOR_TAG_H
 
 enum Tag{
-    WALL, FLOOR, EMPTY
+    WALL, FLOOR, EMPTY,
+	FACE, BODY, LEG
 };
 
 #endif //FPS_SIMULATOR_TAG_H

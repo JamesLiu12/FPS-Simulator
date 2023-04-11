@@ -3,8 +3,8 @@
 //damage calculation & determination from enemy to player
 
 #include "behaviour.h"
+#include "../scene.h"
 
-bool Damage_Determination(struct Player *player,struct Enemy *enemy);
 
 double Damage_Calculation(struct Scene *scene,struct Enemy *enemy);
 

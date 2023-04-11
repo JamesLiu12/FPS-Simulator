@@ -1,5 +1,10 @@
 #include "player.h"
 
+void Weapon_Init(struct Weapon *weapon){
+	weapon->speed = 10;
+	weapon->damage = 2;
+}
+
 void Player_Init(struct Player *player){
     Canvas_Init(&player->canvas, 32, 64);
 
@@ -7,6 +12,7 @@ void Player_Init(struct Player *player){
     player->atk = 1;
     player->speed = 1;
 	player->defence = 5;
+	Weapon_Init(&player->weapon);
 
     Transform_Init(&player->transform, NULL);
 
