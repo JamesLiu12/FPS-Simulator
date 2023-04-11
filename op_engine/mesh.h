@@ -23,7 +23,7 @@ struct Mesh {
 void Mesh_Set(unsigned int triangle_count, unsigned int vertex_count);
 
 //The newer of mesh
-struct Mesh *new_Mesh(unsigned int triangle_count, unsigned int vertex_count);
+struct Mesh *New_Mesh(unsigned int triangle_count, unsigned int vertex_count);
 
 //Freeing the memory of mesh from heap
 void Del_Mesh(struct Mesh *model);

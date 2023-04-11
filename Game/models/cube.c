@@ -1,4 +1,4 @@
-#include "../mesh.h"
+#include "../../op_engine/mesh.h"
 
 
 void ModelCube_Init(struct Mesh *cube) {
@@ -27,7 +27,7 @@ void ModelCube_Init(struct Mesh *cube) {
 }
 
 struct Mesh* ModelCube_New() {
-    struct Mesh *cube = new_Mesh(12, 8);
+    struct Mesh *cube = New_Mesh(12, 8);
     ModelCube_Init(cube);
     return cube;
 }
