@@ -613,7 +613,7 @@ void ModelClock_Init(struct Mesh *clock) {
 }
 
 struct Mesh* ModelClock_New() {
-	struct Mesh *clock= new_Mesh(404, 204);
+	struct Mesh *clock= New_Mesh(404, 204);
 	ModelClock_Init(clock);
 	return clock;
 }
