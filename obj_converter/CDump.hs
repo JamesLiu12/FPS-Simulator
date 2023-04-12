@@ -26,7 +26,7 @@ cDumpFileTemplate modelName vertices triangles =
         "",
         "struct Mesh* Model" ++ upperModelName ++ "_New() {",
         "\tstruct Mesh *" ++ lowerModelName ++
-        "= new_Mesh(" ++ show(length triangles) ++
+        "= New_Mesh(" ++ show(length triangles) ++
         ", " ++ show(length vertices) ++ ");",
         "\tModel" ++ upperModelName ++ "_Init(" ++ lowerModelName ++ ");",
         "\treturn " ++ lowerModelName ++ ";",
