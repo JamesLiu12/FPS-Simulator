@@ -37,24 +37,24 @@ void Scene_Init(struct Scene *scene){
     struct CollideBox *collideBoxes_Boundary = (struct CollideBox*)malloc(sizeof(struct CollideBox) * collideBoxCount_Boundary);
     //set collideBoxes:
 
-    Vector3_Set(&minVertex_Boundary, 7.5, 7.5, 0);//ground
-    Vector3_Set(&maxVertex_Boundary, -7.5, -7.5, -0.1);
+    Vector3_Set(&minVertex_Boundary, -7.5, -7.5, -0.1);//ground
+    Vector3_Set(&maxVertex_Boundary, 7.5, 7.5, 0);
     CollideBox_Set(&collideBoxes_Boundary[0], &minVertex_Boundary, &maxVertex_Boundary);
 
-    Vector3_Set(&minVertex_Boundary, -7.4, -7.4, 0);//boundary west
-    Vector3_Set(&maxVertex_Boundary, -7.8, 7.8, 2.5);
+    Vector3_Set(&minVertex_Boundary, -7.8, -7.8, 0);//boundary west
+    Vector3_Set(&maxVertex_Boundary, -7.4, 7.4, 2.5);
     CollideBox_Set(&collideBoxes_Boundary[1], &minVertex_Boundary, &maxVertex_Boundary);
 
-    Vector3_Set(&minVertex_Boundary, -7.4, -7.4, 0);//boundary south
-    Vector3_Set(&maxVertex_Boundary, 7.8, -7.5, 2.5);
+    Vector3_Set(&minVertex_Boundary, -7.8, -7.8, 0);//boundary south
+    Vector3_Set(&maxVertex_Boundary, 7.4, -7.4, 2.5);
     CollideBox_Set(&collideBoxes_Boundary[2], &minVertex_Boundary, &maxVertex_Boundary);
 
-    Vector3_Set(&minVertex_Boundary, 7.4, 7.4, 0);//boundary east
-    Vector3_Set(&maxVertex_Boundary, 7.8, -7.8, 2.5);
+    Vector3_Set(&minVertex_Boundary, 7.4, -7.4, 0);//boundary east
+    Vector3_Set(&maxVertex_Boundary, 7.8, 7.8, 2.5);
     CollideBox_Set(&collideBoxes_Boundary[3], &minVertex_Boundary, &maxVertex_Boundary);
 
-    Vector3_Set(&minVertex_Boundary, 7.4, 7.4, 0);//boundary north
-    Vector3_Set(&maxVertex_Boundary, -7.8, 7.8, 2.5);
+    Vector3_Set(&minVertex_Boundary, -7.4, 7.4, 0);//boundary north
+    Vector3_Set(&maxVertex_Boundary, 7.8, 7.8, 2.5);
     CollideBox_Set(&collideBoxes_Boundary[4], &minVertex_Boundary, &maxVertex_Boundary);
 
     struct Transform transform_Boundary;
@@ -72,8 +72,8 @@ void Scene_Init(struct Scene *scene){
     int collideBoxCount_Barrier = 2;
     struct CollideBox *collideBoxes_Barrier = (struct CollideBox*)malloc(sizeof(struct CollideBox) * collideBoxCount_Barrier);
 
-    Vector3_Set(&minVertex_Barrier, -2.9, -4.57, 0);    //barrier left
-    Vector3_Set(&maxVertex_Barrier, -3.1, 7.43, 2.5);
+    Vector3_Set(&minVertex_Barrier, -3.2, -4.57, 0);    //barrier left
+    Vector3_Set(&maxVertex_Barrier, -2.9, 7.43, 2.5);
     CollideBox_Set(&collideBoxes_Barrier[0], &minVertex_Barrier, &maxVertex_Barrier);
 
     Vector3_Set(&minVertex_Barrier, 2.9, -7.29, 0);    //barrier right
