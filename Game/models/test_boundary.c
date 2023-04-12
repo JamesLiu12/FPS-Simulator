@@ -1,4 +1,4 @@
-#include "../mesh.h"
+#include "test_boundary.h"
 
 void ModelTest_boundary_Init(struct Mesh *test_boundary) {
 	Vector3_Set(&test_boundary->vertices[0], -7.5, 0.0, 7.5);

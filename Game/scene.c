@@ -1,6 +1,6 @@
 #include "scene.h"
 #include "../op_engine/object.h"
-#include "../Game/models/clock.h"
+#include "../Game/models/models.h"
 
 void Scene_Init(struct Scene *scene){
     ArrayList_Init(&scene->list_Object, sizeof(struct Object*));
@@ -58,7 +58,7 @@ void Scene_Init(struct Scene *scene){
 
     struct Transform transform_Barrier;
     struct Mesh *mesh_Barrier = ModelWall_New();
-    ModelWall_Init(mesh_Barrier)
+    ModelWall_Init(mesh_Barrier);
     Transform_Init(&transform_Barrier, NULL);
 
     struct Object* Map_Barrier = Object_New(mesh_Barrier, &transform_Barrier, WALL, collideBoxes_Barrier, collideBoxCount_Barrier);

@@ -50,5 +50,5 @@ add_executable(
     Game/player.c
     Game/runner.h
     Game/runner.c
-        playground.h op_engine/input.h op_engine/input.c Game/models/clock.h Game/models/clock.h playground.h)
+        playground.h op_engine/input.h op_engine/input.c Game/models/clock.h Game/models/clock.h playground.h Game/models/wall.h Game/models/wall.c Game/models/test_boundary.c Game/models/test_boundary.h Game/models/models.h)
 target_link_libraries(FPS_Simulator m)
