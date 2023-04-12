@@ -58,11 +58,11 @@ void Scene_Init(struct Scene *scene){
     CollideBox_Set(&collideBoxes_Boundary[4], &minVertex_Boundary, &maxVertex_Boundary);
 
     struct Transform transform_Boundary;
-    struct Mesh *mesh = ModelTest_boundary_New();
-    ModelTest_boundary_Init(mesh);
+    struct Mesh *mesh_Boundary = ModelTest_boundary_New();
+    ModelTest_boundary_Init(mesh_Boundary);
     Transform_Init(&transform_Boundary, NULL);
 
-    struct Object* Map_Boundary = Object_New(mesh, &transform_Boundary, FLOOR, collideBoxes_Boundary, collideBoxCount_Boundary);
+    struct Object* Map_Boundary = Object_New(mesh_Boundary, &transform_Boundary, WALL, collideBoxes_Boundary, collideBoxCount_Boundary);
 
     ArrayList_PushBack(&scene->list_Object, Map_Boundary);
     //Map_boundary finished
@@ -81,11 +81,11 @@ void Scene_Init(struct Scene *scene){
     CollideBox_Set(&collideBoxes_Barrier[1], &minVertex_Barrier, &maxVertex_Barrier);
 
     struct Transform transform_Barrier;
-    struct Mesh *mesh = ModelWall_New();
-    ModelWall_Init(mesh)
+    struct Mesh *mesh_Barrier = ModelWall_New();
+    ModelWall_Init(mesh_Barrier)
     Transform_Init(&transform_Barrier, NULL);
 
-    struct Object* Map_Barrier = Object_New(mesh, &transform_Barrier, FLOOR, collideBoxes_Barrier, collideBoxCount_Barrier);
+    struct Object* Map_Barrier = Object_New(mesh_Barrier, &transform_Barrier, WALL, collideBoxes_Barrier, collideBoxCount_Barrier);
 
     ArrayList_PushBack(&scene->list_Object, Map_Barrier);
 >>>>>>> Stashed changes
