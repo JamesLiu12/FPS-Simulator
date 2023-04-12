@@ -16,4 +16,6 @@ void Scene_Init(struct Scene *scene);
 
 void Del_Scene(struct Scene *scene);
 
+void Scene_Show(struct Scene *scene, struct Canvas *canvas);
+
 #endif //FPS_SIMULATOR_SCENE_H

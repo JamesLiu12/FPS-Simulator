@@ -94,7 +94,7 @@ int get_brightness(double depth){
     return (int)fmax(255 - 20 * depth, 10);
 }
 
-void print_pixel(enum Tag tag, int brightness){
+void print_pixel(enum Tag tag, double distance){
     if (tag == EMPTY) printf("  ");
 //    else if (tag == WALL) printf("\x1b[38;2;%d;%d;%dm██", brightness, brightness, brightness);
 //    else if (tag == FLOOR) printf("\x1b[38;2;%d;%d;%dm░░", brightness, brightness, brightness);
@@ -146,7 +146,7 @@ void Canvas_flush(struct Canvas* canvas){
 //                putchar(' ');
 //            }
 //#endif
-            print_pixel(canvas->vram_tag[vram_index], get_brightness(canvas->vram_depth[vram_index]));
+            print_pixel(canvas->vram_tag[vram_index], canvas->vram_depth[vram_index]);
         }
         putchar('\n');
     }

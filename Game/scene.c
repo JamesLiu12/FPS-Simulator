@@ -40,7 +40,7 @@ void Scene_Init(struct Scene *scene){
 
     struct Object* Map_Boundary = Object_New(mesh_Boundary, &transform_Boundary, WALL, collideBoxes_Boundary, collideBoxCount_Boundary);
 
-    ArrayList_PushBack(&scene->list_Object, Map_Boundary);
+    ArrayList_PushBack(&scene->list_Object, &Map_Boundary);
     //Map_boundary finished
 
     //Map_barrier origin coordinate (0,0,0)
@@ -63,11 +63,28 @@ void Scene_Init(struct Scene *scene){
 
     struct Object* Map_Barrier = Object_New(mesh_Barrier, &transform_Barrier, WALL, collideBoxes_Barrier, collideBoxCount_Barrier);
 
-    ArrayList_PushBack(&scene->list_Object, Map_Barrier);
+    ArrayList_PushBack(&scene->list_Object, &Map_Barrier);
 }
 
 void Del_Scene(struct Scene *scene){
     Del_ArrayList(&scene->list_Object);
     Del_ArrayList(&scene->list_Enemy);
     Del_Player(&scene->player);
+}
+
+void Scene_Show(struct Scene *scene, struct Canvas *canvas){
+    for (int i = 0; i < scene->list_Object.size; i++){
+        struct Object *object = ((struct Object**)scene->list_Object.data)[i];
+        Object_Show(object, canvas);
+    }
+    for (int i = 0; i < scene->list_Enemy.size; i++){
+        struct Enemy *enemy = ((struct Enemy**)scene->list_Object.data)[i];
+        struct Object
+                *head = &enemy->head,
+                *body = &enemy->body,
+                *leg = &enemy->leg;
+        Object_Show(head, canvas);
+        Object_Show(body, canvas);
+        Object_Show(leg, canvas);
+    }
 }
