@@ -2,11 +2,6 @@
 #include <stdio.h>
 #include "op_engine/op_engine.h"
 #include <math.h>
-<<<<<<< Updated upstream
-
-int main() {
-    struct Canvas *canvas = New_Canvas(64, 64);
-=======
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
@@ -32,7 +27,6 @@ int main() {
     /*
     //struct Canvas *canvas = New_Canvas(64, 64);
     struct Player *player = New_Player();
->>>>>>> Stashed changes
     struct Vector3 rotation;
     Vector3_Set(&rotation, 0.1, 0, 0);
 
@@ -42,20 +36,6 @@ int main() {
     struct Object *obj1 = Object_New(mesh, &transform, FLOOR), *obj2 = Object_New(mesh, &transform, WALL);
     Vector3_Set(&obj1->transform.position, 0, 0, 5);
     Vector3_Set(&obj2->transform.position, 3, 3, 8);
-<<<<<<< Updated upstream
-    struct Vector3 rot;
-    Vector3_Set(&rot, -1, 0, 0);
-    Canvas_CameraRotate(canvas, &rot);
-
-
-    for (int i = 0; i < 100; i++) {
-        Canvas_clear(canvas);
-        Object_Show(obj1, canvas);
-        Object_Show(obj2, canvas);
-        Canvas_CameraRotate(canvas, &rotation);
-        Canvas_flush(canvas);
-//        getchar();
-=======
     struct Object *obj3 = Object_New(mesh, &transform, FLOOR);
     Vector3_Set(&obj3->transform.position, 5, 0, 0);
     struct Object *obj4 = Object_New(mesh, &transform, FLOOR);
@@ -96,7 +76,6 @@ int main() {
         //printf("count:  %d\n",count);
         //usleep(5000);
         //system("clear");
->>>>>>> Stashed changes
     }
 //    for (int i = 0; i < canvas->height; i++){
 //        for (int j = 0; j < canvas->width; j++) printf("%f ", canvas->vram_depth[i * canvas->width + j]);
@@ -104,16 +83,11 @@ int main() {
 //    }
     printf("\x1b[38;2;%d;%d;%dm", 0xee, 0xee, 0xee);
     printf("\x1b[48;2;%d;%d;%dm", 0, 0, 0);
-<<<<<<< Updated upstream
-    Del_Canvas(canvas);
-    free(canvas);
-=======
     Del_Player(player);
     system("clear");
     printf("Goodbye!\n");*/
 
     term_restore();
 	sleep(1);
->>>>>>> Stashed changes
     return 0;
 }

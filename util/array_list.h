@@ -1,6 +1,5 @@
 # ifndef UTIL_ARRAY_LIST
 #include "util.h"
-
 struct ArrayList {
     unsigned int size, capacity;
     void *data;

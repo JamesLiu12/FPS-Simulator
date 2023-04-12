@@ -1,7 +1,9 @@
 #ifndef Game_UI_StartMenu
+#include "ui_settingmenu.h"
 struct UI_StartMenu {
     int pointer;
     char menu[4][8];
+    struct UI_SettingMenu settingui;
 
 };
 struct UI_StartMenu* New_UI_StartMenu();

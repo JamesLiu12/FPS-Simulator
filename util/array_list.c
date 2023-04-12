@@ -1,7 +1,6 @@
 #include "array_list.h"
 #include <stdlib.h>
 #include <memory.h>
-
 void ArrayList_Init(struct ArrayList *list, unsigned int element_size){
     list->size = 0;
     list->capacity = 2;

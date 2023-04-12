@@ -7,3 +7,4 @@
 #include "tag.h"
 #include "object.h"
 #include "mesh.h"
+#include "input.h"

@@ -5,6 +5,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include "ui_startmenu.h"
+#include "ui_settingmenu.h"
 #include "../op_engine/op_engine.h"
 #include "../Game/game.h"
 struct UI_StartMenu* New_UI_StartMenu() {
@@ -18,6 +19,7 @@ void UI_StartMenu_Init(struct UI_StartMenu *startui){
     strcpy(startui->menu[1],"  Load  ");
     strcpy(startui->menu[2],"Settings");
     strcpy(startui->menu[3],"  Exit  ");
+    UI_SettingMenu_Init(&startui->settingui);
     
 }
 void Show_StartMenu(struct UI_StartMenu *startui){
@@ -72,8 +74,10 @@ int Fetch_Operation(){
 void Launch_StartMenu(struct UI_StartMenu *startui){
     int operation=0;
     while(operation!=3){
+        
         system("clear");
         Show_StartMenu(startui);
+        printf("current operation%d\n",operation);
         operation=Fetch_Operation();
         if(operation==1){
             startui->pointer++;
@@ -97,7 +101,7 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
             //TODO
             break;
         case 1:
-            //Load_Runner();
+            //Runner_Load();
             //TODO
             break;
         case 2:
