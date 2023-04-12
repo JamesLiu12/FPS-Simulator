@@ -20,7 +20,6 @@ void UI_StartMenu_Init(struct UI_StartMenu *startui){
     strcpy(startui->menu[2],"Settings");
     strcpy(startui->menu[3],"  Exit  ");
     UI_SettingMenu_Init(&startui->settingui);
-    
 }
 void Show_StartMenu(struct UI_StartMenu *startui){
     /*printf("\033[3;47;35mTexting\033[0m\t\t");
@@ -62,22 +61,26 @@ int Fetch_Operation(){
     //return 1 is rolling down
     //return 2 is rolling up
     //return 3 is selecting
+    //return 4 is increasing
+    //return 5 is decreasing
     while(1){
         if(kbhit()){
         if(keydown(DOWN)||keydown(S))return 1;
         if(keydown(UP)||keydown(W))return 2;
         if(keydown(ENTER))return 3;
+        if(keydown(RIGHT)||keydown(D))return 4;
+        if(keydown(LEFT)||keydown(S))return 5;
     }
     }
     return 0;
 }
 void Launch_StartMenu(struct UI_StartMenu *startui){
-    int operation=0;
+    int operation;
+    STARTMENUORIGIN:
+    operation=0;
     while(operation!=3){
-        
         system("clear");
         Show_StartMenu(startui);
-        printf("current operation%d\n",operation);
         operation=Fetch_Operation();
         if(operation==1){
             startui->pointer++;
@@ -99,13 +102,15 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
             Runner_Init(&runner);
             Runner_Run(&runner);
             //TODO
+            //Del_Runner(&runner);
             break;
         case 1:
-            //Runner_Load();
+            //Load_Runner();
             //TODO
             break;
         case 2:
-            //Launch_Setting();
+            Launch_SettingMenu(&startui->settingui);
+            goto STARTMENUORIGIN;
             //TODO
             break;
         case 3:

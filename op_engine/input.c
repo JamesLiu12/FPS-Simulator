@@ -8,7 +8,6 @@
 #include <signal.h>
 #include <termios.h>
 #include <sys/ioctl.h>
-#include "input.h"
 static struct termios oldtio;
 static struct termios curtio;
 
@@ -69,5 +68,4 @@ int keydown(const char* key){
 }
 #endif
 #ifdef __windows__
-
 #endif

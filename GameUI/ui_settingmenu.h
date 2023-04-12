@@ -1,7 +1,7 @@
 #ifndef Game_UI_SettingMenu
 struct UI_SettingMenu {
     int pointer;
-    char menu[4][12],difficultylevel[3][6];
+    char menu[4][12],difficultylevel[3][7];
     int framerate,difficulty;
     int sensitivity;
 };

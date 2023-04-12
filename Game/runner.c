@@ -78,3 +78,6 @@ void Runner_Load(struct Runner *runner){
     //TODO
     Runner_Run(runner);
 }
+void Del_Runner(struct Runner *runner){
+    free(runner);
+}
