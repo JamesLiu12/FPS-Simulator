@@ -1,4 +1,5 @@
 #include "ui_settingmenu.h"
+#include <errno.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -14,14 +15,22 @@ void UI_SettingMenu_Init(struct UI_SettingMenu *settingui){
     strcpy(settingui->difficultylevel[1],"Normal ");
     strcpy(settingui->difficultylevel[2],"Hard   ");
 
+    FILE *fp;
+    fp=fopen("setting.cfg","r+");
+	if(fp==NULL) {
+	/*printf("Error: cannot open setting file/n");
+    int errorCode = errno;
+    char* errorMsg = strerror(errorCode);
+    printf("Open file fail, errorCode:%d, errorMsg:%s\n", errorCode, errorMsg);*/
     settingui->framerate=60;
     settingui->difficulty=1;
     settingui->sensitivity=100;
-    /*FILE *fp=fopen("./setting.cfg","r");
+    Write_Setting(settingui);
+	} 
     fscanf(fp,"%d",&settingui->framerate);
     fscanf(fp,"%d",&settingui->difficulty);
     fscanf(fp,"%d",&settingui->sensitivity);
-    fclose(fp);*/
+    fclose(fp);
 }
 void Write_Setting(struct UI_SettingMenu *settingui){
     FILE *fp=NULL;
@@ -144,11 +153,14 @@ void Launch_SettingMenu(struct UI_SettingMenu *settingui){
                 break;
             }
             break;
+        case 6:
+        RETURNFLAG=1;
+        break;
         default:
             break;
         }
         operation=0;
-        
+        Write_Setting(settingui);
     }
     return;
 }
