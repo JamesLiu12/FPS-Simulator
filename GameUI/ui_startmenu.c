@@ -63,6 +63,7 @@ int Fetch_Operation(){
     //return 3 is selecting
     //return 4 is increasing
     //return 5 is decreasing
+    //return 6 is exiting
     while(1){
         if(kbhit()){
         if(keydown(DOWN)||keydown(S))return 1;
@@ -70,6 +71,7 @@ int Fetch_Operation(){
         if(keydown(ENTER))return 3;
         if(keydown(RIGHT)||keydown(D))return 4;
         if(keydown(LEFT)||keydown(S))return 5;
+        if(keydown(ESC))return 6;
     }
     }
     return 0;
@@ -113,8 +115,21 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
             goto STARTMENUORIGIN;
             //TODO
             break;
-        case 3:
-        printf("\nGoodbye\n");
+        case 3:/*
+        char a[19]={'T','h','a','n','k','s',' ','f','o','r',' ','p','l','a','y','i','n','g','!'};
+				for(int i=0;i<32;i++){
+					printf(" ");
+					sleep(1);
+				}
+				for(int i=0;i<19;i++){
+					printf("%c",a[i]);
+					sleep(2);
+				}
+				for(int i=0;i<10;i++){
+					printf(" ");
+					sleep(1);
+				}
+				printf("\n");*/
             break;
         default:
         break;
