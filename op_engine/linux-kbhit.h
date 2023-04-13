@@ -1,3 +1,4 @@
+#include "stdbool.h"
 
 //定义按键们的宏
 #define     ESC     "\033"

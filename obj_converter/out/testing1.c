@@ -1,4 +1,5 @@
-#include "../mesh.h"
+#include "../../op_engine/mesh.h"
+#include "../../op_engine/op_engine.h"
 
 void ModelTesting1_Init(struct Mesh *testing1) {
 	Vector3_Set(&testing1->vertices[0], -25.0, 0.0, 25.0);

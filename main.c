@@ -13,13 +13,13 @@ static sig_atomic_t end = 0;
 static void sighandler(int signo)
 {
     end = 1;
-    //printf("good beye!\n");
+    //printf("good bye!\n");
 }
 int main() {
 
-//    term_setup(sighandler);
+//	  term_setup(sighandler);
 //    system("clear");
-    //struct Canvas *canvas = New_Canvas(64, 64);
+//	  struct Canvas *canvas = New_Canvas(64, 64);
 //    struct Player *player = New_Player();
 //    struct Vector3 rotation;
 //    Vector3_Set(&rotation, 0.1, 0, 0);
@@ -82,6 +82,6 @@ int main() {
 //	sleep(1);
 //    Del_Mesh(mesh);
 //    free(mesh);
-    test();
+	test();
     return 0;
 }

@@ -32,7 +32,7 @@ void Find_Way(struct Object *enemy, struct Scene* scene)
 						min_distance_obj->transform.globalPosition.y-list[j].transform.globalPosition.y,
 						min_distance_obj->transform.globalPosition.z-list[j].transform.globalPosition.z);
 			Line_Set(ray,&list[j].transform.globalPosition,direction);
-			distance = CollideBox_RayDistance(&enemy->collide_box,&list[j].transform,ray);
+			distance = CollideBox_RayDistance(enemy->collideBoxes,&list[j].transform,ray);
 			if (distance == INFINITY) continue;
 			if (distance < min_distance){
 				min_distance = distance;
