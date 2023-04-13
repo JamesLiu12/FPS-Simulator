@@ -18,4 +18,6 @@ void Del_Scene(struct Scene *scene);
 
 void Scene_Show(struct Scene *scene, struct Canvas *canvas);
 
+void EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **enemy, enum Tag *tag);
+
 #endif //FPS_SIMULATOR_SCENE_H

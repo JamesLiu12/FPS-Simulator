@@ -88,3 +88,37 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
         Object_Show(leg, canvas);
     }
 }
+
+void EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **enemy, enum Tag *tag){
+    double result = INFINITY;
+    struct Enemy* current_Enemy = (struct Enemy*)(scene->list_Enemy.data)
+
+    // loop through an ArrayList of enemies, detecting the distance of the ray to all enemies
+    for (int i = 0; i < scene->list_Enemy.size; i++){
+        current_Enemy++;
+        double head_dist = CollideBox_RayDistance(current_Enemy->head.collideBoxes, current_Enemy->head.transform, ray);
+        if (head_dist < result){
+            result = head_dist;
+            *enemy = current_Enemy;
+            *tag = ENEMY_HEAD;
+        }
+        double body_dist = CollideBox_RayDistance(current_Enemy->body.collideBoxes, current_Enemy->body.transform, ray);
+        if (body_dist < result){
+            result = body_dist;
+            *enemy = current_Enemy;
+            *tag = ENEMY_BODY;
+        }
+        double leg_dist = CollideBox_RayDistance(current_Enemy->leg.collideBoxes, current_Enemy->leg.transform, ray);
+        if (leg_dist < result){
+            result = leg_dist;
+            *enemy = current_Enemy;
+            *tag = ENEMY_LEG;
+        }
+    }
+
+    // condition of no collision
+    if (result == INFINITY){
+        *enemy = NULL;
+        *tag = EMPTY;
+    }
+}
