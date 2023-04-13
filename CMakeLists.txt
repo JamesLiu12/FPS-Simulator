@@ -20,10 +20,12 @@ add_executable(
     op_engine/matrix.c
     op_engine/mesh.h
     op_engine/collide_box.h
-        Game/scene.h
-        op_engine/triangle.c
+    Game/scene.h
+    op_engine/triangle.c
+    op_engine/linux-kbhit.h
+    op_engine/linux-kbhit.c
 
-    op_engine/models/cube.c
+        Game/models/cube.c
 
     util/util.h
     util/util.c
@@ -35,7 +37,7 @@ add_executable(
     op_engine/segment.c
     op_engine/plane.c
     op_engine/line.c
-    op_engine/models/clock.c
+        Game/models/clock.c
     op_engine/object.h
     op_engine/object.c
     op_engine/tag.h

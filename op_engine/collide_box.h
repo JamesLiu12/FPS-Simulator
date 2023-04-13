@@ -16,4 +16,7 @@ void CollideBox_Set(struct CollideBox *box, struct Vector3 *minVertex, struct Ve
 //Return the distance between ray and box, return INFINITY if the ray does not hit
 double CollideBox_RayDistance(struct CollideBox *box, struct Transform *transform, struct Line *ray);
 
+//Return True <=> the two collide boxed are overlapped
+double CollideBox_IsCollide(struct CollideBox *b1, struct Transform *t1, struct CollideBox *b2, struct Transform *t2);
+
 #endif //FPS_SIMULATOR_COLLIDE_BOX_H

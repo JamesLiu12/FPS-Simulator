@@ -25,7 +25,6 @@ struct Canvas {
     enum Tag *vram_tag;
 
     struct Transform camera_transform;
-    struct Transform transform;
 
     struct Plane view_planes[4];
     struct Line view_rays[4];
@@ -66,9 +65,6 @@ void Canvas_DrawPoint(struct Canvas *canvas, struct Vector3 *point, enum Tag tag
 void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle, enum Tag tag);
 
 // Move the position of canvas by adding displacement
-void Canvas_Move(struct Canvas *canvas, struct Vector3* displacement);
-void Canvas_Rotation(struct Canvas *canvas, struct Vector3* rotation);
-void Canvas_Stretch(struct Canvas *canvas, struct Vector3* scale);
 
 void Canvas_CameraMove(struct Canvas *canvas, struct Vector3 *displacement);
 void Canvas_CameraRotate(struct Canvas *canvas, struct Vector3 *rotation);

@@ -1,4 +1,5 @@
-#include "../mesh.h"
+#include "clock.h"
+
 void ModelClock_Init(struct Mesh *clock) {
 	Vector3_Set(&clock->vertices[0], -0.994301, 0.0, -0.106613);
 	Vector3_Set(&clock->vertices[1], -0.988014, 0.0, 0.154364);
@@ -612,7 +613,7 @@ void ModelClock_Init(struct Mesh *clock) {
 }
 
 struct Mesh* ModelClock_New() {
-	struct Mesh *clock= new_Mesh(404, 204);
+	struct Mesh *clock= New_Mesh(404, 204);
 	ModelClock_Init(clock);
 	return clock;
 }

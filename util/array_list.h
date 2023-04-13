@@ -26,5 +26,8 @@ void ArrayList_PopBack(struct ArrayList *list);
 //Return the pointer of the last element of the list
 void* ArrayList_Back(struct ArrayList *list);
 
+//Delete the first occurrence of element in list, return True <=> successful delete an element in list
+bool ArrayList_DeleteElement(struct ArrayList *list, void* element);
+
 # define UTIL_ARRAY_LIST
 #endif

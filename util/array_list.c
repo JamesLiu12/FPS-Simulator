@@ -14,7 +14,6 @@ struct ArrayList *New_ArrayList(unsigned int element_size) {
     return list;
 }
 
-
 void Del_ArrayList(struct ArrayList *list) {
     free(list->data);
 //    free(list);
@@ -40,4 +39,17 @@ void ArrayList_PopBack(struct ArrayList *list) {
 
 void* ArrayList_Back(struct ArrayList *list){
     return list->data + (list->size - 1) * list->element_size;
+}
+
+bool ArrayList_DeleteElement(struct ArrayList *list, void* element){
+    for (int i = 0; i < list->size; i++){
+        void *thisElement = list->data + i * list->element_size;
+        if (memcmp(thisElement, element, list->element_size) == 0){
+            void *nextElement = thisElement + list->element_size;
+            memcpy(thisElement, nextElement, (list->size - i - 1) * list->element_size);
+            list->size--;
+            return TRUE;
+        }
+    }
+    return FALSE;
 }

@@ -26,7 +26,7 @@ struct Player* New_Player() {
 
 void Del_Player(struct Player *player){
     Del_Canvas(&player->canvas);
-    free(player);
+//    free(player);
 }
 
 void Player_Move(struct Player *player, struct Vector3* move){
@@ -54,7 +54,6 @@ void Player_Update(struct Player *player){
     //TODO
 }
 
-
 void Player_Control(struct Player *player){
     if(keydown(W))Player_RotateUp(player);
     if(keydown(S))Player_RotateDown(player);
@@ -66,7 +65,6 @@ void Player_Control(struct Player *player){
     if(keydown(LEFT))Player_MoveLeft(player);
     if(keydown(RIGHT))Player_MoveRight(player);
 }
-
 
 void Player_MoveForward(struct Player *player){
     struct Vector3 movement;
@@ -121,4 +119,4 @@ void Player_RotateRight(struct Player *player){
     struct Vector3 rotation;
     Vector3_Set(&rotation,0,-player->rotationspeed,0);
     Player_Rotate(player,&rotation);
-}
+}   
