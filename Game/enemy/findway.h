@@ -9,5 +9,5 @@ struct link{
 	struct Transform* current;
 	struct link* next;
 };
-void Find_Way(struct Object *enemy, struct Scene* scene);
+struct link* Find_Way(struct Object *enemy, struct Scene* scene);
 #endif //FPS_SIMULATOR_FINDWAY_H

@@ -4,7 +4,7 @@
 #define typename struct Object
 
 //build a linked list to find the shortest way from enemy to player.
-void Find_Way(struct Object *enemy, struct Scene* scene)
+struct link* Find_Way(struct Object *enemy, struct Scene* scene)
 {
 	unsigned int size = scene->list_Object.size;
 	double min_distance = INFINITY, distance;
@@ -51,4 +51,5 @@ void Find_Way(struct Object *enemy, struct Scene* scene)
 	beginning->current = &enemy->transform;
 	beginning->next = next_addr;
 
+	return beginning;
 }

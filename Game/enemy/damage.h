@@ -5,7 +5,7 @@
 #include "behaviour.h"
 #include "../scene.h"
 
-
+bool Damage_Determination(struct Scene *scene,struct Enemy *enemy);
 double Damage_Calculation(struct Scene *scene,struct Enemy *enemy);
 
 

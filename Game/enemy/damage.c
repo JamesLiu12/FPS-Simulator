@@ -1,16 +1,24 @@
 #include "damage.h"
+#include "math.h"
 
-double Damage_Calculation(struct Scene *scene,struct Enemy *enemy)
+double square(double x)
+{
+	return x*x;
+}
+bool Damage_Determination(struct Scene *scene,struct Enemy *enemy)//enemy's damage to player
 {
 	double damage = 0;
-	if(CollideBox_IsCollide(&scene->player.collideBox,&scene->player.transform,enemy->face.collideBoxes,&enemy->face.transform)){// shoot at face 2.0x
+	double distance = 1.5;//max distance for enemy to attack the player
+	if (sqrt(square(enemy->transform.globalPosition.x - scene->player.transform.globalPosition.x) +
+		square(enemy->transform.globalPosition.z - scene->player.transform.globalPosition.z)
+	>= distance)) return 0;
+	return 1;
+}
 
-	}
-	if(CollideBox_IsCollide(&scene->player.collideBox,&scene->player.transform,enemy->face.collideBoxes,&enemy->face.transform)){// shoot at body 1.0x
-
-	}
-	if(CollideBox_IsCollide(&scene->player.collideBox,&scene->player.transform,enemy->face.collideBoxes,&enemy->face.transform)){// shoot at leg 0.5x
-
-	}
-	return damage;
+double Damage_Calculation(struct Scene *scene,struct Enemy *enemy)//enemy's damage to player
+{
+	double roller = rand() % 100;
+	double rate = roller * enemy->Critical_Rate;//this value should be 0-5000
+	if (roller >= 2345/*critical damage*/){ return square(enemy->damage/scene->player.defence); }
+	else { return enemy->damage/scene->player.defence; }
 }
