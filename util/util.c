@@ -2,7 +2,6 @@
 #include <memory.h>
 #include <math.h>
 #include "util.h"
-
 void swap(void *a, void *b, size_t size) {
     void *temp = malloc(size);
     memcpy(temp, a, size);
