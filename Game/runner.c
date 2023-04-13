@@ -18,12 +18,13 @@ void Runner_Run(struct Runner *runner){
     struct Mesh *mesh = ModelCube_New();
     struct Transform transform;
     Transform_Init(&transform, NULL);
-    struct Object *obj1 = Object_New(mesh, &transform, FLOOR), *obj2 = Object_New(mesh, &transform, WALL);
+    struct Object *obj1 = Object_New(mesh, &transform, FLOOR, NULL, 0),
+                  *obj2 = Object_New(mesh, &transform, WALL, NULL, 0);
     Vector3_Set(&obj1->transform.position, 0, 0, 5);
     Vector3_Set(&obj2->transform.position, 3, 3, 8);
-    struct Object *obj3 = Object_New(mesh, &transform, FLOOR);
+    struct Object *obj3 = Object_New(mesh, &transform, FLOOR, NULL, 0);
     Vector3_Set(&obj3->transform.position, 5, 0, 0);
-    struct Object *obj4 = Object_New(mesh, &transform, FLOOR);
+    struct Object *obj4 = Object_New(mesh, &transform, FLOOR, NULL, 0);
     Vector3_Set(&obj4->transform.position, -5, -2, 0);
     //struct Vector3 rot;
     //Vector3_Set(&rot, -1, 0, 0);
