@@ -1,4 +1,4 @@
-#include "../mesh.h"
+#include "wall.h"
 
 void ModelWall_Init(struct Mesh *wall) {
 	Vector3_Set(&wall->vertices[0], 3.1, 0.0, 7.29);

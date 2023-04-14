@@ -1,6 +1,6 @@
-#include "../mesh.h"
+#include "enemy_leg.h"
 
-void ModelEnemy_leg_Init(struct Mesh *enemy_leg) {
+void ModelEnemy_Leg_Init(struct Mesh *enemy_leg) {
 	Vector3_Set(&enemy_leg->vertices[0], 7.0e-2, 0.0, -7.0e-2);
 	Vector3_Set(&enemy_leg->vertices[1], 7.0e-2, 0.4, -7.0e-2);
 	Vector3_Set(&enemy_leg->vertices[2], 7.0e-2, 0.0, -0.37);
@@ -84,8 +84,8 @@ void ModelEnemy_leg_Init(struct Mesh *enemy_leg) {
 	Face_Set(&enemy_leg->triangles[47], 32, 30, 26);
 }
 
-struct Mesh* ModelEnemy_leg_New() {
+struct Mesh* ModelEnemy_Leg_New() {
 	struct Mesh *enemy_leg= New_Mesh(48, 32);
-	ModelEnemy_leg_Init(enemy_leg);
+	ModelEnemy_Leg_Init(enemy_leg);
 	return enemy_leg;
 }

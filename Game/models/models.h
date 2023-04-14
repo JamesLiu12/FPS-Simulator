@@ -1,12 +1,12 @@
 #ifndef FPS_SIMULATOR_MODELS_H
 #define FPS_SIMULATOR_MODELS_H
 
-#include "boundaries.h.h"
+#include "boundaries.h"
 #include "floor.h"
 #include "wall.h"
-#include "Enemy_Body.h"
-#include "Enemy_Head.h"
-#include "Enemy_leg.h"
+#include "enemy_body.h"
+#include "enemy_head.h"
+#include "enemy_leg.h"
 
 
 
