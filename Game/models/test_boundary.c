@@ -1,0 +1,97 @@
+#include "test_boundary.h"
+
+void ModelTest_boundary_Init(struct Mesh *test_boundary) {
+	Vector3_Set(&test_boundary->vertices[0], -7.5, 0.0, 7.5);
+	Vector3_Set(&test_boundary->vertices[1], 7.5, 0.0, 7.5);
+	Vector3_Set(&test_boundary->vertices[2], -7.5, 0.0, -7.5);
+	Vector3_Set(&test_boundary->vertices[3], 7.5, 0.0, -7.5);
+	Vector3_Set(&test_boundary->vertices[4], -7.5, 0.0, -7.4);
+	Vector3_Set(&test_boundary->vertices[5], -7.5, 2.5, -7.4);
+	Vector3_Set(&test_boundary->vertices[6], -7.5, 0.0, -7.6);
+	Vector3_Set(&test_boundary->vertices[7], -7.5, 2.5, -7.6);
+	Vector3_Set(&test_boundary->vertices[8], 7.5, 0.0, -7.4);
+	Vector3_Set(&test_boundary->vertices[9], 7.5, 2.5, -7.4);
+	Vector3_Set(&test_boundary->vertices[10], 7.5, 0.0, -7.6);
+	Vector3_Set(&test_boundary->vertices[11], 7.5, 2.5, -7.6);
+	Vector3_Set(&test_boundary->vertices[12], -7.5, 0.0, 7.6);
+	Vector3_Set(&test_boundary->vertices[13], -7.5, 2.5, 7.6);
+	Vector3_Set(&test_boundary->vertices[14], -7.5, 0.0, 7.4);
+	Vector3_Set(&test_boundary->vertices[15], -7.5, 2.5, 7.4);
+	Vector3_Set(&test_boundary->vertices[16], 7.5, 0.0, 7.6);
+	Vector3_Set(&test_boundary->vertices[17], 7.5, 2.5, 7.6);
+	Vector3_Set(&test_boundary->vertices[18], 7.5, 0.0, 7.4);
+	Vector3_Set(&test_boundary->vertices[19], 7.5, 2.5, 7.4);
+	Vector3_Set(&test_boundary->vertices[20], -7.4, 0.0, 7.5);
+	Vector3_Set(&test_boundary->vertices[21], -7.4, 2.5, 7.5);
+	Vector3_Set(&test_boundary->vertices[22], -7.6, 0.0, 7.5);
+	Vector3_Set(&test_boundary->vertices[23], -7.6, 2.5, 7.5);
+	Vector3_Set(&test_boundary->vertices[24], -7.4, 0.0, -7.5);
+	Vector3_Set(&test_boundary->vertices[25], -7.4, 2.5, -7.5);
+	Vector3_Set(&test_boundary->vertices[26], -7.6, 0.0, -7.5);
+	Vector3_Set(&test_boundary->vertices[27], -7.6, 2.5, -7.5);
+	Vector3_Set(&test_boundary->vertices[28], 7.6, 0.0, 7.5);
+	Vector3_Set(&test_boundary->vertices[29], 7.6, 2.5, 7.5);
+	Vector3_Set(&test_boundary->vertices[30], 7.4, 0.0, 7.5);
+	Vector3_Set(&test_boundary->vertices[31], 7.4, 2.5, 7.5);
+	Vector3_Set(&test_boundary->vertices[32], 7.6, 0.0, -7.5);
+	Vector3_Set(&test_boundary->vertices[33], 7.6, 2.5, -7.5);
+	Vector3_Set(&test_boundary->vertices[34], 7.4, 0.0, -7.5);
+	Vector3_Set(&test_boundary->vertices[35], 7.4, 2.5, -7.5);
+
+	Face_Set(&test_boundary->triangles[0], 1, 2, 4);
+	Face_Set(&test_boundary->triangles[1], 5, 6, 8);
+	Face_Set(&test_boundary->triangles[2], 7, 8, 12);
+	Face_Set(&test_boundary->triangles[3], 11, 12, 10);
+	Face_Set(&test_boundary->triangles[4], 9, 10, 6);
+	Face_Set(&test_boundary->triangles[5], 7, 11, 9);
+	Face_Set(&test_boundary->triangles[6], 12, 8, 6);
+	Face_Set(&test_boundary->triangles[7], 13, 14, 16);
+	Face_Set(&test_boundary->triangles[8], 15, 16, 20);
+	Face_Set(&test_boundary->triangles[9], 19, 20, 18);
+	Face_Set(&test_boundary->triangles[10], 17, 18, 14);
+	Face_Set(&test_boundary->triangles[11], 15, 19, 17);
+	Face_Set(&test_boundary->triangles[12], 20, 16, 14);
+	Face_Set(&test_boundary->triangles[13], 21, 22, 24);
+	Face_Set(&test_boundary->triangles[14], 23, 24, 28);
+	Face_Set(&test_boundary->triangles[15], 27, 28, 26);
+	Face_Set(&test_boundary->triangles[16], 25, 26, 22);
+	Face_Set(&test_boundary->triangles[17], 23, 27, 25);
+	Face_Set(&test_boundary->triangles[18], 28, 24, 22);
+	Face_Set(&test_boundary->triangles[19], 29, 30, 32);
+	Face_Set(&test_boundary->triangles[20], 31, 32, 36);
+	Face_Set(&test_boundary->triangles[21], 35, 36, 34);
+	Face_Set(&test_boundary->triangles[22], 33, 34, 30);
+	Face_Set(&test_boundary->triangles[23], 31, 35, 33);
+	Face_Set(&test_boundary->triangles[24], 36, 32, 30);
+	Face_Set(&test_boundary->triangles[25], 1, 3, 4);
+	Face_Set(&test_boundary->triangles[26], 5, 7, 8);
+	Face_Set(&test_boundary->triangles[27], 7, 11, 12);
+	Face_Set(&test_boundary->triangles[28], 11, 9, 10);
+	Face_Set(&test_boundary->triangles[29], 9, 5, 6);
+	Face_Set(&test_boundary->triangles[30], 7, 5, 9);
+	Face_Set(&test_boundary->triangles[31], 12, 10, 6);
+	Face_Set(&test_boundary->triangles[32], 13, 15, 16);
+	Face_Set(&test_boundary->triangles[33], 15, 19, 20);
+	Face_Set(&test_boundary->triangles[34], 19, 17, 18);
+	Face_Set(&test_boundary->triangles[35], 17, 13, 14);
+	Face_Set(&test_boundary->triangles[36], 15, 13, 17);
+	Face_Set(&test_boundary->triangles[37], 20, 18, 14);
+	Face_Set(&test_boundary->triangles[38], 21, 23, 24);
+	Face_Set(&test_boundary->triangles[39], 23, 27, 28);
+	Face_Set(&test_boundary->triangles[40], 27, 25, 26);
+	Face_Set(&test_boundary->triangles[41], 25, 21, 22);
+	Face_Set(&test_boundary->triangles[42], 23, 21, 25);
+	Face_Set(&test_boundary->triangles[43], 28, 26, 22);
+	Face_Set(&test_boundary->triangles[44], 29, 31, 32);
+	Face_Set(&test_boundary->triangles[45], 31, 35, 36);
+	Face_Set(&test_boundary->triangles[46], 35, 33, 34);
+	Face_Set(&test_boundary->triangles[47], 33, 29, 30);
+	Face_Set(&test_boundary->triangles[48], 31, 29, 33);
+	Face_Set(&test_boundary->triangles[49], 36, 34, 30);
+}
+
+struct Mesh* ModelTest_boundary_New() {
+	struct Mesh *test_boundary= New_Mesh(50, 36);
+	ModelTest_boundary_Init(test_boundary);
+	return test_boundary;
+}

@@ -1,4 +1,5 @@
-#include "../../op_engine/mesh.h"
+#include "clock.h"
+
 void ModelClock_Init(struct Mesh *clock) {
 	Vector3_Set(&clock->vertices[0], -0.994301, 0.0, -0.106613);
 	Vector3_Set(&clock->vertices[1], -0.988014, 0.0, 0.154364);
