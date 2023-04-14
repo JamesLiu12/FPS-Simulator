@@ -2,13 +2,16 @@
 #define FPS_SIMULATOR_PLAYER_H
 
 #include "../op_engine/op_engine.h"
-
 struct Player{
     struct Canvas canvas;
-    double health, atk, movespeed, rotationspeed;
+    double maxhealth,health, atk, movespeed, rotationspeed;
     struct Transform transform;
     struct CollideBox collideBox;
     struct Vector3 facing;
+    struct Vector3 movedirection;
+    double fireCDtime,fireCDcounter;
+    int In_FireCD,IsFiring;
+    int DEADFLAG;
 };
 
 //Initializer of player
@@ -38,4 +41,6 @@ void Player_RotateUp(struct Player *player);
 void Player_RotateDown(struct Player *player);
 void Player_RotateLeft(struct Player *player);
 void Player_RotateRight(struct Player *player);
+void Player_Shoot(struct Player *player);
+void Player_ChangeHealth(struct Player *player,double deltahealth);
 #endif //FPS_SIMULATOR_PLAYER_H

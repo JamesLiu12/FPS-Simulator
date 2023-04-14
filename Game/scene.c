@@ -1,7 +1,9 @@
 #include "scene.h"
 #include "../op_engine/object.h"
 #include "../Game/models/models.h"
+#include "runner.h"
 #include <math.h>
+#include <stdio.h>
 
 void Scene_Init(struct Scene *scene) {
     ArrayList_Init(&scene->list_Object, sizeof(struct Object *));
@@ -155,6 +157,7 @@ void Del_Scene(struct Scene *scene){
 }
 
 void Scene_Show(struct Scene *scene, struct Canvas *canvas){
+    Canvas_clear(canvas);
     for (int i = 0; i < scene->list_Object.size; i++){
         struct Object *object = ((struct Object**)scene->list_Object.data)[i];
         Object_Show(object, canvas);
@@ -169,6 +172,23 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
         Object_Show(body, canvas);
         Object_Show(leg, canvas);
     }
+    printf("\n");
+    for(int i=0;i<52;i++)printf("-");
+    printf("\n|");
+    int temp=50*scene->player.health/100;
+    for(int i=0;i<temp;i++)printf("█");
+    for(int i=0;i<50-temp;i++)printf(" ");
+    printf("|\n");
+    for(int i=0;i<52;i++)printf("-");
+    printf("\n");
+    for(int i=0;i<16;i++)printf(" ");
+    printf("HP : %.2lf / %.0lf \n",scene->player.health,scene->player.maxhealth);
+    //The following 2 lines are for debugging
+    //TODO
+    //Delete it when the game is finished
+    printf("%lf %lf %lf\n",scene->player.facing.x,scene->player.facing.y,scene->player.facing.z);
+    printf("%lf %lf %lf\n",scene->player.transform.position.x,scene->player.transform.position.y,scene->player.transform.position.z);
+    Canvas_flush(canvas);
 }
 
 void Scene_EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **result_enemy, enum Tag *result_tag){
