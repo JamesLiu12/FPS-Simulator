@@ -1,6 +1,7 @@
 #include "scene.h"
 #include "../op_engine/object.h"
 #include "../Game/models/models.h"
+#include "runner.h"
 #include <math.h>
 
 void Scene_Init(struct Scene *scene){
@@ -74,6 +75,7 @@ void Del_Scene(struct Scene *scene){
 }
 
 void Scene_Show(struct Scene *scene, struct Canvas *canvas){
+    Canvas_clear(canvas);
     for (int i = 0; i < scene->list_Object.size; i++){
         struct Object *object = ((struct Object**)scene->list_Object.data)[i];
         Object_Show(object, canvas);
@@ -88,6 +90,7 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
         Object_Show(body, canvas);
         Object_Show(leg, canvas);
     }
+    Canvas_flush(canvas);
 }
 
 void Scene_EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **result_enemy, enum Tag *result_tag){

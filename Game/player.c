@@ -1,12 +1,20 @@
+
 #include "player.h"
 #include "../op_engine/op_engine.h"
+
+#include "runner.h"
+
 void Player_Init(struct Player *player){
     Canvas_Init(&player->canvas, 32, 64);
 
     player->health = 100;
     player->atk = 1;
-    player->movespeed = 0.5;
+    player->movespeed = 0.1;
     player->rotationspeed=0.1;
+    player->fireCDtime=0.5;
+    player->In_FireCD=0;
+    player->fireCDtime=0.5;
+    player->fireCDcounter=0;
     Vector3_Set(&player->facing,0,0,1);
 
     Transform_Init(&player->transform, NULL);
@@ -30,8 +38,37 @@ void Del_Player(struct Player *player){
 }
 
 void Player_Move(struct Player *player, struct Vector3* move){
+    /*int isBlocked=0;
+    struct Vector3 New_moveX,New_moveZ;
+    Vector3_Set(&New_moveX,move->x,0,0);
+    Vector3_Set(&New_moveZ,0,0,move->z);
+    //Try X direction
+    Vector3_Add(&player->transform.position, &New_moveX);
+    for(int i=0;i<scene->list_Object.size;i++){
+        struct Object *object = ((struct Object**)scene->list_Object.data)[i];
+        if(CollideBox_IsCollide(&player->collideBox,&player->transform,object->collideBoxes,&object->transform)){
+        isBlocked=1;if(isBlocked)break;}
+    }
+    for(int i=0;i<scene->list_Enemy.size;i++){
+        struct Enemy *enemy = ((struct Enemy**)scene->list_Object.data)[i];
+        if(CollideBox_IsCollide(&player->collideBox,&player->transform,enemy->body.collideBoxes,&enemy->transform)){
+        isBlocked=1;if(isBlocked)break;}
+    }
+    if(isBlocked){Vector3_Set(&New_moveX,-move->x,0,0);Vector3_Add(&player->transform.position, &New_moveX);}
+    //Try Z direction
+    Vector3_Add(&player->transform.position, &New_moveZ);
+    for(int i=0;i<scene->list_Object.size;i++){
+        struct Object *object = ((struct Object**)scene->list_Object.data)[i];
+        if(CollideBox_IsCollide(&player->collideBox,&player->transform,object->collideBoxes,&object->transform)){
+        isBlocked=1;if(isBlocked)break;}
+    }
+    for(int i=0;i<scene->list_Enemy.size;i++){
+        struct Enemy *enemy = ((struct Enemy**)scene->list_Object.data)[i];
+        if(CollideBox_IsCollide(&player->collideBox,&player->transform,enemy->body.collideBoxes,&enemy->transform)){
+        isBlocked=1;if(isBlocked)break;}
+    }
+    if(isBlocked){Vector3_Set(&New_moveZ,-move->z,0,0);Vector3_Add(&player->transform.position, &New_moveZ);}*/
     Vector3_Add(&player->transform.position, move);
-//    Canvas_CameraMove(&player->canvas,move);
 }
 
 void Player_Rotate(struct Player *player, struct Vector3* angle){
@@ -51,7 +88,12 @@ void Player_Start(struct Player *player){
 }
 
 void Player_Update(struct Player *player){
-    //TODO
+    if(player->In_FireCD){
+        player->IsFiring=0;
+        player->fireCDcounter-=1/60;
+    }
+    if(player->fireCDcounter<=0)player->In_FireCD=0;
+    //Player_Control(player);
 }
 
 void Player_Control(struct Player *player){
@@ -64,36 +106,45 @@ void Player_Control(struct Player *player){
     if(keydown(DOWN))Player_MoveBackward(player);
     if(keydown(LEFT))Player_MoveLeft(player);
     if(keydown(RIGHT))Player_MoveRight(player);
-}
 
+    if(keydown(F))Player_Shoot(player);
+}
+void Player_Shoot(struct Player *player){
+    if(!player->IsFiring){
+        if(!player->In_FireCD){player->IsFiring=1;player->In_FireCD=1;player->fireCDcounter=player->fireCDtime;}
+    }
+}
 void Player_MoveForward(struct Player *player){
     struct Vector3 movement;
     Vector3_Set(&movement,player->facing.x,0,player->facing.z);
     Vector3_Normalize(&movement);
     Vector3_Scale(&movement,player->movespeed);
-    Player_Move(player,&movement);
-    
+    //Player_Move(player,&movement);
+    Vector3_Copy(&movement,&player->movedirection);
 }
 void Player_MoveBackward(struct Player *player){
     struct Vector3 movement;
     Vector3_Set(&movement,-player->facing.x,0,-player->facing.z);
     Vector3_Normalize(&movement);
     Vector3_Scale(&movement,player->movespeed);
-    Player_Move(player,&movement);
+    Vector3_Copy(&movement,&player->movedirection);
+    //Player_Move(player,&movement);
 }
 void Player_MoveLeft(struct Player *player){
     struct Vector3 movement;
     Vector3_Set(&movement,-player->facing.z,0,player->facing.x);
     Vector3_Normalize(&movement);
     Vector3_Scale(&movement,player->movespeed);
-    Player_Move(player,&movement);
+    Vector3_Copy(&movement,&player->movedirection);
+    //Player_Move(player,&movement);
 }
 void Player_MoveRight(struct Player *player){
     struct Vector3 movement;
     Vector3_Set(&movement,player->facing.z,0,-player->facing.x);
     Vector3_Normalize(&movement);
     Vector3_Scale(&movement,player->movespeed);
-    Player_Move(player,&movement);
+    Vector3_Copy(&movement,&player->movedirection);
+    //Player_Move(player,&movement);
 }
 
 void Player_RotateUp(struct Player *player){

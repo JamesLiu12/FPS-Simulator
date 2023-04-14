@@ -1,17 +1,27 @@
 #include "runner.h"
 #include "../op_engine/op_engine.h"
-#include "game.h"
+#include "scene.h"
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
 #include <unistd.h>
-void Runner_Init(struct Runner *runner){
-    runner->frame_rate=60;
+void Runner_Init(struct Runner *runner,struct UI_SettingMenu *settingui){
+    runner->frame_rate=settingui->framerate;
+    runner->difficulty=settingui->difficulty;
+    runner->sensitivity=settingui->sensitivity;
 }
 void Runner_Run(struct Runner *runner){
-    struct Player *player = New_Player();
+    struct Scene scene1;
+
+    Scene_Init(&scene1);
+    
+    //Scene_Load(&scene1,1);这里应该写个scene读取,做几个scene的预制件,多个地图//TODO
+
+    Player_Setting(&scene1.player,runner);
+    /*
+    struct Player *player = New_Player(runner);
     struct Vector3 rotation;
     Vector3_Set(&rotation, 0.1, 0, 0);
 
@@ -41,22 +51,59 @@ void Runner_Run(struct Runner *runner){
         getchar();
     }*/
     int count;
+    struct Vector3 ZeroVector;
+    Vector3_Set(&ZeroVector,0,0,0);
+    struct Vector3 New_moveX,New_moveZ;
+    int isBlocked;
     while(1){
         count++;
+        Vector3_Set(&scene1.player.movedirection,0,0,0);
+        isBlocked=0;
         if(kbhit()){
-            Player_Control(player);
+            Player_Control(&scene1.player);
+            if(!Vector3_Equal(&ZeroVector,&scene1.player.movedirection)){
+                Vector3_Set(&New_moveX,scene1.player.movedirection.x,0,0);
+                Player_Move(&scene1.player,&New_moveX);
+                for(int i=0;i<scene1.list_Object.size;i++){
+                    struct Object *object = ((struct Object**)scene1.list_Object.data)[i];
+                    if(CollideBox_IsCollide(&scene1.player.collideBox,&scene1.player.transform,object->collideBoxes,&object->transform)){
+                    isBlocked=1;if(isBlocked)break;}
+                }
+                for(int i=0;i<scene1.list_Enemy.size;i++){
+                    struct Enemy *enemy = ((struct Enemy**)scene1.list_Object.data)[i];
+                    if(CollideBox_IsCollide(&scene1.player.collideBox,&scene1.player.transform,enemy->body.collideBoxes,&enemy->transform)){
+                    isBlocked=1;if(isBlocked)break;}
+                }
+                if(isBlocked){Vector3_Set(&New_moveX,-scene1.player.movedirection.x,0,0);Player_Move(&scene1.player,&New_moveX);}
+            
+                Vector3_Set(&New_moveZ,0,0,scene1.player.movedirection.z);
+                Player_Move(&scene1.player,&New_moveZ);
+                for(int i=0;i<scene1.list_Object.size;i++){
+                    struct Object *object = ((struct Object**)scene1.list_Object.data)[i];
+                    if(CollideBox_IsCollide(&scene1.player.collideBox,&scene1.player.transform,object->collideBoxes,&object->transform)){
+                    isBlocked=1;if(isBlocked)break;}
+                }
+                for(int i=0;i<scene1.list_Enemy.size;i++){
+                    struct Enemy *enemy = ((struct Enemy**)scene1.list_Object.data)[i];
+                    if(CollideBox_IsCollide(&scene1.player.collideBox,&scene1.player.transform,enemy->body.collideBoxes,&enemy->transform)){
+                    isBlocked=1;if(isBlocked)break;}
+                }
+                if(isBlocked){Vector3_Set(&New_moveZ,0,0,-scene1.player.movedirection.z);Player_Move(&scene1.player,&New_moveZ);}
+            
+            }
             if(keydown(ESC))break;
             //if(keydown(SPACE))break;
             
         }
-            Canvas_clear(&player->canvas);
+            Scene_Show(&scene1,&scene1.player.canvas);
+            /*Canvas_clear(&player->canvas);
             Object_Show(obj1, &player->canvas);
             Object_Show(obj2, &player->canvas);
             Object_Show(obj3, &player->canvas);
             Object_Show(obj4, &player->canvas);
-            Canvas_flush(&player->canvas);
-            printf("%lf %lf %lf\n",player->facing.x,player->facing.y,player->facing.z);
-            printf("%lf %lf %lf\n",player->transform.position.x,player->transform.position.y,player->transform.position.z);
+            Canvas_flush(&player->canvas);*/
+            printf("%lf %lf %lf\n",scene1.player.facing.x,scene1.player.facing.y,scene1.player.facing.z);
+            printf("%lf %lf %lf\n",scene1.player.transform.position.x,scene1.player.transform.position.y,scene1.player.transform.position.z);
             usleep(1000000/runner->frame_rate);
         //printf("count:  %d\n",count);
         //usleep(5000);
@@ -68,7 +115,7 @@ void Runner_Run(struct Runner *runner){
 //    }
     printf("\x1b[38;2;%d;%d;%dm", 0xee, 0xee, 0xee);
     printf("\x1b[48;2;%d;%d;%dm", 0, 0, 0);
-    Del_Player(player);
+    Del_Scene(&scene1);
     system("clear");
     printf("Goodbye!\n");
     
@@ -81,4 +128,7 @@ void Runner_Load(struct Runner *runner){
 }
 void Del_Runner(struct Runner *runner){
     free(runner);
+}
+void Player_Setting(struct Player *player,struct Runner *runner){
+    player->rotationspeed=0.1*runner->sensitivity/100;
 }

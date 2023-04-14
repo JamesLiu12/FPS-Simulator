@@ -8,7 +8,6 @@
 #include <unistd.h>
 #include "Game/player.h"
 #include "GameUI/ui_startmenu.h"
-const int FPS=60;
 static sig_atomic_t end = 0;
 static void sighandler(int signo)
 {

@@ -7,7 +7,7 @@
 #include "ui_startmenu.h"
 #include "ui_settingmenu.h"
 #include "../op_engine/op_engine.h"
-#include "../Game/game.h"
+#include "../Game/runner.h"
 struct UI_StartMenu* New_UI_StartMenu() {
     struct UI_StartMenu* startui = malloc(sizeof(struct UI_StartMenu));
     UI_StartMenu_Init(startui);
@@ -101,7 +101,7 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
     switch(startui->pointer){
         case 0:
             struct Runner runner;
-            Runner_Init(&runner);
+            Runner_Init(&runner,&startui->settingui);
             Runner_Run(&runner);
             //TODO
             //Del_Runner(&runner);

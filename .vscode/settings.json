@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "ncurses.h": "c"
+        "ncurses.h": "c",
+        "op_engine.h": "c"
     }
 }
