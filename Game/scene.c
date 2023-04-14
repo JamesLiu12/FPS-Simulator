@@ -81,7 +81,7 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     for (int i = 0; i < scene->list_Enemy.size; i++){
         struct Enemy *enemy = ((struct Enemy**)scene->list_Object.data)[i];
         struct Object
-                *head = &enemy->head,
+                *head = &enemy->face,
                 *body = &enemy->body,
                 *leg = &enemy->leg;
         Object_Show(head, canvas);
@@ -96,12 +96,12 @@ void Scene_EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **r
     // loop through an ArrayList of enemies, detecting the min_dist of the ray to all enemies
     for (int i = 0; i < scene->list_Enemy.size; i++){
         struct Enemy *current_enemy = ((struct Enemy**)scene->list_Enemy.data)[i];
-        double head_dist = CollideBox_RayDistance(current_enemy->head.collideBoxes,
-                                                  &current_enemy->head.transform, ray);
+        double head_dist = CollideBox_RayDistance(current_enemy->face.collideBoxes,
+                                                  &current_enemy->face.transform, ray);
         if (head_dist < min_dist){
             min_dist = head_dist;
             *result_enemy = current_enemy;
-            *result_tag = current_enemy->head.tag;
+            *result_tag = current_enemy->face.tag;
         }
         double body_dist = CollideBox_RayDistance(current_enemy->body.collideBoxes,
                                                   &current_enemy->body.transform, ray);

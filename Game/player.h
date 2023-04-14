@@ -9,7 +9,8 @@ struct Weapon{
 
 struct Player{
     struct Canvas canvas;
-    double health, atk, speed, defence;
+    double health, atk, movespeed, rotationspeed, defence;
+	struct Vector3 facing;
     struct Transform transform;
     struct CollideBox collideBox;
 	struct Weapon weapon;
@@ -33,5 +34,15 @@ void Player_Start(struct Player *player);
 
 //What player does each frame
 void Player_Update(struct Player *player);
+
+void Player_MoveForward(struct Player *player);
+void Player_MoveBackward(struct Player *player);
+void Player_MoveLeft(struct Player *player);
+void Player_MoveRight(struct Player *player);
+
+void Player_RotateUp(struct Player *player);
+void Player_RotateDown(struct Player *player);
+void Player_RotateLeft(struct Player *player);
+void Player_RotateRight(struct Player *player);
 
 #endif //FPS_SIMULATOR_PLAYER_H

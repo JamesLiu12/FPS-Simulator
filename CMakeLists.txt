@@ -38,6 +38,7 @@ add_executable(
     op_engine/plane.c
     op_engine/line.c
         Game/models/clock.c
+        Game/game.h
     op_engine/object.h
     op_engine/object.c
     op_engine/tag.h
@@ -48,15 +49,23 @@ add_executable(
     util/array_list.c
     Game/scene.c
     Game/player.h
-    Game/enemy.h
     Game/player.c
     Game/runner.h
     Game/runner.c
+
+        Game/enemy/behaviour.c
+        Game/enemy/behaviour.h
+        Game/enemy/damage.c
+        Game/enemy/damage.h
+        Game/enemy/findway.c
+        Game/enemy/findway.h
+        Game/enemy/property.c
+        Game/enemy/property.h
 
     GameUI/Game_UI.h
     GameUI/ui_startmenu.h
     GameUI/ui_startmenu.c
     GameUI/ui_settingmenu.h
     GameUI/ui_settingmenu.c
-    )
+        Game/models/test_boundary.c Game/models/wall.c)
 target_link_libraries(FPS_Simulator m)

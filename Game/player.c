@@ -54,18 +54,6 @@ void Player_Update(struct Player *player){
     //TODO
 }
 
-void Player_Control(struct Player *player){
-    if(keydown(W))Player_RotateUp(player);
-    if(keydown(S))Player_RotateDown(player);
-    if(keydown(A))Player_RotateLeft(player);
-    if(keydown(D))Player_RotateRight(player);
-
-    if(keydown(UP))Player_MoveForward(player);
-    if(keydown(DOWN))Player_MoveBackward(player);
-    if(keydown(LEFT))Player_MoveLeft(player);
-    if(keydown(RIGHT))Player_MoveRight(player);
-}
-
 void Player_MoveForward(struct Player *player){
     struct Vector3 movement;
     Vector3_Set(&movement,player->facing.x,0,player->facing.z);
@@ -119,4 +107,16 @@ void Player_RotateRight(struct Player *player){
     struct Vector3 rotation;
     Vector3_Set(&rotation,0,-player->rotationspeed,0);
     Player_Rotate(player,&rotation);
-}   
+}
+
+void Player_Control(struct Player *player){
+	if(keydown(W))Player_RotateUp(player);
+	if(keydown(S))Player_RotateDown(player);
+	if(keydown(A))Player_RotateLeft(player);
+	if(keydown(D))Player_RotateRight(player);
+
+	if(keydown(UP))Player_MoveForward(player);
+	if(keydown(DOWN))Player_MoveBackward(player);
+	if(keydown(LEFT))Player_MoveLeft(player);
+	if(keydown(RIGHT))Player_MoveRight(player);
+}
