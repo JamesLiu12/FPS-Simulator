@@ -1,5 +1,4 @@
-#include "../../op_engine/mesh.h"
-
+#include "cube.h"
 
 void ModelCube_Init(struct Mesh *cube) {
     Face_Set(&cube->triangles[0], 0, 1, 5);

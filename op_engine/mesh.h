@@ -30,12 +30,5 @@ void Del_Mesh(struct Mesh *model);
 
 void Mesh_Copy(struct Mesh *from, struct Mesh *to);
 
-//
-void ModelCube_Init(struct Mesh *cube);
-
-//
-struct Mesh* ModelCube_New();
-
-
 #define OP_MODEL
 #endif

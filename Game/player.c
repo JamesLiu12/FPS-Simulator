@@ -20,6 +20,7 @@ void Player_Init(struct Player *player){
 
     Transform_Init(&player->transform, NULL);
     Transform_Init(&player->canvas.camera_transform, &player->transform);
+SASS
 
     struct Vector3 v1, v2;
     Vector3_Set(&v1, -0.5, -1, -0.5);
@@ -86,6 +87,7 @@ void Player_Rotate(struct Player *player, struct Vector3* angle){
 
 void Player_Start(struct Player *player){
     //TODO
+    Vector3_Set(&player->transform.position,0,0,0)
 }
 
 void Player_Update(struct Player *player){
