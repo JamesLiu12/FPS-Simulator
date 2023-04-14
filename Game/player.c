@@ -6,8 +6,8 @@
 
 void Player_Init(struct Player *player){
     Canvas_Init(&player->canvas, 32, 64);
-
-    player->health = 100;
+    player->maxhealth=100;
+    player->health = player->maxhealth;
     player->atk = 1;
     player->movespeed = 0.1;
     player->rotationspeed=0.1;
@@ -15,6 +15,7 @@ void Player_Init(struct Player *player){
     player->In_FireCD=0;
     player->fireCDtime=0.5;
     player->fireCDcounter=0;
+    player->DEADFLAG=0;
     Vector3_Set(&player->facing,0,0,1);
 
     Transform_Init(&player->transform, NULL);
@@ -107,6 +108,9 @@ void Player_Control(struct Player *player){
     if(keydown(LEFT))Player_MoveLeft(player);
     if(keydown(RIGHT))Player_MoveRight(player);
 
+    if(keydown(H))Player_ChangeHealth(player,-5);
+    if(keydown(K))Player_ChangeHealth(player,5);
+
     if(keydown(F))Player_Shoot(player);
 }
 void Player_Shoot(struct Player *player){
@@ -171,3 +175,8 @@ void Player_RotateRight(struct Player *player){
     Vector3_Set(&rotation,0,-player->rotationspeed,0);
     Player_Rotate(player,&rotation);
 }   
+void Player_ChangeHealth(struct Player *player,double deltahealth){
+    player->health+=deltahealth;
+    if(player->health>player->maxhealth)player->health=player->maxhealth;
+    if(player->health<=0){player->health=0;player->DEADFLAG=1;}
+}

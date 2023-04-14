@@ -102,8 +102,7 @@ void Runner_Run(struct Runner *runner){
             Object_Show(obj3, &player->canvas);
             Object_Show(obj4, &player->canvas);
             Canvas_flush(&player->canvas);*/
-            printf("%lf %lf %lf\n",scene1.player.facing.x,scene1.player.facing.y,scene1.player.facing.z);
-            printf("%lf %lf %lf\n",scene1.player.transform.position.x,scene1.player.transform.position.y,scene1.player.transform.position.z);
+            
             usleep(1000000/runner->frame_rate);
         //printf("count:  %d\n",count);
         //usleep(5000);
