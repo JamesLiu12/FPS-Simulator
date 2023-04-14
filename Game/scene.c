@@ -3,15 +3,16 @@
 #include "../Game/models/models.h"
 #include <math.h>
 
-void Scene_Init(struct Scene *scene){
-    ArrayList_Init(&scene->list_Object, sizeof(struct Object*));
-    ArrayList_Init(&scene->list_Enemy, sizeof(struct Enemy*));
+void Scene_Init(struct Scene *scene) {
+    ArrayList_Init(&scene->list_Object, sizeof(struct Object *));
+    ArrayList_Init(&scene->list_Enemy, sizeof(struct Enemy *));
     Player_Init(&scene->player);
 
     //Map_boundary origin coordinate (0,0,0)
     struct Vector3 minVertex_Boundary, maxVertex_Boundary;
     int collideBoxCount_Boundary = 4;
-    struct CollideBox *collideBoxes_Boundary = (struct CollideBox*)malloc(sizeof(struct CollideBox) * collideBoxCount_Boundary);
+    struct CollideBox *collideBoxes_Boundary = (struct CollideBox *) malloc(
+            sizeof(struct CollideBox) * collideBoxCount_Boundary);
     //set collideBoxes:
 
     Vector3_Set(&minVertex_Boundary, -7.8, 0, -7.8);//boundary west
@@ -35,7 +36,8 @@ void Scene_Init(struct Scene *scene){
     ModelBoundaries_Init(mesh_Boundary);
     Transform_Init(&transform_Boundary, NULL);
 
-    struct Object* Map_Boundary = Object_New(mesh_Boundary, &transform_Boundary, WALL, collideBoxes_Boundary, collideBoxCount_Boundary);
+    struct Object *Map_Boundary = Object_New(mesh_Boundary, &transform_Boundary, WALL, collideBoxes_Boundary,
+                                             collideBoxCount_Boundary);
 
     ArrayList_PushBack(&scene->list_Object, &Map_Boundary);
     //Map_boundary finished
@@ -43,7 +45,8 @@ void Scene_Init(struct Scene *scene){
     //Map_barrier origin coordinate (0,0,0)
     struct Vector3 minVertex_Barrier, maxVertex_Barrier;
     int collideBoxCount_Barrier = 2;
-    struct CollideBox *collideBoxes_Barrier = (struct CollideBox*)malloc(sizeof(struct CollideBox) * collideBoxCount_Barrier);
+    struct CollideBox *collideBoxes_Barrier = (struct CollideBox *) malloc(
+            sizeof(struct CollideBox) * collideBoxCount_Barrier);
 
     Vector3_Set(&minVertex_Barrier, -3.2, 0, -4.57);    //barrier left
     Vector3_Set(&maxVertex_Barrier, -2.9, 2.5, 7.43);
@@ -58,46 +61,92 @@ void Scene_Init(struct Scene *scene){
     ModelWall_Init(mesh_Barrier);
     Transform_Init(&transform_Barrier, NULL);
 
-    struct Object* Map_Barrier = Object_New(mesh_Barrier, &transform_Barrier, WALL, collideBoxes_Barrier, collideBoxCount_Barrier);
+    struct Object *Map_Barrier = Object_New(mesh_Barrier, &transform_Barrier, WALL, collideBoxes_Barrier,
+                                            collideBoxCount_Barrier);
 
     ArrayList_PushBack(&scene->list_Object, &Map_Barrier);
 
     //Map_Floor origin coordinate (0,0,0)
     struct Vector3 minVertex_Floor, maxVertex_Floor;
     int collideBoxCount_Floor = 1;
-    struct CollideBox *collideBoxes_Floor = (struct CollideBox*)malloc(sizeof(struct CollideBox) * collideBoxCount_Floor);
+    struct CollideBox *collideBoxes_Floor = (struct CollideBox *) malloc(
+            sizeof(struct CollideBox) * collideBoxCount_Floor);
 
     Vector3_Set(&minVertex_Floor, -7.5, -0.1, -7.5);    //floor
     Vector3_Set(&maxVertex_Floor, 7.5, 0, 7.5);
-    CollideBox_Set(&collideBoxes_Barrier[0], &minVertex_Barrier, &maxVertex_Barrier);
+    CollideBox_Set(&collideBoxes_Floor[0], &minVertex_Floor, &maxVertex_Floor);
 
     struct Transform transform_Floor;
     struct Mesh *mesh_Floor = ModelFloor_New();
     ModelFloor_Init(mesh_Floor);
     Transform_Init(&transform_Floor, NULL);
 
-    struct Object* Map_Floor= Object_New(mesh_Floor, &transform_Floor, FLOOR, collideBoxes_Floor, collideBoxCount_Floor);
+    struct Object *Map_Floor = Object_New(mesh_Floor, &transform_Floor, FLOOR, collideBoxes_Floor,
+                                          collideBoxCount_Floor);
 
     ArrayList_PushBack(&scene->list_Object, &Map_Floor);
+    //Enemy_Head
+    struct Vector3 minVertex_EnemyHead, maxVertex_EnemyHead;
+    int collideBoxCount_EnemyHead = 1;
+    struct CollideBox *collideBoxes_EnemyHead = (struct CollideBox *) malloc(
+            sizeof(struct CollideBox) * collideBoxCount_EnemyHead);
 
-    //enemy origin coordinate (0,0,0)
-    struct Vector3 minVertex_enemy, maxVertex_enemy;
-    int collideBoxCount_enemy = 1;
-    struct CollideBox *collideBoxes_enemy = (struct CollideBox*)malloc(sizeof(struct CollideBox) * collideBoxCount_enemy);
+    Vector3_Set(&minVertex_EnemyHead, -0.35, 1.4, -0.35);    //Head
+    Vector3_Set(&maxVertex_EnemyHead, 0.35, 2.1, 0.35);
+    CollideBox_Set(&collideBoxes_EnemyHead[0], &minVertex_EnemyHead, &maxVertex_EnemyHead);
 
-    Vector3_Set(&minVertex_enemy, -0.3, 0, -0.3);    //total
-    Vector3_Set(&maxVertex_enemy, 0.3, 1.9, 0.3);
-    CollideBox_Set(&collideBoxes_enemy[0], &minVertex_enemy, &maxVertex_enemy);
+    struct Transform transform_EnemyHead;
+    struct Transform Father_transform_Enemy;
+    struct Mesh *mesh_EnemyHead = ModelEnemy_Head_New();
+    ModelEnemy_Head_Init(mesh_EnemyHead);
+    Transform_Init(&transform_EnemyHead, &Father_transform_Enemy);
 
-    struct Transform transform_enemy;
-    struct Mesh *mesh_enemy = ModelEnemy_model_New();
-    ModelEnemy_model_Init(mesh_enemy);
-    Transform_Init(&transform_enemy, NULL);
+    struct Object *Enemy_Head = Object_New(mesh_EnemyHead, &transform_EnemyHead, ENEMY_HEAD, collideBoxes_EnemyHead,
+                                          collideBoxCount_EnemyHead);
 
-    struct Object* Map_enemy= Object_New(mesh_enemy, &transform_enemy, Enemy->, collideBoxes_Floor, collideBoxCount_Floor);
+    ArrayList_PushBack(&scene->list_Enemy, &Enemy_Head);
 
-    ArrayList_PushBack(&scene->list_Enemy, &Map_enemy);
+    //Enemy_body
+    struct Vector3 minVertex_EnemyBody, maxVertex_EnemyBody;
+    int collideBoxCount_EnemyBody = 1;
+    struct CollideBox *collideBoxes_EnemyBody = (struct CollideBox *) malloc(
+            sizeof(struct CollideBox) * collideBoxCount_EnemyBody);
+
+    Vector3_Set(&minVertex_EnemyBody, -0.15, 0.4, -0.15);    //Body
+    Vector3_Set(&maxVertex_EnemyBody, 0.15, 1.4, 0.15);
+    CollideBox_Set(&collideBoxes_EnemyBody[0], &minVertex_EnemyBody, &maxVertex_EnemyBody);
+
+    struct Transform transform_EnemyBody;
+    struct Mesh *mesh_EnemyBody = ModelEnemy_Body_New();
+    ModelEnemy_Body_Init(mesh_EnemyBody);
+    Transform_Init(&transform_EnemyBody, &Father_transform_Enemy);
+
+    struct Object *Enemy_Body = Object_New(mesh_EnemyBody, &transform_EnemyBody, ENEMY_BODY, collideBoxes_EnemyBody,
+                                           collideBoxCount_EnemyBody);
+
+    ArrayList_PushBack(&scene->list_Enemy, &Enemy_Body);
+
+    //Enemy_Leg
+    struct Vector3 minVertex_EnemyLeg, maxVertex_EnemyLeg;
+    int collideBoxCount_EnemyLeg = 1;
+    struct CollideBox *collideBoxes_EnemyLeg = (struct CollideBox *) malloc(
+            sizeof(struct CollideBox) * collideBoxCount_EnemyLeg);
+
+    Vector3_Set(&minVertex_EnemyLeg, -0.37, 0, -0.37);    //Leg
+    Vector3_Set(&maxVertex_EnemyLeg, 0.37, 0.4, 0.37);
+    CollideBox_Set(&collideBoxes_EnemyLeg[0], &minVertex_EnemyLeg, &maxVertex_EnemyLeg);
+
+    struct Transform transform_EnemyLeg;
+    struct Mesh *mesh_EnemyLeg = ModelEnemy_leg_New();
+    ModelEnemy_leg_Init(mesh_EnemyLeg);
+    Transform_Init(&transform_EnemyLeg, &Father_transform_Enemy);
+
+    struct Object *Enemy_Leg = Object_New(mesh_EnemyLeg, &transform_EnemyLeg, ENEMY_LEG, collideBoxes_EnemyLeg,
+                                           collideBoxCount_EnemyLeg);
+
+    ArrayList_PushBack(&scene->list_Enemy, &Enemy_Leg);
 }
+
 
 void Del_Scene(struct Scene *scene){
     Del_ArrayList(&scene->list_Object);
