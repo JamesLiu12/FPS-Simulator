@@ -1,4 +1,4 @@
-#include "../mesh.h"
+#include "floor.h"
 
 void ModelFloor_Init(struct Mesh *floor) {
 	Vector3_Set(&floor->vertices[0], -7.5, 0.0, 7.5);

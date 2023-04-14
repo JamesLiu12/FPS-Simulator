@@ -1,3 +1,5 @@
+#ifndef FPS_SIMULATOR_INPUT_H
+#define FPS_SIMULATOR_INPUT_H
 
 #define     ESC     "\033"
 #define     UP      "\033[A"
@@ -46,3 +48,5 @@ void term_setup(void (*sighandler)(int));
 void term_restore();
 int kbhit();
 int keydown(const char* key);
+
+#endif //FPS_SIMULATOR_INPUT_H

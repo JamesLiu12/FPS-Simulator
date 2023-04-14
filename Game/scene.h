@@ -10,6 +10,9 @@ struct Scene{
     struct ArrayList list_Object;
     struct ArrayList list_Enemy;
     struct Player player;
+
+    //The objects used to create an enemy
+    struct Object *enemyHead_obj, *enemyBody_obj, *enemyLeg_obj;
 };
 
 //The initializer of scene

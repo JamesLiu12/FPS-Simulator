@@ -1,4 +1,4 @@
-#include "../mesh.h"
+#include "boundaries.h"
 
 void ModelBoundaries_Init(struct Mesh *boundaries) {
 	Vector3_Set(&boundaries->vertices[0], -7.5, 0.0, -7.4);

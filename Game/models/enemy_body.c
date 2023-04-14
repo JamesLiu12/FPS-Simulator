@@ -1,4 +1,4 @@
-#include "../mesh.h"
+#include "enemy_body.h"
 
 void ModelEnemy_Body_Init(struct Mesh *enemy_body) {
 	Vector3_Set(&enemy_body->vertices[0], -0.15, 0.4, 0.15);
