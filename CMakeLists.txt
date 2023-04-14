@@ -22,8 +22,6 @@ add_executable(
     op_engine/collide_box.h
     Game/scene.h
     op_engine/triangle.c
-    op_engine/linux-kbhit.h
-    op_engine/linux-kbhit.c
 
         Game/models/cube.c
 
@@ -58,5 +56,5 @@ add_executable(
     GameUI/ui_startmenu.c
     GameUI/ui_settingmenu.h
     GameUI/ui_settingmenu.c
-    )
+        Game/models/test_boundary.c Game/models/wall.c)
 target_link_libraries(FPS_Simulator m)
