@@ -67,5 +67,5 @@ int keydown(const char* key){
     return !strcmp(get, key);
 }
 #endif
-#ifdef __windows__
+#ifdef _WIN32
 #endif
