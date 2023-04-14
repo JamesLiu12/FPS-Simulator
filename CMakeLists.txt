@@ -42,6 +42,8 @@ add_executable(
     op_engine/object.c
     op_engine/tag.h
     op_engine/collide_box.c
+    op_engine/input.h
+    op_engine/input.c
     util/array_list.h
     util/array_list.c
     Game/scene.c
@@ -50,5 +52,11 @@ add_executable(
     Game/player.c
     Game/runner.h
     Game/runner.c
-        playground.h op_engine/input.h op_engine/input.c Game/models/clock.h Game/models/clock.h playground.h Game/models/wall.h Game/models/wall.c Game/models/test_boundary.c Game/models/test_boundary.h Game/models/models.h)
+
+    GameUI/Game_UI.h
+    GameUI/ui_startmenu.h
+    GameUI/ui_startmenu.c
+    GameUI/ui_settingmenu.h
+    GameUI/ui_settingmenu.c
+    )
 target_link_libraries(FPS_Simulator m)

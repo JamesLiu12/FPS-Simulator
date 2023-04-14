@@ -7,12 +7,4 @@
 #include "tag.h"
 #include "object.h"
 #include "mesh.h"
-
-#ifdef __LINUX__
-    //linux specific code
-    #include "linux-kbhit.h"
-#endif
-
-#ifdef _WIN32
-    //windows specific code
-#endif
+#include "input.h"

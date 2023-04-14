@@ -4,8 +4,12 @@
 
 struct Runner{
     double frame_rate;
+    //struct Scene scene;
+    
 };
 
-void Runner_Run();
-
+void Runner_Run(struct Runner *runner);
+void Runner_Init(struct Runner *runner);
+void Runner_Load(struct Runner *runner);
+void Del_Runner(struct Runner *runner);
 #endif //FPS_SIMULATOR_RUNNER_H

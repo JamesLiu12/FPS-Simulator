@@ -1,6 +1,7 @@
 #include "scene.h"
 #include "../op_engine/object.h"
 #include "../Game/models/models.h"
+#include <math.h>
 
 void Scene_Init(struct Scene *scene){
     ArrayList_Init(&scene->list_Object, sizeof(struct Object*));
@@ -118,5 +119,56 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
         Object_Show(head, canvas);
         Object_Show(body, canvas);
         Object_Show(leg, canvas);
+    }
+}
+
+void Scene_EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **result_enemy, enum Tag *result_tag){
+    double min_dist = INFINITY;
+
+    // loop through an ArrayList of enemies, detecting the min_dist of the ray to all enemies
+    for (int i = 0; i < scene->list_Enemy.size; i++){
+        struct Enemy *current_enemy = ((struct Enemy**)scene->list_Enemy.data)[i];
+        double head_dist = CollideBox_RayDistance(current_enemy->head.collideBoxes,
+                                                  &current_enemy->head.transform, ray);
+        if (head_dist < min_dist){
+            min_dist = head_dist;
+            *result_enemy = current_enemy;
+            *result_tag = current_enemy->head.tag;
+        }
+        double body_dist = CollideBox_RayDistance(current_enemy->body.collideBoxes,
+                                                  &current_enemy->body.transform, ray);
+        if (body_dist < min_dist){
+            min_dist = body_dist;
+            *result_enemy = current_enemy;
+            *result_tag = current_enemy->body.tag;
+        }
+        double leg_dist = CollideBox_RayDistance(current_enemy->leg.collideBoxes,
+                                                 &current_enemy->leg.transform, ray);
+        if (leg_dist < min_dist){
+            min_dist = leg_dist;
+            *result_enemy = current_enemy;
+            *result_tag = current_enemy->leg.tag;
+        }
+    }
+
+    //condition of collides an object other than Enemy
+    for (int i = 0; i < scene->list_Object.size; i++){
+        struct Object *current_object = ((struct Object**)scene->list_Object.data)[i];
+
+        for (int j = 0; j < current_object->collideBoxCount; j++){
+            double collideBox_dist = CollideBox_RayDistance(&current_object->collideBoxes[j],
+                                                            &current_object->transform, ray);
+            if (collideBox_dist < min_dist){
+                min_dist = collideBox_dist;
+                *result_enemy = NULL;
+                *result_tag = current_object->tag;
+            }
+        }
+    }
+
+    // condition of no collision
+    if (min_dist == INFINITY){
+        *result_enemy = NULL;
+        *result_tag = EMPTY;
     }
 }
