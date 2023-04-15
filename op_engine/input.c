@@ -1,3 +1,5 @@
+#include "input.h"
+
 #ifdef __linux__
 #include <stdio.h>
 #include <stdlib.h>
@@ -67,5 +69,8 @@ int keydown(const char* key){
     return !strcmp(get, key);
 }
 #endif
-#ifdef __windows__
+#ifdef _WIN32
+int keydown(const char* key){
+    return 1;
+}
 #endif

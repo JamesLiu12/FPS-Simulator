@@ -59,7 +59,7 @@ int Runner_Run(struct Runner *runner){
     int isBlocked;
     while(1){
         count++;
-        Vector3_Set(&scene1.player.movedirection,0,0,0);
+        Vector3_Set(&scene1.player.moveDirection, 0, 0, 0);
         isBlocked=0;
         if(kbhit()){
             Player_Control(&scene1.player);
@@ -91,7 +91,7 @@ int Runner_Run(struct Runner *runner){
                     if(CollideBox_IsCollide(&scene1.player.collideBox,&scene1.player.transform,enemy->body.collideBoxes,&enemy->transform)){
                     isBlocked=1;if(isBlocked)break;}
                 }
-                if(isBlocked){Vector3_Set(&New_moveZ,0,0,-scene1.player.movedirection.z);Player_Move(&scene1.player,&New_moveZ);}
+                if(isBlocked){Vector3_Set(&New_moveZ,0,0,-scene1.player.moveDirection.z);Player_Move(&scene1.player, &New_moveZ);}
             
             }
             if(keydown(ESC))break;
@@ -132,5 +132,5 @@ void Del_Runner(struct Runner *runner){
     free(runner);
 }
 void Player_Setting(struct Player *player,struct Runner *runner){
-    player->rotationspeed=0.1*runner->sensitivity/100;
+    player->rotationSpeed= 0.1 * runner->sensitivity / 100;
 }

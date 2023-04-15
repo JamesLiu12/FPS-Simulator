@@ -4,14 +4,14 @@
 #include "../op_engine/op_engine.h"
 struct Player{
     struct Canvas canvas;
-    double maxhealth,health, atk, movespeed, rotationspeed;
+    double maxHealth, health, atk, moveSpeed, rotationSpeed;
     struct Transform transform;
     struct CollideBox collideBox;
     struct Vector3 facing;
-    struct Vector3 movedirection;
-    double fireCDtime,fireCDcounter;
+    struct Vector3 moveDirection;
+    double fireCDtime, fireCDcounter;
     int In_FireCD,IsFiring;
-    int DEADFLAG;
+    int IsDead;
 };
 
 //Initializer of player
@@ -42,5 +42,5 @@ void Player_RotateDown(struct Player *player);
 void Player_RotateLeft(struct Player *player);
 void Player_RotateRight(struct Player *player);
 void Player_Shoot(struct Player *player);
-void Player_ChangeHealth(struct Player *player,double deltahealth);
+void Player_ChangeHealth(struct Player *player,double deltaHealth);
 #endif //FPS_SIMULATOR_PLAYER_H

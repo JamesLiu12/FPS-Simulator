@@ -9,4 +9,7 @@ struct Enemy{
     struct Transform transform;
 };
 
+void Enemy_Init(struct Enemy *enemy, struct Object *head, struct Object *body, struct Object *leg);
+void Del_Enemy(struct Enemy *enemy);
+
 #endif //FPS_SIMULATOR_ENEMY_H
