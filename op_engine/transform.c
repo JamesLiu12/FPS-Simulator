@@ -76,3 +76,11 @@ void Transform_AddPosition(struct Transform *transform, struct Vector3 *position
 void Transform_AddRotation(struct Transform *transform, struct Vector3 *rotation){
     Vector3_Add(&transform->rotation, rotation);
 }
+
+void Transform_CopyValues(struct Transform *from, struct Transform *to){
+    to->position = from->position;
+    to->rotation = from->rotation;
+    to->scale = from->scale;
+    Matrix3x3_FromEulerAngle(
+            &to->rotationMatrix, &to->rotation, EULER_ANGLE_NORMAL);
+}
