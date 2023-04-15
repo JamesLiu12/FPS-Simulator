@@ -1,13 +1,6 @@
 #include "behaviour.h"
-
-
-void Enemy_Move(struct Enemy* enemy, struct Vector3* move){
-    Object_Move(&enemy->face,move);
-    Object_Move(&enemy->body,move);
-	Object_Move(&enemy->leg,move);
-	Vector3_Add(&enemy->transform.position, move);
-	Transform_UpdateGlobal(&enemy->transform);
-}
+#include "property.h"
+#include "../../op_engine/object.h"
 
 void Enemy_Rotation(struct Enemy* enemy, struct Vector3 *angle){
     Object_Rotation(&enemy->face,angle);

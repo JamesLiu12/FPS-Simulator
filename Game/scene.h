@@ -4,7 +4,12 @@
 #include "../util/array_list.h"
 #include "../op_engine/canvas.h"
 #include "player.h"
-#include "./enemy/property.h"
+#include "enemy/property.h"
+
+struct link{
+    struct Transform* current;
+    struct link* next;
+};
 
 struct Scene{
     struct ArrayList list_Object;
@@ -23,5 +28,9 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas);
 
 //get which enemy and parts are collided by the ray
 void Scene_EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **result_enemy, enum Tag *result_tag);
+
+struct link* Find_Way(struct Object *enemy, struct Scene* scene);
+
+void Enemy_Update(struct Enemy *enemy, bool do_find_way, struct Scene* scene, struct link* current);
 
 #endif //FPS_SIMULATOR_SCENE_H

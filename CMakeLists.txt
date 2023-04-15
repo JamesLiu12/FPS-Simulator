@@ -22,8 +22,6 @@ add_executable(
     op_engine/collide_box.h
     Game/scene.h
     op_engine/triangle.c
-    op_engine/linux-kbhit.h
-    op_engine/linux-kbhit.c
 
         Game/models/cube.c
 
@@ -57,8 +55,6 @@ add_executable(
         Game/enemy/behaviour.h
         Game/enemy/damage.c
         Game/enemy/damage.h
-        Game/enemy/findway.c
-        Game/enemy/findway.h
         Game/enemy/property.c
         Game/enemy/property.h
 

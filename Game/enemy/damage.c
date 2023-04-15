@@ -1,6 +1,6 @@
 #include "damage.h"
 #include "math.h"
-
+#include "property.h"
 double square(double x)
 {
 	return x*x;

@@ -21,6 +21,7 @@ void Weapon_Init(struct Weapon *weapon);
 
 //Initializer of player
 void Player_Init(struct Player *player);
+struct Player* New_Player();
 
 //Free the memory of player
 void Del_Player(struct Player *player);
@@ -44,5 +45,7 @@ void Player_RotateUp(struct Player *player);
 void Player_RotateDown(struct Player *player);
 void Player_RotateLeft(struct Player *player);
 void Player_RotateRight(struct Player *player);
+
+void Player_Control(struct Player *player);
 
 #endif //FPS_SIMULATOR_PLAYER_H

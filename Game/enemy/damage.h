@@ -2,7 +2,7 @@
 #define FPS_SIMULATOR_DAMAGE_H
 //damage calculation & determination from enemy to player
 
-#include "behaviour.h"
+
 #include "../scene.h"
 
 bool Damage_Determination(struct Scene *scene,struct Enemy *enemy);
