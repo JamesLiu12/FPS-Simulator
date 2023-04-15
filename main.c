@@ -8,7 +8,6 @@
 #include <unistd.h>
 #include "Game/player.h"
 #include "GameUI/ui_startmenu.h"
-#include "playground.h"
 static sig_atomic_t end = 0;
 static void sighandler(int signo)
 {
@@ -16,6 +15,13 @@ static void sighandler(int signo)
     //printf("good beye!\n");
 }
 int main() {
-    test();
+    term_setup(sighandler);
+    system("clear");    
+
+    struct UI_StartMenu *startui=New_UI_StartMenu();
+    UI_StartMenu_Init(startui);
+    Launch_StartMenu(startui);
+    term_restore();
+	sleep(1);
     return 0;
 }

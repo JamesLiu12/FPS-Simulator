@@ -15,7 +15,7 @@ void Player_Init(struct Player *player){
     player->In_FireCD = 0;
     player->fireCDtime = 0.5;
     player->fireCDcounter = 0;
-    player->IsDead = 0;
+    player->DEADFLAG = 0;
     Vector3_Set(&player->facing,0,0,1);
 
     Transform_Init(&player->transform, NULL);
@@ -156,6 +156,6 @@ void Player_ChangeHealth(struct Player *player, double deltaHealth){
     if(player->health > player->maxHealth) player->health = player->maxHealth;
     if(player->health <= 0){
         player->health = 0;
-        player->IsDead = 1;
+        player->DEADFLAG = 1;
     }
 }

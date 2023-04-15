@@ -64,8 +64,8 @@ int Runner_Run(struct Runner *runner){
         if(kbhit()){
             Player_Control(&scene1.player);
             //Player_Move(&scene1.player, &scene1.player.movedirection);
-            if(!Vector3_Equal(&ZeroVector,&scene1.player.movedirection)){
-                Vector3_Set(&New_moveX,scene1.player.movedirection.x,0,0);
+            if(!Vector3_Equal(&ZeroVector,&scene1.player.moveDirection)){
+                Vector3_Set(&New_moveX,scene1.player.moveDirection.x,0,0);
                 Player_Move(&scene1.player,&New_moveX);
                 for(int i=0;i<scene1.list_Object.size;i++){
                     struct Object *object = ((struct Object**)scene1.list_Object.data)[i];
@@ -77,9 +77,9 @@ int Runner_Run(struct Runner *runner){
                     if(CollideBox_IsCollide(&scene1.player.collideBox,&scene1.player.transform,enemy->body.collideBoxes,&enemy->transform)){
                     isBlocked=1;if(isBlocked)break;}
                 }
-                if(isBlocked){Vector3_Set(&New_moveX,-scene1.player.movedirection.x,0,0);Player_Move(&scene1.player,&New_moveX);}
+                if(isBlocked){Vector3_Set(&New_moveX,-scene1.player.moveDirection.x,0,0);Player_Move(&scene1.player,&New_moveX);}
                 isBlocked=0;
-                Vector3_Set(&New_moveZ,0,0,scene1.player.movedirection.z);
+                Vector3_Set(&New_moveZ,0,0,scene1.player.moveDirection.z);
                 Player_Move(&scene1.player,&New_moveZ);
                 for(int i=0;i<scene1.list_Object.size;i++){
                     struct Object *object = ((struct Object**)scene1.list_Object.data)[i];

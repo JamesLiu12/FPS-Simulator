@@ -1,6 +1,8 @@
 #include "scene.h"
 #include "../op_engine/object.h"
 #include "../Game/models/models.h"
+#include "../util/array_list.h"
+#include "../util/util.h"
 #include "runner.h"
 #include <math.h>
 #include <stdio.h>

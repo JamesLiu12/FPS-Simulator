@@ -14,3 +14,14 @@ _deps
 playground.h
 .vscode
 FPS_Simulator.cbp
+.cmake/api/v1/query/cache-v2
+.cmake/api/v1/query/cmakeFiles-v1
+.cmake/api/v1/query/codemodel-v2
+.cmake/api/v1/query/toolchains-v1
+.cmake/api/v1/reply/cache-v2-82e94af9fbadf0f7bf45.json
+.cmake/api/v1/reply/cmakeFiles-v1-30a13962816fa0373922.json
+.cmake/api/v1/reply/codemodel-v2-1fda758b81fc1350cc43.json
+.cmake/api/v1/reply/directory-.-Debug-f5ebdc15457944623624.json
+.cmake/api/v1/reply/index-2023-04-15T05-55-53-0893.json
+.cmake/api/v1/reply/target-FPS_Simulator-Debug-d0f3f7c2021ce56899fb.json
+.cmake/api/v1/reply/toolchains-v1-6bbe3d3521e8d6cffb4c.json

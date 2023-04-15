@@ -11,7 +11,7 @@ struct Player{
     struct Vector3 moveDirection;
     double fireCDtime, fireCDcounter;
     int In_FireCD,IsFiring;
-    int IsDead;
+    int DEADFLAG;
 };
 
 //Initializer of player
