@@ -4,5 +4,6 @@
 #include "clock.h"
 #include "test_boundary.h"
 #include "wall.h"
+#include "cube.h"
 
 #endif //FPS_SIMULATOR_MODELS_H

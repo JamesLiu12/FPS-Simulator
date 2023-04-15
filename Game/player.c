@@ -39,42 +39,12 @@ void Del_Player(struct Player *player){
 }
 
 void Player_Move(struct Player *player, struct Vector3* move){
-    /*int isBlocked=0;
-    struct Vector3 New_moveX,New_moveZ;
-    Vector3_Set(&New_moveX,move->x,0,0);
-    Vector3_Set(&New_moveZ,0,0,move->z);
-    //Try X direction
-    Vector3_Add(&player->transform.position, &New_moveX);
-    for(int i=0;i<scene->list_Object.size;i++){
-        struct Object *object = ((struct Object**)scene->list_Object.data)[i];
-        if(CollideBox_IsCollide(&player->collideBox,&player->transform,object->collideBoxes,&object->transform)){
-        isBlocked=1;if(isBlocked)break;}
-    }
-    for(int i=0;i<scene->list_Enemy.size;i++){
-        struct Enemy *enemy = ((struct Enemy**)scene->list_Object.data)[i];
-        if(CollideBox_IsCollide(&player->collideBox,&player->transform,enemy->body.collideBoxes,&enemy->transform)){
-        isBlocked=1;if(isBlocked)break;}
-    }
-    if(isBlocked){Vector3_Set(&New_moveX,-move->x,0,0);Vector3_Add(&player->transform.position, &New_moveX);}
-    //Try Z direction
-    Vector3_Add(&player->transform.position, &New_moveZ);
-    for(int i=0;i<scene->list_Object.size;i++){
-        struct Object *object = ((struct Object**)scene->list_Object.data)[i];
-        if(CollideBox_IsCollide(&player->collideBox,&player->transform,object->collideBoxes,&object->transform)){
-        isBlocked=1;if(isBlocked)break;}
-    }
-    for(int i=0;i<scene->list_Enemy.size;i++){
-        struct Enemy *enemy = ((struct Enemy**)scene->list_Object.data)[i];
-        if(CollideBox_IsCollide(&player->collideBox,&player->transform,enemy->body.collideBoxes,&enemy->transform)){
-        isBlocked=1;if(isBlocked)break;}
-    }
-    if(isBlocked){Vector3_Set(&New_moveZ,-move->z,0,0);Vector3_Add(&player->transform.position, &New_moveZ);}*/
     Vector3_Add(&player->transform.position, move);
 }
 
 void Player_Rotate(struct Player *player, struct Vector3* angle){
-    Vector3_Add(&player->transform.rotation, angle);
-    Transform_RotationMatrixUpdate(&player->transform);
+    //Vector3_Add(&player->transform.rotation, angle);
+    //Transform_RotationMatrixUpdate(&player->transform);
 
     struct Matrix3x3 RotationMatrix;
     Matrix3x3_FromEulerAngle(&RotationMatrix,angle,EULER_ANGLE_REVERSED);

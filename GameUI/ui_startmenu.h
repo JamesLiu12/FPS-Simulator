@@ -11,5 +11,6 @@ void UI_StartMenu_Init(struct UI_StartMenu *Smenu);
 void Show_StartMenu(struct UI_StartMenu *Smenu);
 int Fetch_Operation();
 void Launch_StartMenu(struct UI_StartMenu *startui);
+void Victory();
 #define Game_UI_StartMenu
 #endif

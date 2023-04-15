@@ -4,13 +4,17 @@
 #include "runner.h"
 #include <math.h>
 #include <stdio.h>
-
+#include <stdlib.h>
+#include <unistd.h>
+#include <time.h>
 void Scene_Init(struct Scene *scene){
+    srand((int)time(NULL));
     ArrayList_Init(&scene->list_Object, sizeof(struct Object*));
     ArrayList_Init(&scene->list_Enemy, sizeof(struct Enemy*));
     Player_Init(&scene->player);
 
     //Map_boundary origin coordinate (0,0,0)
+    
     struct Vector3 minVertex_Boundary, maxVertex_Boundary;
     int collideBoxCount_Boundary = 5;
     struct CollideBox *collideBoxes_Boundary = (struct CollideBox*)malloc(sizeof(struct CollideBox) * collideBoxCount_Boundary);
@@ -67,6 +71,9 @@ void Scene_Init(struct Scene *scene){
     struct Object* Map_Barrier = Object_New(mesh_Barrier, &transform_Barrier, WALL, collideBoxes_Barrier, collideBoxCount_Barrier);
 
     ArrayList_PushBack(&scene->list_Object, &Map_Barrier);
+    
+    sleep(2);
+    
 }
 
 void Del_Scene(struct Scene *scene){

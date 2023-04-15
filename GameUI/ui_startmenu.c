@@ -8,6 +8,7 @@
 #include "ui_settingmenu.h"
 #include "../op_engine/op_engine.h"
 #include "../Game/runner.h"
+#include "ui_defeatmenu.h"
 struct UI_StartMenu* New_UI_StartMenu() {
     struct UI_StartMenu* startui = malloc(sizeof(struct UI_StartMenu));
     UI_StartMenu_Init(startui);
@@ -78,6 +79,8 @@ int Fetch_Operation(){
 }
 void Launch_StartMenu(struct UI_StartMenu *startui){
     int operation;
+    int end;
+    struct Runner runner;
     STARTMENUORIGIN:
     operation=0;
     while(operation!=3){
@@ -98,16 +101,44 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
         sleep(5);
         return;
     }
+    STARTUI_ENTER:
     switch(startui->pointer){
         case 0:
-            struct Runner runner;
             Runner_Init(&runner,&startui->settingui);
-            Runner_Run(&runner);
+            end=Runner_Run(&runner);
+            //Del_Runner(&runner);
+            if(end){
+                //TODO
+                Victory();
+                goto STARTMENUORIGIN;
+            }
+            else{
+                //TODO
+                //Defeat();
+                struct UI_DefeatMenu defeatui;
+                UI_DefeatMenu_Init(&defeatui);
+                int endchoice;
+                endchoice=Launch_DefeatMenu(&defeatui);
+                switch (endchoice){
+                    case 0:
+                    startui->pointer=0;goto STARTUI_ENTER;
+                    case 1:
+                    goto STARTMENUORIGIN;
+                    case 2:
+                    startui->pointer=3;goto STARTUI_ENTER;
+                    default:
+                    break;
+                }
+
+            }
             //TODO
             //Del_Runner(&runner);
             break;
         case 1:
-            //Load_Runner();
+            Runner_Init(&runner,&startui->settingui);
+            Runner_Load(&runner);
+            end=Runner_Run(&runner);
+            Del_Runner(&runner);
             //TODO
             break;
         case 2:
@@ -115,25 +146,14 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
             goto STARTMENUORIGIN;
             //TODO
             break;
-        case 3:/*
-        char a[19]={'T','h','a','n','k','s',' ','f','o','r',' ','p','l','a','y','i','n','g','!'};
-				for(int i=0;i<32;i++){
-					printf(" ");
-					sleep(1);
-				}
-				for(int i=0;i<19;i++){
-					printf("%c",a[i]);
-					sleep(2);
-				}
-				for(int i=0;i<10;i++){
-					printf(" ");
-					sleep(1);
-				}
-				printf("\n");*/
+        case 3:
             break;
         default:
         break;
     }
     //sleep(3);
     return;
+}
+void Victory(){
+
 }
