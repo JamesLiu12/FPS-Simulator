@@ -27,11 +27,11 @@ struct Object{
 };
 
 //Setter of object
-void Object_Set(struct Object *object, struct Mesh *mesh, struct Transform *transform, enum Tag tag,
+void Object_Set(struct Object *object, struct Mesh *mesh, struct Transform *father_transform, enum Tag tag,
                 struct CollideBox *collideBoxes, int collideBoxCount);
 
 //Newer of object
-struct Object* Object_New(struct Mesh *mesh, struct Transform *transform, enum Tag tag,
+struct Object* Object_New(struct Mesh *mesh, struct Transform *father_transform, enum Tag tag,
                           struct CollideBox *collideBoxes, int collideBoxCount);
 
 //Free the memory of object
