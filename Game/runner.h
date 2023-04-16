@@ -10,7 +10,7 @@ struct Runner{
     
 };
 
-void Runner_Run(struct Runner *runner);
+int Runner_Run(struct Runner *runner);//return 0 for losing, 1 for victory
 void Runner_Init(struct Runner *runner,struct UI_SettingMenu *settingui);
 void Runner_Load(struct Runner *runner);
 void Del_Runner(struct Runner *runner);

@@ -1,13 +1,18 @@
 #include "scene.h"
 #include "../op_engine/object.h"
 #include "../Game/models/models.h"
+#include "../util/array_list.h"
+#include "../util/util.h"
 #include "runner.h"
 #include <math.h>
 #include <stdio.h>
-
-void Scene_Init(struct Scene *scene) {
-    ArrayList_Init(&scene->list_Object, sizeof(struct Object *));
-    ArrayList_Init(&scene->list_Enemy, sizeof(struct Enemy *));
+#include <stdlib.h>
+#include <unistd.h>
+#include <time.h>
+void Scene_Init(struct Scene *scene){
+    srand((int)time(NULL));
+    ArrayList_Init(&scene->list_Object, sizeof(struct Object*));
+    ArrayList_Init(&scene->list_Enemy, sizeof(struct Enemy*));
     Player_Init(&scene->player);
 
     struct Vector3 playerStartPosition;
@@ -16,6 +21,7 @@ void Scene_Init(struct Scene *scene) {
 
 
     //Map_boundary origin coordinate (0,0,0)
+    
     struct Vector3 minVertex_Boundary, maxVertex_Boundary;
     int collideBoxCount_Boundary = 4;
     struct CollideBox *collideBoxes_Boundary = (struct CollideBox *) malloc(
@@ -150,6 +156,7 @@ void Scene_Init(struct Scene *scene) {
             collideBoxes_EnemyLeg,collideBoxCount_EnemyLeg);
     scene->enemyLeg_obj = Enemy_Leg;
 
+    printf("\033[32;16O");
     //Sample Enemy generate test
     struct Enemy *enemy = New_Enemy(scene->enemyHead_obj, scene->enemyBody_obj, scene->enemyLeg_obj);
     ArrayList_PushBack(&scene->list_Enemy, &enemy);
@@ -210,8 +217,9 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     //Delete it when the game is finished
     printf("%lf %lf %lf\n",scene->player.facing.x,scene->player.facing.y,scene->player.facing.z);
     printf("%lf %lf %lf\n",scene->player.transform.position.x,scene->player.transform.position.y,scene->player.transform.position.z);
+    printf("\033[16;60HX");
     Canvas_flush(canvas);
-}
+}   
 
 void Scene_EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **result_enemy, enum Tag *result_tag){
     double min_dist = INFINITY;

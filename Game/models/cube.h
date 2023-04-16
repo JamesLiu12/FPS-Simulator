@@ -2,7 +2,6 @@
 #define FPS_SIMULATOR_CUBE_H
 
 #include "../../op_engine/mesh.h"
-
 void ModelCube_Init(struct Mesh *cube);
 struct Mesh* ModelCube_New();
 

@@ -12,14 +12,14 @@ void Runner_Init(struct Runner *runner,struct UI_SettingMenu *settingui){
     runner->difficulty=settingui->difficulty;
     runner->sensitivity=settingui->sensitivity;
 }
-void Runner_Run(struct Runner *runner){
+int Runner_Run(struct Runner *runner){
     struct Scene scene1;
 
     Scene_Init(&scene1);
     
     //Scene_Load(&scene1,1);这里应该写个scene读取,做几个scene的预制件,多个地图//TODO
 
-    Player_Setting(&scene1.player,runner);
+    //Player_Setting(&scene1.player,runner);
     /*
     struct Player *player = New_Player(runner);
     struct Vector3 rotation;
@@ -54,6 +54,8 @@ void Runner_Run(struct Runner *runner){
     struct Vector3 ZeroVector;
     Vector3_Set(&ZeroVector,0,0,0);
     struct Vector3 New_moveX,New_moveZ;
+    Vector3_Set(&New_moveX,0,0,0);
+    Vector3_Set(&New_moveZ,0,0,0);
     int isBlocked;
     while(1){
         count++;
@@ -61,8 +63,9 @@ void Runner_Run(struct Runner *runner){
         isBlocked=0;
         if(kbhit()){
             Player_Control(&scene1.player);
+            //Player_Move(&scene1.player, &scene1.player.movedirection);
             if(!Vector3_Equal(&ZeroVector,&scene1.player.moveDirection)){
-                Vector3_Set(&New_moveX, scene1.player.moveDirection.x, 0, 0);
+                Vector3_Set(&New_moveX,scene1.player.moveDirection.x,0,0);
                 Player_Move(&scene1.player,&New_moveX);
                 for(int i=0;i<scene1.list_Object.size;i++){
                     struct Object *object = ((struct Object**)scene1.list_Object.data)[i];
@@ -70,12 +73,12 @@ void Runner_Run(struct Runner *runner){
                     isBlocked=1;if(isBlocked)break;}
                 }
                 for(int i=0;i<scene1.list_Enemy.size;i++){
-                    struct Enemy *enemy = ((struct Enemy**)scene1.list_Object.data)[i];
+                    struct Enemy *enemy = ((struct Enemy**)scene1.list_Enemy.data)[i];
                     if(CollideBox_IsCollide(&scene1.player.collideBox,&scene1.player.transform,enemy->body.collideBoxes,&enemy->transform)){
                     isBlocked=1;if(isBlocked)break;}
                 }
-                if(isBlocked){Vector3_Set(&New_moveX, -scene1.player.moveDirection.x, 0, 0);Player_Move(&scene1.player, &New_moveX);}
-            
+                if(isBlocked){Vector3_Set(&New_moveX,-scene1.player.moveDirection.x,0,0);Player_Move(&scene1.player,&New_moveX);}
+                isBlocked=0;
                 Vector3_Set(&New_moveZ,0,0,scene1.player.moveDirection.z);
                 Player_Move(&scene1.player,&New_moveZ);
                 for(int i=0;i<scene1.list_Object.size;i++){
@@ -84,14 +87,15 @@ void Runner_Run(struct Runner *runner){
                     isBlocked=1;if(isBlocked)break;}
                 }
                 for(int i=0;i<scene1.list_Enemy.size;i++){
-                    struct Enemy *enemy = ((struct Enemy**)scene1.list_Object.data)[i];
+                    struct Enemy *enemy = ((struct Enemy**)scene1.list_Enemy.data)[i];
                     if(CollideBox_IsCollide(&scene1.player.collideBox,&scene1.player.transform,enemy->body.collideBoxes,&enemy->transform)){
                     isBlocked=1;if(isBlocked)break;}
                 }
                 if(isBlocked){Vector3_Set(&New_moveZ,0,0,-scene1.player.moveDirection.z);Player_Move(&scene1.player, &New_moveZ);}
             
             }
-            if(keydown(ESC))break;
+            if(keydown(ESC))return 1;
+            for(int i=0;i<10;i++)kbhit();
             //if(keydown(SPACE))break;
             
         }
@@ -102,8 +106,8 @@ void Runner_Run(struct Runner *runner){
             Object_Show(obj3, &player->canvas);
             Object_Show(obj4, &player->canvas);
             Canvas_flush(&player->canvas);*/
-            
-            usleep(1000000/runner->frame_rate);
+            if(scene1.player.DEADFLAG){return 0;}
+            usleep(10000000/runner->frame_rate);
         //printf("count:  %d\n",count);
         //usleep(5000);
         //system("clear");
@@ -117,7 +121,7 @@ void Runner_Run(struct Runner *runner){
     Del_Scene(&scene1);
     system("clear");
     printf("Goodbye!\n");
-    
+    return 1;
     //TODO
     //For each frame
 }

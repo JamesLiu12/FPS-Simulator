@@ -15,7 +15,7 @@ void Player_Init(struct Player *player){
     player->In_FireCD = 0;
     player->fireCDtime = 0.5;
     player->fireCDcounter = 0;
-    player->IsDead = 0;
+    player->DEADFLAG = 0;
     Vector3_Set(&player->facing,0,0,1);
 
     Transform_Init(&player->transform, NULL);
@@ -43,8 +43,8 @@ void Player_Move(struct Player *player, struct Vector3* move){
 }
 
 void Player_Rotate(struct Player *player, struct Vector3* angle){
-    Vector3_Add(&player->transform.rotation, angle);
-    Transform_RotationMatrixUpdate(&player->transform);
+    //Vector3_Add(&player->transform.rotation, angle);
+    //Transform_RotationMatrixUpdate(&player->transform);
 
     struct Matrix3x3 RotationMatrix;
     Matrix3x3_FromEulerAngle(&RotationMatrix,angle,EULER_ANGLE_REVERSED);
@@ -156,6 +156,6 @@ void Player_ChangeHealth(struct Player *player, double deltaHealth){
     if(player->health > player->maxHealth) player->health = player->maxHealth;
     if(player->health <= 0){
         player->health = 0;
-        player->IsDead = 1;
+        player->DEADFLAG = 1;
     }
 }

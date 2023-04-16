@@ -8,6 +8,7 @@
 #include "ui_settingmenu.h"
 #include "../op_engine/op_engine.h"
 #include "../Game/runner.h"
+#include "ui_defeatmenu.h"
 struct UI_StartMenu* New_UI_StartMenu() {
     struct UI_StartMenu* startui = malloc(sizeof(struct UI_StartMenu));
     UI_StartMenu_Init(startui);
@@ -78,6 +79,8 @@ int Fetch_Operation(){
 }
 void Launch_StartMenu(struct UI_StartMenu *startui){
     int operation;
+    int end;
+    struct Runner runner;
     STARTMENUORIGIN:
     operation=0;
     while(operation!=3){
@@ -98,16 +101,44 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
         sleep(5);
         return;
     }
+    STARTUI_ENTER:
     switch(startui->pointer){
         case 0:
-            struct Runner runner;
             Runner_Init(&runner,&startui->settingui);
-            Runner_Run(&runner);
+            end=Runner_Run(&runner);
+            //Del_Runner(&runner);
+            if(end){
+                //TODO
+                Victory();
+                goto STARTMENUORIGIN;
+            }
+            else{
+                //TODO
+                //Defeat();
+                struct UI_DefeatMenu defeatui;
+                UI_DefeatMenu_Init(&defeatui);
+                int endchoice;
+                endchoice=Launch_DefeatMenu(&defeatui);
+                switch (endchoice){
+                    case 0:
+                    startui->pointer=0;goto STARTUI_ENTER;
+                    case 1:
+                    goto STARTMENUORIGIN;
+                    case 2:
+                    startui->pointer=3;goto STARTUI_ENTER;
+                    default:
+                    break;
+                }
+
+            }
             //TODO
             //Del_Runner(&runner);
             break;
         case 1:
-            //Load_Runner();
+            Runner_Init(&runner,&startui->settingui);
+            Runner_Load(&runner);
+            end=Runner_Run(&runner);
+            Del_Runner(&runner);
             //TODO
             break;
         case 2:
@@ -115,25 +146,201 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
             goto STARTMENUORIGIN;
             //TODO
             break;
-        case 3:/*
-        char a[19]={'T','h','a','n','k','s',' ','f','o','r',' ','p','l','a','y','i','n','g','!'};
-				for(int i=0;i<32;i++){
-					printf(" ");
-					sleep(1);
-				}
-				for(int i=0;i<19;i++){
-					printf("%c",a[i]);
-					sleep(2);
-				}
-				for(int i=0;i<10;i++){
-					printf(" ");
-					sleep(1);
-				}
-				printf("\n");*/
+        case 3:
             break;
         default:
         break;
     }
     //sleep(3);
     return;
+}
+void printchar(int n, char a){
+    for(int i=0;i<n;i++)printf("%c",a);
+}
+void printdialog(char a[]){
+    printf("\n");
+    int linecounter,totalcounter;
+        printchar(25,' ');
+        printchar(60,'_');
+        printf("\n");
+        printchar(24,' ');
+        printchar(1,'/');
+        printchar(60,' ');
+        printchar(1,'\\');
+        printf("\n");
+        totalcounter=0;
+        while(1){
+            printchar(24,' ');
+            printchar(1,'|');
+            printchar(2,' ');
+            linecounter=0;
+            while(linecounter<56){
+                if(totalcounter>=strlen(a))break;
+                if(a[totalcounter]=='\n'){totalcounter++;break;}
+                printf("%c",a[totalcounter]);
+                linecounter++;
+                totalcounter++;
+            }
+            printchar(58-linecounter,' ');
+            printchar(1,'|');
+            printf("\n");
+            if(totalcounter>=strlen(a))break;
+        }
+        printchar(24,' ');
+        printchar(1,'\\');
+        printchar(60,'_');
+        printchar(1,'/');
+        printf("\n");
+}
+int minimum(int a,int b){
+    return a<b?a:b;
+}
+void printeye(){
+    printf(R"(------_________________________                                                 _________________________------
+      |                     --|                                                |--                     |      
+      |                     --|                                                |--                     |      
+      |                     --|                       ▒▒                       |--                     |      
+      |                     --|                      ▒▒▒▒                      |--                     |      
+      |                     --|                     ▒▒▒▒▒▒                     |--                     |      
+      |                     --|                    ▒▒▒▒▒▒▒▒                    |--                     |      
+      |                     --|                   ▒▒▒▒▒▒▒▒▒▒                   |--                     |      
+      |                     --|                  ▒▒▒▒▒▒▒▒▒▒▒▒                  |--                     |      
+      |                     --|                 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒                 |--                     |      
+      |                     --|                ▒▒▒▒▒▒▒▓▓▒▒▒▒▒▒▒                |--                     |      
+      |                     --|               ▒▒▒▒▒▒▒▓▓▓▓▒▒▒▒▒▒▒               |--                     |      
+      |                     --|              ▒▒▒▒▒▒▒▓▓▓▓▓▓▒▒▒▒▒▒▒              |--                     |      
+      |                     --|             ▒▒▒▒▒▒▒▓▓▓▓▓▓▓▓▒▒▒▒▒▒▒             |--                     |      
+      |                     --|            ▒▒▒▒▒▒▒▓▓▓▓▓▓▓▓▓▓▒▒▒▒▒▒▒            |--                     |      
+      |                     --|           ▒▒▒▒▒▒▒▓▓░░░░░░░░▓▓▒▒▒▒▒▒▒           |--                     |      
+      |                     --|          ▒▒▒▒▒▒▒▓░░  ████  ░░▓▒▒▒▒▒▒▒          |--                     |      
+      |                     --|           ▒▒▒▒▒▓▓▓▓░░░░░░░░▓▓▓▓▒▒▒▒▒           |--                     |      
+      |                     --|            ▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒▒▒            |--                     |      
+      |                     --|             ▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒             |--                     |      
+      |                     --|              ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒              |--                     |      
+      |                     --|               ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒               |--                     |      
+      |                     --|                ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒                |--                     |      
+      |                     --|                 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒                 |--                     |      
+      |                     --|                  ▒▒▒▒▒▒▒▒▒▒▒▒                  |--                     |      
+      |                     --|                   ▒▒▒▒▒▒▒▒▒▒                   |--                     |      
+      |                     --|                    ▒▒▒▒▒▒▒▒                    |--                     |      
+      |                     --|                     ▒▒▒▒▒▒                     |--                     |      
+      |                     --|                      ▒▒▒▒                      |--                     |      
+      |                     --|                       ▒▒                       |--                     |      
+      |                     --|                                                |--                     |      )");
+    printf("\n------________________________|                                                |________________________------\n");
+}
+void Victory(){
+    int temp;
+    char a[200];
+    int linecounter,totalcounter;
+        strcpy(a,"You: This is the end. Right?\n\n(press E to open the door)");
+        system("clear");
+        printchar(30,'-');
+        printchar(25,'_');
+        printf(" ");
+        printchar(25,'_');
+        printchar(30,'-');
+        printf("\n");
+        for(int k=0;k<30;k++){
+            printchar(30,' ');
+            printf("|");
+            printchar(21,' ');
+            printf("--| ");
+            printf("|--");
+            printchar(21,' ');
+            printf("|");
+            printchar(30,' ');
+        printf("\n");
+        }
+        printchar(30,'-');
+        printchar(25,'_');
+        printf(" ");
+        printchar(25,'_');
+        printchar(30,'-');
+        printf("\n");
+        printdialog(a);
+        while(1){
+            if(kbhit())if(keydown(E))break;
+        }
+
+    for(int i=0;i<25;i++){
+        system("clear");
+        printchar(30-i,'-');
+        printchar(25,'_');
+        printchar(2*i+1,' ');
+        printchar(25,'_');
+        printchar(30-i,'-');
+        printf("\n");
+        for(int k=0;k<30;k++){
+            printchar(30-i,' ');
+            printf("|");
+            printchar(21,' ');
+            printf("--|");
+            temp=minimum(k,30-k)*2+(i-10)*2-30;
+            if(temp>0){
+                printchar((i*2+1-temp)/2,' ');
+                for(int j=0;j<temp;j++)printf("▒");
+                printchar((i*2+1-temp)/2,' ');
+            }
+            else{
+                printchar(2*i,' ');
+            }
+                //for(int j=0;j<2*i;j++){printf(" ");}
+            
+            printf("|--");
+            for(int j=0;j<21;j++){printf(" ");}
+            printf("|");
+            for(int j=0;j<30-i;j++){printf(" ");}
+        printf("\n");
+        }
+        for(int j=0;j<30-i;j++){printf("-");}
+        for(int j=0;j<24;j++){printf("_");}
+        printf("|");
+        for(int j=0;j<2*i;j++){printf(" ");}
+        printf("|");
+        for(int j=0;j<24;j++){printf("_");}
+        for(int j=0;j<30-i;j++){printf("-");}
+        printf("\n");
+        usleep(200000);
+    }
+    sleep(2);
+    system("clear");
+    for(int i=0;i<100;i++)kbhit();
+    printeye();
+    strcpy(a,"You: What ...\n\npress to continue");
+    printdialog(a);
+    while(1){if(kbhit())break;}
+
+    system("clear");
+    printeye();
+    strcpy(a,"*mystery voice*: Well done\n\npress to continue");
+    printdialog(a);
+    while(1){if(kbhit())break;}
+
+    system("clear");
+    printeye();
+    strcpy(a,"*mystery voice*: See you at the entrance\n\npress to continue");
+    printdialog(a);
+    while(1){if(kbhit())break;}
+    
+    for(int i=0;i<40;i++){
+    system("clear");
+    printeye();
+    strcpy(a,"Your vision gradually fades");
+    printdialog(a);
+    printf("\033[1;1H");
+    for(int j=1;j<=i;j++){
+        //printf("\033[0J");
+        printf("\033[%d;1H",j);
+        printf("\r");
+        printchar(120,' ');
+        printf("\n");
+    }
+    usleep(150000);
+    }
+    
+    //usleep(200000);
+
+    usleep(1000000);
+    printf("\033[1;1H");
 }

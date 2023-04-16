@@ -31,8 +31,10 @@ add_executable(
         Game/player.h
         Game/player.c
         Game/enemy.h
+        Game/enemy.c
         Game/runner.h
         Game/runner.c
+        Game/game.h
 
         op_engine/canvas.h
         op_engine/canvas.c
@@ -59,17 +61,17 @@ add_executable(
         op_engine/collide_box.h
         op_engine/input.h
         op_engine/input.c
-
-        util/util.h
         util/util.c
-        util/array_list.h
+        util/util.h
         util/array_list.c
+        util/array_list.h
 
-        GameUI/Game_UI.h
-        GameUI/ui_startmenu.h
-        GameUI/ui_startmenu.c
-        GameUI/ui_settingmenu.h
-        GameUI/ui_settingmenu.c
-        playground.h
-        Game/enemy.c)
+    GameUI/Game_UI.h
+    GameUI/ui_startmenu.h
+    GameUI/ui_startmenu.c
+    GameUI/ui_settingmenu.h
+    GameUI/ui_settingmenu.c
+    GameUI/ui_defeatmenu.h
+    GameUI/ui_defeatmenu.c
+    )
 target_link_libraries(FPS_Simulator m)
