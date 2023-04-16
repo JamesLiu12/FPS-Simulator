@@ -94,7 +94,8 @@ int Runner_Run(struct Runner *runner){
                 if(isBlocked){Vector3_Set(&New_moveZ,0,0,-scene1.player.moveDirection.z);Player_Move(&scene1.player, &New_moveZ);}
             
             }
-            if(keydown(ESC))break;
+            if(keydown(ESC))return 1;
+            for(int i=0;i<10;i++)kbhit();
             //if(keydown(SPACE))break;
             
         }
@@ -106,7 +107,7 @@ int Runner_Run(struct Runner *runner){
             Object_Show(obj4, &player->canvas);
             Canvas_flush(&player->canvas);*/
             if(scene1.player.DEADFLAG){return 0;}
-            usleep(1000000/runner->frame_rate);
+            usleep(10000000/runner->frame_rate);
         //printf("count:  %d\n",count);
         //usleep(5000);
         //system("clear");

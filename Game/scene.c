@@ -151,6 +151,8 @@ void Scene_Init(struct Scene *scene){
     struct Object *Enemy_Leg = Object_New(mesh_EnemyLeg, &transform_EnemyLeg, ENEMY_LEG,
             collideBoxes_EnemyLeg,collideBoxCount_EnemyLeg);
     scene->enemyLeg_obj = Enemy_Leg;
+
+    printf("\033[32;16O");
 }
 
 
@@ -204,8 +206,9 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     //Delete it when the game is finished
     printf("%lf %lf %lf\n",scene->player.facing.x,scene->player.facing.y,scene->player.facing.z);
     printf("%lf %lf %lf\n",scene->player.transform.position.x,scene->player.transform.position.y,scene->player.transform.position.z);
+    printf("\033[16;60HX");
     Canvas_flush(canvas);
-}
+}   
 
 void Scene_EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **result_enemy, enum Tag *result_tag){
     double min_dist = INFINITY;
