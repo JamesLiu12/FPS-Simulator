@@ -63,5 +63,5 @@ add_executable(
     GameUI/ui_startmenu.c
     GameUI/ui_settingmenu.h
     GameUI/ui_settingmenu.c
-        Game/models/test_boundary.c Game/models/wall.c)
+        Game/models/test_boundary.c Game/models/wall.c Game/weapon.c Game/weapon.h playground.c playground.h)
 target_link_libraries(FPS_Simulator m)

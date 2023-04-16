@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include "Game/player.h"
 #include "GameUI/ui_startmenu.h"
+#include "playground.h"
 const int FPS=60;
 static sig_atomic_t end = 0;
 static void sighandler(int signo)
@@ -89,5 +90,6 @@ int main() {
 
     term_restore();
 	sleep(1);
+    test();
     return 0;
 }

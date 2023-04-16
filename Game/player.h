@@ -4,7 +4,9 @@
 #include "../op_engine/op_engine.h"
 
 struct Weapon{
-	double speed, damage;
+    double speed, damage, critical_rate;
+    struct Transform transform;
+    int index;
 };
 
 struct Player{
@@ -15,9 +17,6 @@ struct Player{
     struct CollideBox collideBox;
 	struct Weapon weapon;
 };
-
-//Initializer of weapon (corresponding to player)
-void Weapon_Init(struct Weapon *weapon);
 
 //Initializer of player
 void Player_Init(struct Player *player);

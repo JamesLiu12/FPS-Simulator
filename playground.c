@@ -1,13 +1,13 @@
-#include "playground.h"
 #include "op_engine/op_engine.h"
-#include "obj_converter/out/testing1.c"
 #include "test_map/map.h"
-#include <windows.h>
+#include "test_map/test_boundary.h"
+#include "playground.h"
 #include <stdio.h>
+#include <unistd.h>
 
 void test()
 {
-	struct Mesh* map = ModelTesting1_New();
+	struct Mesh* map = ModelTest_boundary_New();
 	struct Player plr; Player_Init(&plr); struct Player* player = &plr;
 	struct Transform transform;
 	struct CollideBox* box;
@@ -26,13 +26,11 @@ void test()
 	while (count < 100){
 		if (count%10==0){dof = 1;}
 		Enemy_Update(enemy,dof,scene,beginning);
-		printf("%f",enemy->transform.globalPosition.x);
+		printf("enemy x position: %f",enemy->transform.globalPosition.x);
+        printf("player x position: %f",player->transform.globalPosition.x);
 		count++;
-		Sleep(500);
+		sleep(1);
 	}
-
-
-
 
 
 }

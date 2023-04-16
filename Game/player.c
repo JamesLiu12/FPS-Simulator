@@ -1,4 +1,5 @@
 #include "player.h"
+#include "weapon.h"
 #include "../op_engine/op_engine.h"
 void Player_Init(struct Player *player){
     Canvas_Init(&player->canvas, 32, 64);
@@ -16,6 +17,11 @@ void Player_Init(struct Player *player){
     Vector3_Set(&v1, -0.5, -1, -0.5);
     Vector3_Set(&v2, 0.5, 1, 0.5);
     CollideBox_Set(&player->collideBox, &v1, &v2);
+
+    struct Weapon* weapon = (struct Weapon*)malloc(sizeof (struct Weapon));
+    struct ArrayList* weapon_list = (struct ArrayList*)malloc(sizeof (struct ArrayList));
+    Weapon_List_Init(weapon_list);
+    Weapon_Init(weapon,player,weapon_list);
 }
 
 struct Player* New_Player() {
