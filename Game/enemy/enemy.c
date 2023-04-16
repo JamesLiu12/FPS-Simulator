@@ -1,7 +1,6 @@
-#include "property.h"
+#include "enemy.h"
 #include "math.h"
-
-double square(double x);
+#include "../../util/util.h"
 
 void Enemy_Init(struct Enemy *enemy,struct Object* body,struct Object* face, struct Object* leg){
     enemy->body = *body;
@@ -32,8 +31,8 @@ bool Damage_Determination(struct Scene *scene,struct Enemy *enemy)//enemy's dama
 {
     double damage = 0;
     double distance = 1.5;//max distance for enemy to attack the player
-    if (sqrt(square(enemy->transform.globalPosition.x - scene->player.transform.globalPosition.x) +
-             square(enemy->transform.globalPosition.z - scene->player.transform.globalPosition.z)
+    if (sqrt(pow(enemy->transform.globalPosition.x - scene->player.transform.globalPosition.x,2) +
+             pow(enemy->transform.globalPosition.z - scene->player.transform.globalPosition.z,2)
              >= distance)) return 0;
     return 1;
 }
@@ -42,7 +41,7 @@ double Damage_Calculation(struct Scene *scene,struct Enemy *enemy)//enemy's dama
 {
     double roller = rand() % 100;
     double rate = roller * enemy->Critical_Rate;//this value should be 0-5000
-    if (roller >= 2345/*critical damage*/){ return square(enemy->damage/scene->player.defence); }
+    if (roller >= 2345/*critical damage*/){ return pow(enemy->damage/scene->player.defence,2); }
     else { return enemy->damage/scene->player.defence; }
 }
 
@@ -57,7 +56,3 @@ void Enemy_Rotation(struct Enemy* enemy, struct Vector3 *angle){
     Transform_RotationMatrixUpdate(&enemy->transform);
 }
 
-double square(double x)
-{
-    return x*x;
-}

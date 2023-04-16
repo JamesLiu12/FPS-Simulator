@@ -1,5 +1,5 @@
-#ifndef FPS_SIMULATOR_PROPERTY_H
-#define FPS_SIMULATOR_PROPERTY_H
+#ifndef FPS_SIMULATOR_ENEMY_H
+#define FPS_SIMULATOR_ENEMY_H
 
 #include "../../op_engine/op_engine.h"
 #include "../player.h"
@@ -25,4 +25,4 @@ double Damage_Calculation(struct Scene *scene,struct Enemy *enemy);
 void Enemy_Move(struct Enemy* enemy, struct Vector3 *move); //enemy consists of three objects: face and body
 
 void Enemy_Rotation(struct Enemy *enemy, struct Vector3* angle);
-#endif //FPS_SIMULATOR_PROPERTY_H
+#endif //FPS_SIMULATOR_ENEMY_H

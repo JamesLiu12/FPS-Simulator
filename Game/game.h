@@ -1,4 +1,4 @@
 #include "player.h"
 #include "runner.h"
-#include "enemy/property.h"
+#include "enemy/enemy.h"
 #include "scene.h"
