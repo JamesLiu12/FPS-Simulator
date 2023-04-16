@@ -15,6 +15,10 @@ void Scene_Init(struct Scene *scene){
     ArrayList_Init(&scene->list_Enemy, sizeof(struct Enemy*));
     Player_Init(&scene->player);
 
+    struct Vector3 playerStartPosition;
+    Vector3_Set(&playerStartPosition, 0, 1, 0);
+    Transform_AddPosition(&scene->player.transform, &playerStartPosition);
+
 
     //Map_boundary origin coordinate (0,0,0)
     
@@ -153,6 +157,13 @@ void Scene_Init(struct Scene *scene){
     scene->enemyLeg_obj = Enemy_Leg;
 
     printf("\033[32;16O");
+    //Sample Enemy generate test
+    struct Enemy *enemy = New_Enemy(scene->enemyHead_obj, scene->enemyBody_obj, scene->enemyLeg_obj);
+    ArrayList_PushBack(&scene->list_Enemy, &enemy);
+    struct Vector3 vec;
+    Vector3_Set(&vec, 0, 1, 5);
+    Transform_AddPosition(&enemy->transform, &vec);
+    //Sample end
 }
 
 
@@ -181,7 +192,7 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
         Object_Show(object, canvas);
     }
     for (int i = 0; i < scene->list_Enemy.size; i++){
-        struct Enemy *enemy = ((struct Enemy**)scene->list_Object.data)[i];
+        struct Enemy *enemy = ((struct Enemy**)scene->list_Enemy.data)[i];
         struct Object
                 *head = &enemy->head,
                 *body = &enemy->body,

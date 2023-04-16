@@ -40,5 +40,8 @@ void Transform_AddPosition(struct Transform *transform, struct Vector3 *position
 
 void Transform_AddRotation(struct Transform *transform, struct Vector3 *rotation);
 
+//Only copy the values of position, rotation, and scale
+void Transform_CopyValues(struct Transform *from, struct Transform *to);
+
 #define OP_ENGINE_TRANSFORMATION
 #endif
