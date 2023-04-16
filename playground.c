@@ -22,10 +22,10 @@ void test()
 
 	int count = 1;
 	bool dof = 0;
-	struct link* beginning = Find_Way(&enemy->body,scene);
+	struct Enemy_TransformLink* beginning = Enemy_FindWay(&enemy->body,scene);
 	while (count < 100){
 		if (count%10==0){dof = 1;}
-		Enemy_Update(enemy,dof,scene,beginning);
+		Scene_EnemyUpdate(enemy,dof,scene,beginning);
 		printf("enemy x position: %f",enemy->transform.globalPosition.x);
         printf("player x position: %f",player->transform.globalPosition.x);
 		count++;

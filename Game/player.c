@@ -1,5 +1,4 @@
 #include "player.h"
-#include "weapon.h"
 #include "../op_engine/op_engine.h"
 void Player_Init(struct Player *player){
     Canvas_Init(&player->canvas, 32, 64);
@@ -20,7 +19,7 @@ void Player_Init(struct Player *player){
 
     struct Weapon* weapon = (struct Weapon*)malloc(sizeof (struct Weapon));
     struct ArrayList* weapon_list = (struct ArrayList*)malloc(sizeof (struct ArrayList));
-    Weapon_List_Init(weapon_list);
+    WeaponList_Init(weapon_list);
     Weapon_Init(weapon,player,weapon_list);
 }
 
@@ -125,4 +124,39 @@ void Player_Control(struct Player *player){
 	if(keydown(DOWN))Player_MoveBackward(player);
 	if(keydown(LEFT))Player_MoveLeft(player);
 	if(keydown(RIGHT))Player_MoveRight(player);
+}
+
+void Weapon_Init(struct Weapon* weapon, struct Player* player, struct ArrayList* weapon_list)
+{
+    Transform_Init(&weapon->transform,&player->transform);
+    weapon->transform = player->transform;
+
+    weapon->damage = 10;
+    weapon->speed = 1;
+    weapon->critical_rate = 30;//0-100
+
+    weapon->index = weapon_list->capacity;//all weapons in this function are assumed not initialized and should be added into the list
+    ArrayList_PushBack(weapon_list,weapon);
+
+    if(player->weapon.damage == 0) player->weapon = *weapon;//player's weapon does not exist
+}
+
+void Weapon_Change(struct Weapon* Old, struct Weapon* New, struct Player* player, struct ArrayList* weapon_list)
+{
+    struct Weapon empty = {};
+    if(New->index == empty.index) Weapon_Init(New,player,weapon_list);//New weapon is not initialized
+    player->weapon = *New;
+}
+
+struct Weapon* New_Weapon(struct Player* player, struct ArrayList* weapon_list) {
+    struct Weapon* weapon = (struct Weapon*)malloc(sizeof(struct Weapon));
+    Weapon_Init(weapon,player,weapon_list);
+    return weapon;
+}
+
+void WeaponList_Init(struct ArrayList* weapon_list)
+{
+    ArrayList_Init(weapon_list,sizeof(struct Weapon));
+    struct Weapon empty = {};
+    ArrayList_PushBack(weapon_list,&empty);
 }

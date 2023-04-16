@@ -51,10 +51,6 @@ add_executable(
     Game/runner.h
     Game/runner.c
 
-        Game/enemy/behaviour.c
-        Game/enemy/behaviour.h
-        Game/enemy/damage.c
-        Game/enemy/damage.h
         Game/enemy/property.c
         Game/enemy/property.h
 
@@ -63,5 +59,5 @@ add_executable(
     GameUI/ui_startmenu.c
     GameUI/ui_settingmenu.h
     GameUI/ui_settingmenu.c
-        Game/models/test_boundary.c Game/models/wall.c Game/weapon.c Game/weapon.h playground.c playground.h)
+        Game/models/test_boundary.c Game/models/wall.c playground.c playground.h)
 target_link_libraries(FPS_Simulator m)

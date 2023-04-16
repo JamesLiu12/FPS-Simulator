@@ -6,9 +6,9 @@
 #include "player.h"
 #include "enemy/property.h"
 
-struct link{
+struct Enemy_TransformLink{
     struct Transform* current;
-    struct link* next;
+    struct Enemy_TransformLink* next;
 };
 
 struct Scene{
@@ -29,8 +29,7 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas);
 //get which enemy and parts are collided by the ray
 void Scene_EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **result_enemy, enum Tag *result_tag);
 
-struct link* Find_Way(struct Object *enemy, struct Scene* scene);
+struct Enemy_TransformLink* Enemy_FindWay(struct Object *enemy, struct Scene* scene);
 
-void Enemy_Update(struct Enemy *enemy, bool do_find_way, struct Scene* scene, struct link* current);
-
+void Scene_EnemyUpdate(struct Enemy *enemy, bool do_find_way, struct Scene* scene, struct Enemy_TransformLink* current);
 #endif //FPS_SIMULATOR_SCENE_H
