@@ -73,5 +73,6 @@ add_executable(
     GameUI/ui_settingmenu.c
     GameUI/ui_defeatmenu.h
     GameUI/ui_defeatmenu.c
-    )
+    playground.h
+)
 target_link_libraries(FPS_Simulator m)
