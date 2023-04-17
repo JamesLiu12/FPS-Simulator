@@ -8,8 +8,10 @@ Contributors:
 
   Zhuang Keju
 
+  Xiao Yuxuan
+
 第一人称射击游戏 (3D)
-1. 写引擎
+1. 写引擎it 
 2. 玩法设计
 3. 场景设计
 4. Bot设计
@@ -19,6 +21,7 @@ Contributors:
 射线
 视距
 刚体
+寻路
 
 物体：
   模型

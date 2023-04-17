@@ -148,9 +148,10 @@ void Player_RotateLeft(struct Player *player){
 }
 void Player_RotateRight(struct Player *player){
     struct Vector3 rotation;
-    Vector3_Set(&rotation, 0, -player->rotationSpeed, 0);
-    Player_Rotate(player, &rotation);
-}   
+    Vector3_Set(&rotation,0,-player->rotationSpeed,0);
+    Player_Rotate(player,&rotation);
+}
+
 void Player_ChangeHealth(struct Player *player, double deltaHealth){
     player->health += deltaHealth;
     if(player->health > player->maxHealth) player->health = player->maxHealth;

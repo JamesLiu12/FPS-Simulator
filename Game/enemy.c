@@ -1,4 +1,6 @@
 #include "enemy.h"
+#include "math.h"
+#include "../util/util.h"
 
 void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
     Transform_Init(&enemy->transform, NULL);
@@ -37,6 +39,15 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
                collideBoxes_EnemyLeg,1);
 
     Vector3_Set(&enemy->leg.transform.position, 0, 0, 0);
+
+    enemy->speed = 5;
+	enemy->health = 100;
+	enemy->damage = 5;
+	enemy->Critical_Rate = 50;//critical damage to player; should not be higher than 50
+}
+
+void Enemy_Start(struct Enemy *enemy){
+	//TODO enemy start
 }
 
 struct Enemy* New_Enemy(struct EnemyMeshes *meshes){
@@ -68,4 +79,15 @@ void Del_EnemyMeshes(struct EnemyMeshes *meshes){
     Del_Mesh(meshes->head);
     Del_Mesh(meshes->body);
     Del_Mesh(meshes->leg);
+}
+
+void Enemy_Move(struct Enemy* enemy, struct Vector3* move){
+    Transform_AddPosition(&enemy->transform, move);
+}
+
+void Enemy_Rotation(struct Enemy* enemy, struct Vector3 *angle){
+    Object_Rotation(&enemy->head, angle);
+    Object_Rotation(&enemy->body,angle);
+    Vector3_Add(&enemy->transform.rotation, angle);
+    Transform_RotationMatrixUpdate(&enemy->transform);
 }

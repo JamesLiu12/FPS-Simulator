@@ -210,3 +210,92 @@ void Scene_EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **r
         *result_tag = EMPTY;
     }
 }
+
+void Enemy_Move(struct Enemy* enemy, struct Vector3* move);
+
+void Scene_EnemyUpdate(struct Enemy* enemy, bool do_find_way, struct Scene* scene, struct Enemy_TransformLink* current)
+{
+    if (do_find_way){
+        struct Enemy_TransformLink* beginning = Scene_EnemyFindWay(scene, &enemy->body);//beginning actually refers to current position of bot.
+        current = beginning;
+    }
+    struct Transform* target = current->next->current;
+    struct Vector3* move = (struct Vector3*)malloc(sizeof(struct Vector3));
+    Transform_UpdateGlobal(&enemy->transform);
+    Vector3_Set(move,
+                target->globalPosition.x - enemy->transform.globalPosition.x,
+                target->globalPosition.y - enemy->transform.globalPosition.y,
+                target->globalPosition.z - enemy->transform.globalPosition.z);
+    Enemy_Move(enemy, move);
+}
+
+//build a linked list to find the shortest way from enemy to player.
+struct Enemy_TransformLink* Scene_EnemyFindWay(struct Scene* scene, struct Object *enemy)
+{
+    unsigned int size = scene->list_Object.size;
+    double min_distance = INFINITY, distance;
+    struct Object *list = (struct Object*)scene->list_Object.data;
+    struct Line* ray = NULL;
+    struct Player* player = &scene->player;
+    struct Object* min_distance_obj = (struct Object*)malloc(sizeof(struct Object)),*min_temp = (struct Object*)malloc(sizeof(struct Object));
+    Transform_UpdateGlobal(&player->transform);
+    min_distance_obj->transform.globalPosition.x = player->transform.globalPosition.x;
+    min_distance_obj->transform.globalPosition.y = player->transform.globalPosition.y;
+    min_distance_obj->transform.globalPosition.z = player->transform.globalPosition.z;
+    struct Enemy_TransformLink* destination = NULL;
+    destination->next = NULL;
+    destination->current = &min_distance_obj->transform;
+    struct Enemy_TransformLink* next_addr = destination;
+
+    while(!	(min_distance_obj->transform.globalPosition.x == enemy->transform.globalPosition.x &&
+                min_distance_obj->transform.globalPosition.z == enemy->transform.globalPosition.z)){
+        for (int j=0;j<size;j++){
+            if (min_distance_obj->transform.globalPosition.x==list[j].transform.globalPosition.x
+                &&  min_distance_obj->transform.globalPosition.z==list[j].transform.globalPosition.z) continue;
+            if (list[j].tag == WALL) continue;
+            struct Vector3* direction = (struct Vector3*)malloc(sizeof(struct Vector3));
+            Transform_UpdateGlobal(&list[j].transform);
+            Vector3_Set(direction,
+                        min_distance_obj->transform.globalPosition.x-list[j].transform.globalPosition.x,
+                        min_distance_obj->transform.globalPosition.y-list[j].transform.globalPosition.y,
+                        min_distance_obj->transform.globalPosition.z-list[j].transform.globalPosition.z);
+            Line_Set(ray,&list[j].transform.globalPosition,direction);
+            distance = CollideBox_RayDistance(enemy->collideBoxes,&list[j].transform,ray);
+            if (distance == INFINITY) continue;
+            if (distance < min_distance){
+                min_distance = distance;
+                min_temp = &list[j];
+            }
+        }
+        struct Enemy_TransformLink* link = NULL;
+        link->current = &min_temp->transform;
+        link->next = next_addr;
+        min_distance_obj = min_temp;
+        next_addr = link;
+        min_temp = NULL;
+    }
+
+    struct Enemy_TransformLink* beginning = NULL;
+    beginning->current = &enemy->transform;
+    beginning->next = next_addr;
+
+    return beginning;
+}
+
+bool Scene_IsPlayerInAttackRange(struct Scene *scene, struct Enemy *enemy)//enemy's damage to player
+{
+    double damage = 0;
+    double distance = 1.5;//max distance for enemy to attack the player
+    if (sqrt(pow(enemy->transform.globalPosition.x - scene->player.transform.globalPosition.x,2) +
+             pow(enemy->transform.globalPosition.z - scene->player.transform.globalPosition.z,2)
+             >= distance)) return 0;
+    return 1;
+}
+
+double Scene_DamageCalculation(struct Scene *scene, struct Enemy *enemy)//enemy's damage to player
+{
+    double roller = rand() % 100;
+    double rate = roller * enemy->Critical_Rate;//this value should be 0-5000
+    if (roller >= 2345/*critical damage*/){ return pow(enemy->damage/scene->player.defence,2); }
+    else { return enemy->damage/scene->player.defence; }
+}
