@@ -51,8 +51,8 @@ add_executable(
     Game/runner.h
     Game/runner.c
 
-        Game/enemy/enemy.c
-        Game/enemy/enemy.h
+        Game/enemy.c
+        Game/enemy.h
 
     GameUI/Game_UI.h
     GameUI/ui_startmenu.h

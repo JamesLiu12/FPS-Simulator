@@ -4,7 +4,7 @@
 #include "../util/array_list.h"
 #include "../op_engine/canvas.h"
 #include "player.h"
-#include "enemy/enemy.h"
+#include "enemy.h"
 
 struct Enemy_TransformLink{
     struct Transform* current;

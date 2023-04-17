@@ -1,9 +1,9 @@
 #ifndef FPS_SIMULATOR_ENEMY_H
 #define FPS_SIMULATOR_ENEMY_H
 
-#include "../../op_engine/op_engine.h"
-#include "../player.h"
-#include "../scene.h"
+#include "../op_engine/op_engine.h"
+#include "player.h"
+#include "scene.h"
 
 
 struct Enemy{

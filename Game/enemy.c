@@ -1,6 +1,6 @@
 #include "enemy.h"
 #include "math.h"
-#include "../../util/util.h"
+#include "../util/util.h"
 
 void Enemy_Init(struct Enemy *enemy,struct Object* body,struct Object* face, struct Object* leg){
     enemy->body = *body;
