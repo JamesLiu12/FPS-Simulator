@@ -22,6 +22,7 @@ struct Object* Object_New(struct Mesh *mesh, struct Transform *father_transform,
 
 void Del_Object(struct Object *object){
     Del_Transform(&object->transform);
+    free(object->collideBoxes);
 //    free(object);
 }
 

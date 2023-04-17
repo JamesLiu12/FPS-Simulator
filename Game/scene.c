@@ -14,14 +14,11 @@ void Scene_Init(struct Scene *scene){
     ArrayList_Init(&scene->list_Object, sizeof(struct Object*));
     ArrayList_Init(&scene->list_Enemy, sizeof(struct Enemy*));
     Player_Init(&scene->player);
-
-    struct Vector3 playerStartPosition;
-    Vector3_Set(&playerStartPosition, 0, 1, 0);
-    Transform_AddPosition(&scene->player.transform, &playerStartPosition);
+    Vector3_Set(&scene->player.transform.position, 0, 1, 0);
 
 
     //Map_boundary origin coordinate (0,0,0)
-    
+
     struct Vector3 minVertex_Boundary, maxVertex_Boundary;
     int collideBoxCount_Boundary = 4;
     struct CollideBox *collideBoxes_Boundary = (struct CollideBox *) malloc(
@@ -104,7 +101,7 @@ void Scene_Init(struct Scene *scene){
     //Sample Enemy generate test
     struct Enemy *enemy = New_Enemy(&scene->enemyMeshes);
     ArrayList_PushBack(&scene->list_Enemy, &enemy);
-    Vector3_Set(&enemy->transform.position, 0, 1.1 ,0);
+    Vector3_Set(&enemy->transform.position, 0, 1.05 ,0);
     //Sample end
 }
 

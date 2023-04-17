@@ -99,7 +99,7 @@ void print_pixel(enum Tag tag, double distance){
 //    else if (tag == WALL) printf("\x1b[38;2;%d;%d;%dm██", brightness, brightness, brightness);
 //    else if (tag == FLOOR) printf("\x1b[38;2;%d;%d;%dm░░", brightness, brightness, brightness);
     else if (tag == WALL) printf("██");
-    else if (tag == FLOOR) printf("ff");
+    else if (tag == FLOOR) printf("░░");
     else if (tag == ENEMY_HEAD) printf("▓▓");
     else if (tag == ENEMY_LEG) printf("█░");
     else if (tag == ENEMY_BODY) printf("▥▥");
