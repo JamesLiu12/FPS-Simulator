@@ -1,12 +1,7 @@
 #ifndef FPS_SIMULATOR_PLAYER_H
 #define FPS_SIMULATOR_PLAYER_H
 #include "../op_engine/op_engine.h"
-
-struct Weapon{
-    double speed, damage, critical_rate;
-    struct Transform transform;
-    int index;
-};
+#include "weapon.h"
 
 struct Player{
     struct Canvas canvas;
@@ -50,12 +45,6 @@ void Player_RotateRight(struct Player *player);
 
 void Player_Control(struct Player *player);
 
-//Initializer of weapon (corresponding to player)
-void Weapon_Init(struct Weapon* weapon, struct Player* player, struct ArrayList* weapon_list);
-
-void Weapon_Change(struct Weapon* Old, struct Weapon* New, struct Player* player, struct ArrayList* weapon_list);
-
-void WeaponList_Init(struct ArrayList* weapon_list);
 void Player_Shoot(struct Player *player);
 void Player_ChangeHealth(struct Player *player,double deltaHealth);
 #endif //FPS_SIMULATOR_PLAYER_H

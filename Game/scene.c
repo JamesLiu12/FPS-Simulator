@@ -133,7 +133,7 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     for (int i = 0; i < scene->list_Enemy.size; i++){
         struct Enemy *enemy = ((struct Enemy**)scene->list_Enemy.data)[i];
         struct Object
-                *head = &enemy->face,
+                *head = &enemy->head,
                 *body = &enemy->body,
                 *leg = &enemy->leg;
         Object_Show(head, canvas);
@@ -166,12 +166,12 @@ void Scene_EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **r
     // loop through an ArrayList of enemies, detecting the min_dist of the ray to all enemies
     for (int i = 0; i < scene->list_Enemy.size; i++){
         struct Enemy *current_enemy = ((struct Enemy**)scene->list_Enemy.data)[i];
-        double head_dist = CollideBox_RayDistance(current_enemy->face.collideBoxes,
-                                                  &current_enemy->face.transform, ray);
+        double head_dist = CollideBox_RayDistance(current_enemy->head.collideBoxes,
+                                                  &current_enemy->head.transform, ray);
         if (head_dist < min_dist){
             min_dist = head_dist;
             *result_enemy = current_enemy;
-            *result_tag = current_enemy->face.tag;
+            *result_tag = current_enemy->head.tag;
         }
         double body_dist = CollideBox_RayDistance(current_enemy->body.collideBoxes,
                                                   &current_enemy->body.transform, ray);
@@ -216,7 +216,7 @@ void Enemy_Move(struct Enemy* enemy, struct Vector3* move);
 void Scene_EnemyUpdate(struct Enemy* enemy, bool do_find_way, struct Scene* scene, struct Enemy_TransformLink* current)
 {
     if (do_find_way){
-        struct Enemy_TransformLink* beginning = Enemy_FindWay(&enemy->body,scene);//beginning actually refers to current position of bot.
+        struct Enemy_TransformLink* beginning = Scene_EnemyFindWay(scene, &enemy->body);//beginning actually refers to current position of bot.
         current = beginning;
     }
     struct Transform* target = current->next->current;
@@ -229,13 +229,12 @@ void Scene_EnemyUpdate(struct Enemy* enemy, bool do_find_way, struct Scene* scen
     Enemy_Move(enemy, move);
 }
 
-#define typename struct Object
 //build a linked list to find the shortest way from enemy to player.
-struct Enemy_TransformLink* Enemy_FindWay(struct Object *enemy, struct Scene* scene)
+struct Enemy_TransformLink* Scene_EnemyFindWay(struct Scene* scene, struct Object *enemy)
 {
     unsigned int size = scene->list_Object.size;
     double min_distance = INFINITY, distance;
-    typename* list = (typename*)scene->list_Object.data;
+    struct Object *list = (struct Object*)scene->list_Object.data;
     struct Line* ray = NULL;
     struct Player* player = &scene->player;
     struct Object* min_distance_obj = (struct Object*)malloc(sizeof(struct Object)),*min_temp = (struct Object*)malloc(sizeof(struct Object));
@@ -281,4 +280,22 @@ struct Enemy_TransformLink* Enemy_FindWay(struct Object *enemy, struct Scene* sc
     beginning->next = next_addr;
 
     return beginning;
+}
+
+bool Scene_IsPlayerInAttackRange(struct Scene *scene, struct Enemy *enemy)//enemy's damage to player
+{
+    double damage = 0;
+    double distance = 1.5;//max distance for enemy to attack the player
+    if (sqrt(pow(enemy->transform.globalPosition.x - scene->player.transform.globalPosition.x,2) +
+             pow(enemy->transform.globalPosition.z - scene->player.transform.globalPosition.z,2)
+             >= distance)) return 0;
+    return 1;
+}
+
+double Scene_DamageCalculation(struct Scene *scene, struct Enemy *enemy)//enemy's damage to player
+{
+    double roller = rand() % 100;
+    double rate = roller * enemy->Critical_Rate;//this value should be 0-5000
+    if (roller >= 2345/*critical damage*/){ return pow(enemy->damage/scene->player.defence,2); }
+    else { return enemy->damage/scene->player.defence; }
 }

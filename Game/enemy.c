@@ -81,30 +81,12 @@ void Del_EnemyMeshes(struct EnemyMeshes *meshes){
     Del_Mesh(meshes->leg);
 }
 
-bool Damage_Determination(struct Scene *scene,struct Enemy *enemy)//enemy's damage to player
-{
-    double damage = 0;
-    double distance = 1.5;//max distance for enemy to attack the player
-    if (sqrt(pow(enemy->transform.globalPosition.x - scene->player.transform.globalPosition.x,2) +
-             pow(enemy->transform.globalPosition.z - scene->player.transform.globalPosition.z,2)
-             >= distance)) return 0;
-    return 1;
-}
-
-double Damage_Calculation(struct Scene *scene,struct Enemy *enemy)//enemy's damage to player
-{
-    double roller = rand() % 100;
-    double rate = roller * enemy->Critical_Rate;//this value should be 0-5000
-    if (roller >= 2345/*critical damage*/){ return pow(enemy->damage/scene->player.defence,2); }
-    else { return enemy->damage/scene->player.defence; }
-}
-
 void Enemy_Move(struct Enemy* enemy, struct Vector3* move){
     Transform_AddPosition(&enemy->transform, move);
 }
 
 void Enemy_Rotation(struct Enemy* enemy, struct Vector3 *angle){
-    Object_Rotation(&enemy->face,angle);
+    Object_Rotation(&enemy->head, angle);
     Object_Rotation(&enemy->body,angle);
     Vector3_Add(&enemy->transform.rotation, angle);
     Transform_RotationMatrixUpdate(&enemy->transform);
