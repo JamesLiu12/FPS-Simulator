@@ -10,11 +10,15 @@ struct Weapon{
 
 struct Player{
     struct Canvas canvas;
-    double health, atk, movespeed, rotationspeed, defence;
-	struct Vector3 facing;
+    double maxHealth, health, atk, moveSpeed, rotationSpeed, defence;
     struct Transform transform;
     struct CollideBox collideBox;
-	struct Weapon weapon;
+    struct Vector3 facing;
+    struct Vector3 moveDirection;
+    double fireCDtime, fireCDcounter;
+    struct Weapon weapon;
+    int In_FireCD,IsFiring;
+    int DEADFLAG;
 };
 
 //Initializer of player
@@ -52,4 +56,6 @@ void Weapon_Init(struct Weapon* weapon, struct Player* player, struct ArrayList*
 void Weapon_Change(struct Weapon* Old, struct Weapon* New, struct Player* player, struct ArrayList* weapon_list);
 
 void WeaponList_Init(struct ArrayList* weapon_list);
+void Player_Shoot(struct Player *player);
+void Player_ChangeHealth(struct Player *player,double deltaHealth);
 #endif //FPS_SIMULATOR_PLAYER_H

@@ -16,7 +16,6 @@ struct ArrayList *New_ArrayList(unsigned int element_size) {
 
 void Del_ArrayList(struct ArrayList *list) {
     free(list->data);
-//    free(list);
 }
 
 bool ArrayList_Empty(struct ArrayList *list){

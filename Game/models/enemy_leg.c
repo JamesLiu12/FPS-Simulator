@@ -1,0 +1,91 @@
+#include "enemy_leg.h"
+
+void ModelEnemy_Leg_Init(struct Mesh *enemy_leg) {
+	Vector3_Set(&enemy_leg->vertices[0], 7.0e-2, 0.0, -7.0e-2);
+	Vector3_Set(&enemy_leg->vertices[1], 7.0e-2, 0.4, -7.0e-2);
+	Vector3_Set(&enemy_leg->vertices[2], 7.0e-2, 0.0, -0.37);
+	Vector3_Set(&enemy_leg->vertices[3], 7.0e-2, 0.4, -0.37);
+	Vector3_Set(&enemy_leg->vertices[4], 0.37, 0.0, -7.0e-2);
+	Vector3_Set(&enemy_leg->vertices[5], 0.37, 0.4, -7.0e-2);
+	Vector3_Set(&enemy_leg->vertices[6], 0.37, 0.0, -0.37);
+	Vector3_Set(&enemy_leg->vertices[7], 0.37, 0.4, -0.37);
+	Vector3_Set(&enemy_leg->vertices[8], -0.37, 0.0, -7.0e-2);
+	Vector3_Set(&enemy_leg->vertices[9], -0.37, 0.4, -7.0e-2);
+	Vector3_Set(&enemy_leg->vertices[10], -0.37, 0.0, -0.37);
+	Vector3_Set(&enemy_leg->vertices[11], -0.37, 0.4, -0.37);
+	Vector3_Set(&enemy_leg->vertices[12], -7.0e-2, 0.0, -7.0e-2);
+	Vector3_Set(&enemy_leg->vertices[13], -7.0e-2, 0.4, -7.0e-2);
+	Vector3_Set(&enemy_leg->vertices[14], -7.0e-2, 0.0, -0.37);
+	Vector3_Set(&enemy_leg->vertices[15], -7.0e-2, 0.4, -0.37);
+	Vector3_Set(&enemy_leg->vertices[16], -0.37, 0.0, 0.37);
+	Vector3_Set(&enemy_leg->vertices[17], -0.37, 0.4, 0.37);
+	Vector3_Set(&enemy_leg->vertices[18], -0.37, 0.0, 7.0e-2);
+	Vector3_Set(&enemy_leg->vertices[19], -0.37, 0.4, 7.0e-2);
+	Vector3_Set(&enemy_leg->vertices[20], -7.0e-2, 0.0, 0.37);
+	Vector3_Set(&enemy_leg->vertices[21], -7.0e-2, 0.4, 0.37);
+	Vector3_Set(&enemy_leg->vertices[22], -7.0e-2, 0.0, 7.0e-2);
+	Vector3_Set(&enemy_leg->vertices[23], -7.0e-2, 0.4, 7.0e-2);
+	Vector3_Set(&enemy_leg->vertices[24], 7.0e-2, 0.0, 0.37);
+	Vector3_Set(&enemy_leg->vertices[25], 7.0e-2, 0.4, 0.37);
+	Vector3_Set(&enemy_leg->vertices[26], 7.0e-2, 0.0, 7.0e-2);
+	Vector3_Set(&enemy_leg->vertices[27], 7.0e-2, 0.4, 7.0e-2);
+	Vector3_Set(&enemy_leg->vertices[28], 0.37, 0.0, 0.37);
+	Vector3_Set(&enemy_leg->vertices[29], 0.37, 0.4, 0.37);
+	Vector3_Set(&enemy_leg->vertices[30], 0.37, 0.0, 7.0e-2);
+	Vector3_Set(&enemy_leg->vertices[31], 0.37, 0.4, 7.0e-2);
+
+	Face_Set(&enemy_leg->triangles[0], 1, 2, 4);
+	Face_Set(&enemy_leg->triangles[1], 3, 4, 8);
+	Face_Set(&enemy_leg->triangles[2], 7, 8, 6);
+	Face_Set(&enemy_leg->triangles[3], 5, 6, 2);
+	Face_Set(&enemy_leg->triangles[4], 3, 7, 5);
+	Face_Set(&enemy_leg->triangles[5], 8, 4, 2);
+	Face_Set(&enemy_leg->triangles[6], 9, 10, 12);
+	Face_Set(&enemy_leg->triangles[7], 11, 12, 16);
+	Face_Set(&enemy_leg->triangles[8], 15, 16, 14);
+	Face_Set(&enemy_leg->triangles[9], 13, 14, 10);
+	Face_Set(&enemy_leg->triangles[10], 11, 15, 13);
+	Face_Set(&enemy_leg->triangles[11], 16, 12, 10);
+	Face_Set(&enemy_leg->triangles[12], 17, 18, 20);
+	Face_Set(&enemy_leg->triangles[13], 19, 20, 24);
+	Face_Set(&enemy_leg->triangles[14], 23, 24, 22);
+	Face_Set(&enemy_leg->triangles[15], 21, 22, 18);
+	Face_Set(&enemy_leg->triangles[16], 19, 23, 21);
+	Face_Set(&enemy_leg->triangles[17], 24, 20, 18);
+	Face_Set(&enemy_leg->triangles[18], 25, 26, 28);
+	Face_Set(&enemy_leg->triangles[19], 27, 28, 32);
+	Face_Set(&enemy_leg->triangles[20], 31, 32, 30);
+	Face_Set(&enemy_leg->triangles[21], 29, 30, 26);
+	Face_Set(&enemy_leg->triangles[22], 27, 31, 29);
+	Face_Set(&enemy_leg->triangles[23], 32, 28, 26);
+	Face_Set(&enemy_leg->triangles[24], 1, 3, 4);
+	Face_Set(&enemy_leg->triangles[25], 3, 7, 8);
+	Face_Set(&enemy_leg->triangles[26], 7, 5, 6);
+	Face_Set(&enemy_leg->triangles[27], 5, 1, 2);
+	Face_Set(&enemy_leg->triangles[28], 3, 1, 5);
+	Face_Set(&enemy_leg->triangles[29], 8, 6, 2);
+	Face_Set(&enemy_leg->triangles[30], 9, 11, 12);
+	Face_Set(&enemy_leg->triangles[31], 11, 15, 16);
+	Face_Set(&enemy_leg->triangles[32], 15, 13, 14);
+	Face_Set(&enemy_leg->triangles[33], 13, 9, 10);
+	Face_Set(&enemy_leg->triangles[34], 11, 9, 13);
+	Face_Set(&enemy_leg->triangles[35], 16, 14, 10);
+	Face_Set(&enemy_leg->triangles[36], 17, 19, 20);
+	Face_Set(&enemy_leg->triangles[37], 19, 23, 24);
+	Face_Set(&enemy_leg->triangles[38], 23, 21, 22);
+	Face_Set(&enemy_leg->triangles[39], 21, 17, 18);
+	Face_Set(&enemy_leg->triangles[40], 19, 17, 21);
+	Face_Set(&enemy_leg->triangles[41], 24, 22, 18);
+	Face_Set(&enemy_leg->triangles[42], 25, 27, 28);
+	Face_Set(&enemy_leg->triangles[43], 27, 31, 32);
+	Face_Set(&enemy_leg->triangles[44], 31, 29, 30);
+	Face_Set(&enemy_leg->triangles[45], 29, 25, 26);
+	Face_Set(&enemy_leg->triangles[46], 27, 25, 29);
+	Face_Set(&enemy_leg->triangles[47], 32, 30, 26);
+}
+
+struct Mesh* ModelEnemy_Leg_New() {
+	struct Mesh *enemy_leg= New_Mesh(48, 32);
+	ModelEnemy_Leg_Init(enemy_leg);
+	return enemy_leg;
+}

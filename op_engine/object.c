@@ -4,24 +4,25 @@
 #include "matrix.h"
 #include "vector.h"
 
-void Object_Set(struct Object *object, struct Mesh *mesh, struct Transform *transform, enum Tag tag,
+void Object_Set(struct Object *object, struct Mesh *mesh, struct Transform *father_transform, enum Tag tag,
                 struct CollideBox *collideBoxes, int collideBoxCount) {
     object->mesh = mesh;
-    object->transform = *transform;
+    Transform_Init(&object->transform, father_transform);
     object->tag = tag;
     object->collideBoxes = collideBoxes;
     object->collideBoxCount = collideBoxCount;
 }
 
-struct Object* Object_New(struct Mesh *mesh, struct Transform *transform, enum Tag tag,
+struct Object* Object_New(struct Mesh *mesh, struct Transform *father_transform, enum Tag tag,
                           struct CollideBox *collideBoxes, int collideBoxCount){
     struct Object *object = malloc(sizeof (struct Object));
-    Object_Set(object, mesh, transform, tag, collideBoxes, collideBoxCount);
+    Object_Set(object, mesh, father_transform, tag, collideBoxes, collideBoxCount);
     return object;
 }
 
 void Del_Object(struct Object *object){
     Del_Transform(&object->transform);
+    free(object->collideBoxes);
 //    free(object);
 }
 

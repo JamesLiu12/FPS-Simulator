@@ -3,6 +3,7 @@
 
 #include "../util/array_list.h"
 #include "../op_engine/canvas.h"
+#include "../Game/models/models.h"
 #include "player.h"
 #include "enemy.h"
 
@@ -15,6 +16,9 @@ struct Scene{
     struct ArrayList list_Object;
     struct ArrayList list_Enemy;
     struct Player player;
+
+    //The meshes used to create an enemy
+    struct EnemyMeshes enemyMeshes;
 };
 
 //The initializer of scene
