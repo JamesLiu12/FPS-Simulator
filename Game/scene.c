@@ -21,37 +21,35 @@ void Scene_Init(struct Scene *scene){
 
     //Map_boundary origin coordinate (0,0,0)
 
-    struct Vector3 minVertex_Boundary, maxVertex_Boundary;
-    int collideBoxCount_Boundary = 4;
-    struct CollideBox *collideBoxes_Boundary = (struct CollideBox *) malloc(
-            sizeof(struct CollideBox) * collideBoxCount_Boundary);
-    //set collideBoxes:
-
-    Vector3_Set(&minVertex_Boundary, -7.8, 0, -7.8);//boundary west
-    Vector3_Set(&maxVertex_Boundary, -7.4, 2.5, 7.4);
-    CollideBox_Init(&collideBoxes_Boundary[0], NULL, 1, 1, 1);
-
-    Vector3_Set(&minVertex_Boundary, -7.8, 0, -7.8);//boundary south
-    Vector3_Set(&maxVertex_Boundary, 7.4, 2.5, -7.4);
-    CollideBox_Init(&collideBoxes_Boundary[1], NULL, 1, 1, 1);
-
-    Vector3_Set(&minVertex_Boundary, 7.4, 0, -7.4);//boundary east
-    Vector3_Set(&maxVertex_Boundary, 7.8, 2.5, 7.8);
-    CollideBox_Init(&collideBoxes_Boundary[2], NULL, 1, 1, 1);
-
-    Vector3_Set(&minVertex_Boundary, -7.4, 0, 7.4);//boundary north
-    Vector3_Set(&maxVertex_Boundary, 7.8, 2.5, 7.8);
-    CollideBox_Init(&collideBoxes_Boundary[3], NULL, 1, 1, 1);
-
-    struct Transform transform_Boundary;
+    //Map_boundary
     struct Mesh *mesh_Boundary = ModelBoundaries_New();
     ModelBoundaries_Init(mesh_Boundary);
+    struct Object *Map_Boundary = Object_New(mesh_Boundary, NULL, WALL);
 
-    struct Object *Map_Boundary = Object_New(mesh_Boundary, NULL, WALL,
-            collideBoxes_Boundary,collideBoxCount_Boundary);
+    //set collideBoxes:
+    struct CollideBox *collideBoxes_Boundary = (struct CollideBox *) malloc(sizeof(struct CollideBox) * 4);
+
+    //boundary west
+    CollideBox_Init(&collideBoxes_Boundary[0], &Map_Boundary->transform, 0.4, 2.5, 15.2);
+    Vector3_Set(&collideBoxes_Boundary[0].transform.position, -7.6, 1.25, -0.2);
+
+    //boundary south
+    CollideBox_Init(&collideBoxes_Boundary[1], &Map_Boundary->transform, 15.2, 2.5, 0.4);
+    Vector3_Set(&collideBoxes_Boundary[1].transform.position, -0.2, 1.25, -7.6);
+
+    //boundary east
+    CollideBox_Init(&collideBoxes_Boundary[2], &Map_Boundary->transform, 0.4, 2.5, 15.2);
+    Vector3_Set(&collideBoxes_Boundary[2].transform.position, 7.6, 1.25, 0.2);
+
+    //boundary north
+    CollideBox_Init(&collideBoxes_Boundary[3], &Map_Boundary->transform, 15.2, 2.5, 0.4);
+    Vector3_Set(&collideBoxes_Boundary[3].transform.position, 0.2, 1.25, 7.6);
+
+    Object_SetCollideBoxes(Map_Boundary, collideBoxes_Boundary, 4);
+
+
 
     ArrayList_PushBack(&scene->list_Object, &Map_Boundary);
-    //Map_boundary finished
 
     //Map_barrier origin coordinate (0,0,0)
     struct Vector3 minVertex_Barrier, maxVertex_Barrier;

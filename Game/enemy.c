@@ -13,8 +13,8 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
     Vector3_Set(&maxVertex, 0.35, 2.1, 0.35);
     CollideBox_Init(collideBoxes_EnemyHead, NULL, 1, 1, 1);
 
-    Object_Set(&enemy->head, meshes->head, &enemy->transform, ENEMY_HEAD,
-               collideBoxes_EnemyHead,1);
+    Object_Init(&enemy->head, meshes->head, &enemy->transform, ENEMY_HEAD,
+                collideBoxes_EnemyHead, 1);
 
     Vector3_Set(&enemy->head.transform.position, 0, 0, 0);
 
@@ -24,8 +24,8 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
     Vector3_Set(&maxVertex, 0.15, 1.4, 0.15);
     CollideBox_Init(collideBoxes_EnemyBody, NULL, 1, 1, 1);
 
-    Object_Set(&enemy->body, meshes->body, &enemy->transform, ENEMY_BODY,
-               collideBoxes_EnemyBody,1);
+    Object_Init(&enemy->body, meshes->body, &enemy->transform, ENEMY_BODY,
+                collideBoxes_EnemyBody, 1);
 
     Vector3_Set(&enemy->body.transform.position, 0, 0, 0);
 
@@ -35,8 +35,8 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
     Vector3_Set(&maxVertex, 0.37, 0.4, 0.37);
     CollideBox_Init(collideBoxes_EnemyLeg, NULL, 1, 1, 1);
 
-    Object_Set(&enemy->leg, meshes->leg, &enemy->transform, ENEMY_LEG,
-               collideBoxes_EnemyLeg,1);
+    Object_Init(&enemy->leg, meshes->leg, &enemy->transform, ENEMY_LEG,
+                collideBoxes_EnemyLeg, 1);
 
     Vector3_Set(&enemy->leg.transform.position, 0, 0, 0);
 
