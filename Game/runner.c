@@ -62,41 +62,41 @@ int Runner_Run(struct Runner *runner){
         Vector3_Set(&scene1.player.moveDirection, 0, 0, 0);
         isBlocked=0;
         if(kbhit()){
-            Player_Control(&scene1.player);
-            //Player_Move(&scene1.player, &scene1.player.movedirection);
-            if(!Vector3_Equal(&ZeroVector,&scene1.player.moveDirection)){
-                Vector3_Set(&New_moveX,scene1.player.moveDirection.x,0,0);
-                Player_Move(&scene1.player,&New_moveX);
-                for(int i=0;i<scene1.list_Object.size;i++){
-                    struct Object *object = ((struct Object**)scene1.list_Object.data)[i];
-                    if(CollideBox_IsCollide(&scene1.player.collideBox,&scene1.player.transform,object->collideBoxes,&object->transform)){
-                    isBlocked=1;if(isBlocked)break;}
-                }
-                for(int i=0;i<scene1.list_Enemy.size;i++){
-                    struct Enemy *enemy = ((struct Enemy**)scene1.list_Enemy.data)[i];
-                    if(CollideBox_IsCollide(&scene1.player.collideBox,&scene1.player.transform,enemy->body.collideBoxes,&enemy->transform)){
-                    isBlocked=1;if(isBlocked)break;}
-                }
-                if(isBlocked){Vector3_Set(&New_moveX,-scene1.player.moveDirection.x,0,0);Player_Move(&scene1.player,&New_moveX);}
-                isBlocked=0;
-                Vector3_Set(&New_moveZ,0,0,scene1.player.moveDirection.z);
-                Player_Move(&scene1.player,&New_moveZ);
-                for(int i=0;i<scene1.list_Object.size;i++){
-                    struct Object *object = ((struct Object**)scene1.list_Object.data)[i];
-                    if(CollideBox_IsCollide(&scene1.player.collideBox,&scene1.player.transform,object->collideBoxes,&object->transform)){
-                    isBlocked=1;if(isBlocked)break;}
-                }
-                for(int i=0;i<scene1.list_Enemy.size;i++){
-                    struct Enemy *enemy = ((struct Enemy**)scene1.list_Enemy.data)[i];
-                    if(CollideBox_IsCollide(&scene1.player.collideBox,&scene1.player.transform,enemy->body.collideBoxes,&enemy->transform)){
-                    isBlocked=1;if(isBlocked)break;}
-                }
-                if(isBlocked){Vector3_Set(&New_moveZ,0,0,-scene1.player.moveDirection.z);Player_Move(&scene1.player, &New_moveZ);}
-            
-            }
-            if(keydown(ESC))return 1;
-            for(int i=0;i<10;i++)kbhit();
-            //if(keydown(SPACE))break;
+//            Player_Control(&scene1.player);
+//            //Player_Move(&scene1.player, &scene1.player.movedirection);
+//            if(!Vector3_Equal(&ZeroVector,&scene1.player.moveDirection)){
+//                Vector3_Set(&New_moveX,scene1.player.moveDirection.x,0,0);
+//                Player_Move(&scene1.player,&New_moveX);
+//                for(int i=0;i<scene1.list_Object.size;i++){
+//                    struct Object *object = ((struct Object**)scene1.list_Object.data)[i];
+//                    if(CollideBox_IsCollide(&scene1.player.collideBox,&scene1.player.transform,object->collideBoxes,&object->transform)){
+//                    isBlocked=1;if(isBlocked)break;}
+//                }
+//                for(int i=0;i<scene1.list_Enemy.size;i++){
+//                    struct Enemy *enemy = ((struct Enemy**)scene1.list_Enemy.data)[i];
+//                    if(CollideBox_IsCollide(&scene1.player.collideBox,&scene1.player.transform,enemy->body.collideBoxes,&enemy->transform)){
+//                    isBlocked=1;if(isBlocked)break;}
+//                }
+//                if(isBlocked){Vector3_Set(&New_moveX,-scene1.player.moveDirection.x,0,0);Player_Move(&scene1.player,&New_moveX);}
+//                isBlocked=0;
+//                Vector3_Set(&New_moveZ,0,0,scene1.player.moveDirection.z);
+//                Player_Move(&scene1.player,&New_moveZ);
+//                for(int i=0;i<scene1.list_Object.size;i++){
+//                    struct Object *object = ((struct Object**)scene1.list_Object.data)[i];
+//                    if(CollideBox_IsCollide(&scene1.player.collideBox,&scene1.player.transform,object->collideBoxes,&object->transform)){
+//                    isBlocked=1;if(isBlocked)break;}
+//                }
+//                for(int i=0;i<scene1.list_Enemy.size;i++){
+//                    struct Enemy *enemy = ((struct Enemy**)scene1.list_Enemy.data)[i];
+//                    if(CollideBox_IsCollide(&scene1.player.collideBox,&scene1.player.transform,enemy->body.collideBoxes,&enemy->transform)){
+//                    isBlocked=1;if(isBlocked)break;}
+//                }
+//                if(isBlocked){Vector3_Set(&New_moveZ,0,0,-scene1.player.moveDirection.z);Player_Move(&scene1.player, &New_moveZ);}
+//
+//            }
+//            if(keydown(ESC))return 1;
+//            for(int i=0;i<10;i++)kbhit();
+//            //if(keydown(SPACE))break;
             
         }
             Scene_Show(&scene1,&scene1.player.canvas);

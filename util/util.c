@@ -2,6 +2,8 @@
 #include <memory.h>
 #include <math.h>
 #include "util.h"
+#include <time.h>
+
 void swap(void *a, void *b, size_t size) {
     void *temp = malloc(size);
     memcpy(temp, a, size);
@@ -58,4 +60,8 @@ void Gaussian_Elimination(double **a, int number_row, int number_col){
 
 bool double_IsSameSign(double a, double b){
     return (a < 0 && b < 0) || (a == 0 && b == 0) || (a > 0 && b > 0);
+}
+
+double ProgramRunTime(){
+    return (double)(clock() / CLK_TCK);
 }

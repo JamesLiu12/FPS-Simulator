@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <time.h>
+#include "../util/util.h"
+
 void Scene_Init(struct Scene *scene){
     srand((int)time(NULL));
     ArrayList_Init(&scene->list_Object, sizeof(struct Object*));
@@ -27,19 +29,19 @@ void Scene_Init(struct Scene *scene){
 
     Vector3_Set(&minVertex_Boundary, -7.8, 0, -7.8);//boundary west
     Vector3_Set(&maxVertex_Boundary, -7.4, 2.5, 7.4);
-    CollideBox_Set(&collideBoxes_Boundary[0], &minVertex_Boundary, &maxVertex_Boundary);
+    CollideBox_Init(&collideBoxes_Boundary[0], NULL, 1, 1, 1);
 
     Vector3_Set(&minVertex_Boundary, -7.8, 0, -7.8);//boundary south
     Vector3_Set(&maxVertex_Boundary, 7.4, 2.5, -7.4);
-    CollideBox_Set(&collideBoxes_Boundary[1], &minVertex_Boundary, &maxVertex_Boundary);
+    CollideBox_Init(&collideBoxes_Boundary[1], NULL, 1, 1, 1);
 
     Vector3_Set(&minVertex_Boundary, 7.4, 0, -7.4);//boundary east
     Vector3_Set(&maxVertex_Boundary, 7.8, 2.5, 7.8);
-    CollideBox_Set(&collideBoxes_Boundary[2], &minVertex_Boundary, &maxVertex_Boundary);
+    CollideBox_Init(&collideBoxes_Boundary[2], NULL, 1, 1, 1);
 
     Vector3_Set(&minVertex_Boundary, -7.4, 0, 7.4);//boundary north
     Vector3_Set(&maxVertex_Boundary, 7.8, 2.5, 7.8);
-    CollideBox_Set(&collideBoxes_Boundary[3], &minVertex_Boundary, &maxVertex_Boundary);
+    CollideBox_Init(&collideBoxes_Boundary[3], NULL, 1, 1, 1);
 
     struct Transform transform_Boundary;
     struct Mesh *mesh_Boundary = ModelBoundaries_New();
@@ -59,11 +61,11 @@ void Scene_Init(struct Scene *scene){
 
     Vector3_Set(&minVertex_Barrier, -3.2, 0, -4.57);    //barrier left
     Vector3_Set(&maxVertex_Barrier, -2.9, 2.5, 7.43);
-    CollideBox_Set(&collideBoxes_Barrier[0], &minVertex_Barrier, &maxVertex_Barrier);
+    CollideBox_Init(&collideBoxes_Barrier[0], NULL, 1, 1, 1);
 
     Vector3_Set(&minVertex_Barrier, 2.9, 0, -7.29);    //barrier right
     Vector3_Set(&maxVertex_Barrier, 3.1, 2.5, 4.9);
-    CollideBox_Set(&collideBoxes_Barrier[1], &minVertex_Barrier, &maxVertex_Barrier);
+    CollideBox_Init(&collideBoxes_Barrier[1], NULL, 1, 1, 1);
 
     struct Transform transform_Barrier;
     struct Mesh *mesh_Barrier = ModelWall_New();
@@ -82,7 +84,7 @@ void Scene_Init(struct Scene *scene){
 
     Vector3_Set(&minVertex_Floor, -7.5, -0.1, -7.5);    //floor
     Vector3_Set(&maxVertex_Floor, 7.5, 0, 7.5);
-    CollideBox_Set(&collideBoxes_Floor[0], &minVertex_Floor, &maxVertex_Floor);
+    CollideBox_Init(&collideBoxes_Floor[0], NULL, 1, 1, 1);
 
     struct Transform transform_Floor;
     struct Mesh *mesh_Floor = ModelFloor_New();
@@ -122,6 +124,34 @@ void Del_Scene(struct Scene *scene){
     Del_ArrayList(&scene->list_Object);
     Del_ArrayList(&scene->list_Enemy);
     Del_Player(&scene->player);
+}
+
+void Scene_Update(struct Scene *scene){
+    for (int i = 0; i < scene->list_Enemy.size; i++){
+        struct Enemy *enemy = ((struct Enemy**)scene->list_Enemy.data)[i];
+
+        struct Vector3 enemyPosition = enemy->transform.position,
+                playerPosition = scene->player.transform.position;
+
+        enemyPosition.y = 1;
+        playerPosition.y = 1;
+
+        struct Line ray;
+        struct Vector3 positionDiff;
+        positionDiff = playerPosition;
+        Vector3_Subtract(&positionDiff, &enemyPosition);
+        Line_Set(&ray, &enemyPosition, &positionDiff);
+
+        double distanceBetween = Vector3_Distance3D(&enemyPosition, &playerPosition);
+        enemy->canSeePlayer = Scene_MinDistanceWall(scene, &ray) > distanceBetween;
+
+        struct Vector3 move;
+        Transform_UpdateGlobal(&enemy->transform);
+        Vector3_Normalize(&move);
+        Vector3_Scale(&move, enemy->speed);
+        if (Vector3_Magnitude(&move) > Vector3_Magnitude(&positionDiff)) move = positionDiff;
+        Enemy_Move(enemy, &move);
+    }
 }
 
 void Scene_Show(struct Scene *scene, struct Canvas *canvas){
@@ -166,22 +196,19 @@ void Scene_EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **r
     // loop through an ArrayList of enemies, detecting the min_dist of the ray to all enemies
     for (int i = 0; i < scene->list_Enemy.size; i++){
         struct Enemy *current_enemy = ((struct Enemy**)scene->list_Enemy.data)[i];
-        double head_dist = CollideBox_RayDistance(current_enemy->head.collideBoxes,
-                                                  &current_enemy->head.transform, ray);
+        double head_dist = CollideBox_RayDistance(current_enemy->head.collideBoxes, ray);
         if (head_dist < min_dist){
             min_dist = head_dist;
             *result_enemy = current_enemy;
             *result_tag = current_enemy->head.tag;
         }
-        double body_dist = CollideBox_RayDistance(current_enemy->body.collideBoxes,
-                                                  &current_enemy->body.transform, ray);
+        double body_dist = CollideBox_RayDistance(current_enemy->body.collideBoxes, ray);
         if (body_dist < min_dist){
             min_dist = body_dist;
             *result_enemy = current_enemy;
             *result_tag = current_enemy->body.tag;
         }
-        double leg_dist = CollideBox_RayDistance(current_enemy->leg.collideBoxes,
-                                                 &current_enemy->leg.transform, ray);
+        double leg_dist = CollideBox_RayDistance(current_enemy->leg.collideBoxes, ray);
         if (leg_dist < min_dist){
             min_dist = leg_dist;
             *result_enemy = current_enemy;
@@ -194,8 +221,7 @@ void Scene_EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **r
         struct Object *current_object = ((struct Object**)scene->list_Object.data)[i];
 
         for (int j = 0; j < current_object->collideBoxCount; j++){
-            double collideBox_dist = CollideBox_RayDistance(&current_object->collideBoxes[j],
-                                                            &current_object->transform, ray);
+            double collideBox_dist = CollideBox_RayDistance(&current_object->collideBoxes[j], ray);
             if (collideBox_dist < min_dist){
                 min_dist = collideBox_dist;
                 *result_enemy = NULL;
@@ -211,75 +237,58 @@ void Scene_EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **r
     }
 }
 
-void Enemy_Move(struct Enemy* enemy, struct Vector3* move);
-
-void Scene_EnemyUpdate(struct Enemy* enemy, bool do_find_way, struct Scene* scene, struct Enemy_TransformLink* current)
-{
-    if (do_find_way){
-        struct Enemy_TransformLink* beginning = Scene_EnemyFindWay(scene, &enemy->body);//beginning actually refers to current position of bot.
-        current = beginning;
-    }
-    struct Transform* target = current->next->current;
-    struct Vector3* move = (struct Vector3*)malloc(sizeof(struct Vector3));
-    Transform_UpdateGlobal(&enemy->transform);
-    Vector3_Set(move,
-                target->globalPosition.x - enemy->transform.globalPosition.x,
-                target->globalPosition.y - enemy->transform.globalPosition.y,
-                target->globalPosition.z - enemy->transform.globalPosition.z);
-    Enemy_Move(enemy, move);
-}
-
 //build a linked list to find the shortest way from enemy to player.
-struct Enemy_TransformLink* Scene_EnemyFindWay(struct Scene* scene, struct Object *enemy)
-{
-    unsigned int size = scene->list_Object.size;
-    double min_distance = INFINITY, distance;
-    struct Object *list = (struct Object*)scene->list_Object.data;
-    struct Line* ray = NULL;
-    struct Player* player = &scene->player;
-    struct Object* min_distance_obj = (struct Object*)malloc(sizeof(struct Object)),*min_temp = (struct Object*)malloc(sizeof(struct Object));
-    Transform_UpdateGlobal(&player->transform);
-    min_distance_obj->transform.globalPosition.x = player->transform.globalPosition.x;
-    min_distance_obj->transform.globalPosition.y = player->transform.globalPosition.y;
-    min_distance_obj->transform.globalPosition.z = player->transform.globalPosition.z;
-    struct Enemy_TransformLink* destination = NULL;
-    destination->next = NULL;
-    destination->current = &min_distance_obj->transform;
-    struct Enemy_TransformLink* next_addr = destination;
-
-    while(!	(min_distance_obj->transform.globalPosition.x == enemy->transform.globalPosition.x &&
-                min_distance_obj->transform.globalPosition.z == enemy->transform.globalPosition.z)){
-        for (int j=0;j<size;j++){
-            if (min_distance_obj->transform.globalPosition.x==list[j].transform.globalPosition.x
-                &&  min_distance_obj->transform.globalPosition.z==list[j].transform.globalPosition.z) continue;
-            if (list[j].tag == WALL) continue;
-            struct Vector3* direction = (struct Vector3*)malloc(sizeof(struct Vector3));
-            Transform_UpdateGlobal(&list[j].transform);
-            Vector3_Set(direction,
-                        min_distance_obj->transform.globalPosition.x-list[j].transform.globalPosition.x,
-                        min_distance_obj->transform.globalPosition.y-list[j].transform.globalPosition.y,
-                        min_distance_obj->transform.globalPosition.z-list[j].transform.globalPosition.z);
-            Line_Set(ray,&list[j].transform.globalPosition,direction);
-            distance = CollideBox_RayDistance(enemy->collideBoxes,&list[j].transform,ray);
-            if (distance == INFINITY) continue;
-            if (distance < min_distance){
-                min_distance = distance;
-                min_temp = &list[j];
-            }
-        }
-        struct Enemy_TransformLink* link = NULL;
-        link->current = &min_temp->transform;
-        link->next = next_addr;
-        min_distance_obj = min_temp;
-        next_addr = link;
-        min_temp = NULL;
-    }
-
-    struct Enemy_TransformLink* beginning = NULL;
-    beginning->current = &enemy->transform;
-    beginning->next = next_addr;
-
-    return beginning;
+struct Path* Scene_EnemyFindPath(struct Scene* scene, struct Object *enemy){
+//    int searchDepth = 10;
+//    double stepLength = 2, angleNumber = 8;
+//    struct node{
+//        struct Vector3 position;
+//        int depth;
+//    };
+//    struct ArrayList queue;
+//    ArrayList_Init(&queue, sizeof(struct node));
+//    struct node firstNode;
+//    firstNode.position = enemy->transform.position;
+//    firstNode.depth = 0;
+//    ArrayList_PushBack(&queue, &firstNode);
+//    while (!ArrayList_Empty(&queue)){
+//        struct node thisNode = *(struct node*)ArrayList_Front(&queue);
+//        ArrayList_PopFront(&queue);
+//        for (int i = 0; i < angleNumber; i++){
+//            struct Vector3 angle;
+//            Vector3_Set(&angle, 0, M_PI / angleNumber * i, 0);
+//            struct Matrix3x3 rotationMatrix;
+//            Matrix3x3_FromEulerAngle(&rotationMatrix, &angle, FALSE);
+//            struct Vector3 move;
+//            Vector3_Set(&move, 0, 0, 1);
+//            Matrix3x3_TransformMatrix(&rotationMatrix, &move);
+//            Vector3_Scale(&move, stepLength);
+//
+//            struct Line ray;
+//            Line_Set(&ray, &thisNode.position, &move);
+//
+//            double minDistance;
+//
+//            for (int j = 0; j < scene->list_Object.size; j++){
+//                struct Object *object = ((struct Object**)scene->list_Object.data)[j];
+//                if (object->tag != WALL) continue;
+//                for (int k = 0; k < object->collideBoxCount; k++){
+//                    struct CollideBox *collideBox = &object->collideBoxes[k];
+//                    double distance = CollideBox_RayDistance(collideBox, &object->transform, &ray);
+//                    if (minDistance > distance) minDistance = distance;
+//                }
+//            }
+//
+//            if (minDistance < stepLength) continue;
+//
+//
+//            struct node newNode;
+//            newNode.position = thisNode.position;
+//            Vector3_Add(&newNode.position, &move);
+//            newNode.depth = thisNode.depth + 1;
+//        }
+//    }
+//    Del_ArrayList(&queue);
 }
 
 bool Scene_IsPlayerInAttackRange(struct Scene *scene, struct Enemy *enemy)//enemy's damage to player
@@ -298,4 +307,18 @@ double Scene_DamageCalculation(struct Scene *scene, struct Enemy *enemy)//enemy'
     double rate = roller * enemy->Critical_Rate;//this value should be 0-5000
     if (roller >= 2345/*critical damage*/){ return pow(enemy->damage/scene->player.defence,2); }
     else { return enemy->damage/scene->player.defence; }
+}
+
+double Scene_MinDistanceWall(struct Scene *scene, struct Line *ray){
+    double minDistance = INFINITY;
+    for (int j = 0; j < scene->list_Object.size; j++){
+        struct Object *object = ((struct Object**)scene->list_Object.data)[j];
+        if (object->tag != WALL) continue;
+        for (int k = 0; k < object->collideBoxCount; k++){
+            struct CollideBox *collideBox = &object->collideBoxes[k];
+            double distance = CollideBox_RayDistance(collideBox, ray);
+            if (minDistance > distance) minDistance = distance;
+        }
+    }
+    return minDistance;
 }

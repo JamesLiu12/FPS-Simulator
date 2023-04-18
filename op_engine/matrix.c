@@ -1,6 +1,7 @@
 #include "matrix.h"
 #include <memory.h>
 #include <math.h>
+#include "../util/util.h"
 
 void Matrix3x3_Multiply(struct Matrix3x3 *m1, struct Matrix3x3 *m2){
     double results[3] = {0, 0, 0};
@@ -18,7 +19,7 @@ void Matrix3x3_Multiply(struct Matrix3x3 *m1, struct Matrix3x3 *m2){
 
 }
 
-void Matrix3x3_Transform(struct Matrix3x3 *m, struct Vector3 *v) {
+void Matrix3x3_TransformMatrix(struct Matrix3x3 *m, struct Vector3 *v) {
     double result_x = 0, result_y = 0, result_z = 0;
     int col;
 
@@ -37,6 +38,12 @@ void Matrix3x3_Transform(struct Matrix3x3 *m, struct Vector3 *v) {
     v->x = result_x;
     v->y = result_y;
     v->z = result_z;
+}
+
+void Matrix3x3_TransformEular(struct Vector3 *angle, struct Vector3 *v){
+    struct Matrix3x3 m;
+    Matrix3x3_FromEulerAngle(&m, angle, FALSE);
+    Matrix3x3_TransformMatrix(&m, v);
 }
 
 void Matrix3x3_FromEulerAngle(struct Matrix3x3 *m, struct Vector3 *ea, char reversed) {

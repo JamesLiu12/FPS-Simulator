@@ -11,7 +11,9 @@ struct Matrix3x3 {
 void Matrix3x3_Multiply(struct Matrix3x3 *m1, struct Matrix3x3 *m2);
 
 //Apply a transformation m to v
-void Matrix3x3_Transform(struct Matrix3x3 *m, struct Vector3 *v);
+void Matrix3x3_TransformMatrix(struct Matrix3x3 *m, struct Vector3 *v);
+
+void Matrix3x3_TransformEular(struct Vector3 *angle, struct Vector3 *v);
 
 #define EULER_ANGLE_REVERSED 1
 #define EULER_ANGLE_NORMAL 0

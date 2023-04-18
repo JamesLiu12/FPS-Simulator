@@ -189,7 +189,7 @@ void Canvas_ProjectFromWorldToCamera(struct Canvas *canvas, struct Vector3 *from
     Vector3_Copy(from, to);
     Transform_UpdateGlobal(&canvas->camera_transform);
     Vector3_Subtract(to, &canvas->camera_transform.globalPosition);
-    Matrix3x3_Transform(&canvas->camera_transform.globalRotationMatrix, to);
+    Matrix3x3_TransformMatrix(&canvas->camera_transform.globalRotationMatrix, to);
 }
 
 void Canvas_ProjectFromCameraToScreen(struct Canvas *canvas, struct Vector3 *from, struct Vector3 *to) {

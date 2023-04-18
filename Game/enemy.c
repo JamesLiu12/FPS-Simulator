@@ -11,7 +11,7 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
     struct CollideBox *collideBoxes_EnemyHead = (struct CollideBox *)malloc(sizeof(struct CollideBox));
     Vector3_Set(&minVertex, -0.35, 1.4, -0.35);    //Head
     Vector3_Set(&maxVertex, 0.35, 2.1, 0.35);
-    CollideBox_Set(collideBoxes_EnemyHead, &minVertex, &maxVertex);
+    CollideBox_Init(collideBoxes_EnemyHead, NULL, 1, 1, 1);
 
     Object_Set(&enemy->head, meshes->head, &enemy->transform, ENEMY_HEAD,
                collideBoxes_EnemyHead,1);
@@ -22,7 +22,7 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
     struct CollideBox *collideBoxes_EnemyBody = (struct CollideBox *)malloc(sizeof(struct CollideBox));
     Vector3_Set(&minVertex, -0.15, 0.4, -0.15);    //Body
     Vector3_Set(&maxVertex, 0.15, 1.4, 0.15);
-    CollideBox_Set(collideBoxes_EnemyBody, &minVertex, &maxVertex);
+    CollideBox_Init(collideBoxes_EnemyBody, NULL, 1, 1, 1);
 
     Object_Set(&enemy->body, meshes->body, &enemy->transform, ENEMY_BODY,
                collideBoxes_EnemyBody,1);
@@ -33,7 +33,7 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
     struct CollideBox *collideBoxes_EnemyLeg = (struct CollideBox *)malloc(sizeof(struct CollideBox));
     Vector3_Set(&minVertex, -0.37, 0, -0.37);    //Leg
     Vector3_Set(&maxVertex, 0.37, 0.4, 0.37);
-    CollideBox_Set(collideBoxes_EnemyLeg, &minVertex, &maxVertex);
+    CollideBox_Init(collideBoxes_EnemyLeg, NULL, 1, 1, 1);
 
     Object_Set(&enemy->leg, meshes->leg, &enemy->transform, ENEMY_LEG,
                collideBoxes_EnemyLeg,1);
@@ -44,10 +44,16 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
 	enemy->health = 100;
 	enemy->damage = 5;
 	enemy->Critical_Rate = 50;//critical damage to player; should not be higher than 50
+    enemy->findPathCD = 1;
+    enemy->canSeePlayer = FALSE;
 }
 
 void Enemy_Start(struct Enemy *enemy){
 	//TODO enemy start
+}
+
+void Enemy_Update(struct Enemy *enemy){
+
 }
 
 struct Enemy* New_Enemy(struct EnemyMeshes *meshes){
@@ -90,4 +96,9 @@ void Enemy_Rotation(struct Enemy* enemy, struct Vector3 *angle){
     Object_Rotation(&enemy->body,angle);
     Vector3_Add(&enemy->transform.rotation, angle);
     Transform_RotationMatrixUpdate(&enemy->transform);
+}
+
+int Enemy_IsNeedFindPath(struct Enemy *enemy){
+    return TRUE;
+//    return ProgramRunTime() - enemy->previousFindTime > enemy->findPathCD;
 }

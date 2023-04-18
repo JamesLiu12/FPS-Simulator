@@ -7,11 +7,6 @@
 #include "player.h"
 #include "enemy.h"
 
-struct Enemy_TransformLink{
-    struct Transform* current;
-    struct Enemy_TransformLink* next;
-};
-
 struct Scene{
     struct ArrayList list_Object;
     struct ArrayList list_Enemy;
@@ -27,18 +22,22 @@ void Scene_Init(struct Scene *scene);
 //The deleter of scene
 void Del_Scene(struct Scene *scene);
 
+void Scene_Update(struct Scene *scene);
+
 //Showing all the object within scene in the view of canvas
 void Scene_Show(struct Scene *scene, struct Canvas *canvas);
 
 //get which enemy and parts are collided by the ray
 void Scene_EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **result_enemy, enum Tag *result_tag);
 
-struct Enemy_TransformLink* Scene_EnemyFindWay(struct Scene* scene, struct Object *enemy);
+struct Path* Scene_EnemyFindPath(struct Scene* scene, struct Object *enemy);
 
-void Scene_EnemyUpdate(struct Enemy *enemy, bool do_find_way, struct Scene* scene, struct Enemy_TransformLink* current);
+void Scene_EnemyUpdate(struct Enemy *enemy, bool do_find_way, struct Scene* scene, struct Path* current);
 
 bool Scene_IsPlayerInAttackRange(struct Scene *scene, struct Enemy *enemy);
 
 double Scene_DamageCalculation(struct Scene *scene, struct Enemy *enemy);
+
+double Scene_MinDistanceWall(struct Scene *scene, struct Line *ray);
 
 #endif //FPS_SIMULATOR_SCENE_H
