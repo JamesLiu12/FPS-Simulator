@@ -25,7 +25,9 @@ void Player_Init(struct Player *player){
     struct Vector3 v1, v2;
     Vector3_Set(&v1, -0.5, -1, -0.5);
     Vector3_Set(&v2, 0.5, 1, 0.5);
-    CollideBox_Init(&player->collideBox, NULL, 1, 1, 1);
+    CollideBox_Init(&player->collideBox, NULL, 0.7, 1.8, 0.7);
+    player->collideBox.transform = player->transform;
+    player->collideBox.transform.position.y = 0.9;
 }
 
 struct Player* New_Player() {
@@ -59,7 +61,7 @@ void Player_Start(struct Player *player){
     Vector3_Set(&player->transform.position,0,1,0);
 }
 
-void Player_Update(struct Player *player){
+void Player_Update(struct Player *player, double delta_time){
     if(player->In_FireCD){
         player->IsFiring = 0 ;
         //TODO

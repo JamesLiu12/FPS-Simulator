@@ -11,6 +11,7 @@ void Runner_Init(struct Runner *runner,struct UI_SettingMenu *settingui){
     runner->frame_rate=settingui->framerate;
     runner->difficulty=settingui->difficulty;
     runner->sensitivity=settingui->sensitivity;
+    runner->previousFrameTime = ProgramRunTime();
 }
 int Runner_Run(struct Runner *runner){
     struct Scene scene1;

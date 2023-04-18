@@ -31,7 +31,7 @@ void Player_Rotate(struct Player *player, struct Vector3* angle);
 void Player_Start(struct Player *player);
 
 //What player does each frame
-void Player_Update(struct Player *player);
+void Player_Update(struct Player *player, double delta_time);
 
 void Player_MoveForward(struct Player *player);
 void Player_MoveBackward(struct Player *player);

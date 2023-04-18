@@ -5,55 +5,63 @@
 void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
     Transform_Init(&enemy->transform, NULL);
 
-    struct Vector3 minVertex, maxVertex;
-
     //Enemy_Head
-    struct CollideBox *collideBoxes_EnemyHead = (struct CollideBox *)malloc(sizeof(struct CollideBox));
-    Vector3_Set(&minVertex, -0.35, 1.4, -0.35);    //Head
-    Vector3_Set(&maxVertex, 0.35, 2.1, 0.35);
-    CollideBox_Init(collideBoxes_EnemyHead, NULL, 1, 1, 1);
-
-    Object_Init(&enemy->head, meshes->head, &enemy->transform, ENEMY_HEAD,
-                collideBoxes_EnemyHead, 1);
-
+    Object_Init(&enemy->head, meshes->head, &enemy->transform, ENEMY_HEAD);
     Vector3_Set(&enemy->head.transform.position, 0, 0, 0);
 
+    struct CollideBox *collideBoxes_EnemyHead = (struct CollideBox *)malloc(sizeof(struct CollideBox));
+    CollideBox_Init(collideBoxes_EnemyHead, &enemy->transform, 0.7, 0.7, 0.7);
+    Vector3_Set(&collideBoxes_EnemyHead->transform.position, 0, 1.75, 0);
+
+    Object_SetCollideBoxes(&enemy->head, collideBoxes_EnemyHead, 1);
+
+
     //Enemy_Body
-    struct CollideBox *collideBoxes_EnemyBody = (struct CollideBox *)malloc(sizeof(struct CollideBox));
-    Vector3_Set(&minVertex, -0.15, 0.4, -0.15);    //Body
-    Vector3_Set(&maxVertex, 0.15, 1.4, 0.15);
-    CollideBox_Init(collideBoxes_EnemyBody, NULL, 1, 1, 1);
-
-    Object_Init(&enemy->body, meshes->body, &enemy->transform, ENEMY_BODY,
-                collideBoxes_EnemyBody, 1);
-
+    Object_Init(&enemy->body, meshes->body, &enemy->transform, ENEMY_BODY);
     Vector3_Set(&enemy->body.transform.position, 0, 0, 0);
 
+    struct CollideBox *collideBoxes_EnemyBody = (struct CollideBox *)malloc(sizeof(struct CollideBox));
+    CollideBox_Init(collideBoxes_EnemyBody, &enemy->transform, 0.3, 1, 0.3);
+    Vector3_Set(&collideBoxes_EnemyBody->transform.position, 0, 0.9, 0);
+
+    Object_SetCollideBoxes(&enemy->body, collideBoxes_EnemyBody, 1);
+
     //Enemy_Leg
-    struct CollideBox *collideBoxes_EnemyLeg = (struct CollideBox *)malloc(sizeof(struct CollideBox));
-    Vector3_Set(&minVertex, -0.37, 0, -0.37);    //Leg
-    Vector3_Set(&maxVertex, 0.37, 0.4, 0.37);
-    CollideBox_Init(collideBoxes_EnemyLeg, NULL, 1, 1, 1);
-
-    Object_Init(&enemy->leg, meshes->leg, &enemy->transform, ENEMY_LEG,
-                collideBoxes_EnemyLeg, 1);
-
+    Object_Init(&enemy->leg, meshes->leg, &enemy->transform, ENEMY_LEG);
     Vector3_Set(&enemy->leg.transform.position, 0, 0, 0);
 
-    enemy->speed = 5;
+    struct CollideBox *collideBoxes_EnemyLeg = (struct CollideBox *)malloc(sizeof(struct CollideBox));
+    CollideBox_Init(collideBoxes_EnemyLeg, &enemy->leg.transform, 0.74, 0.4, 0.74);
+    Vector3_Set(&collideBoxes_EnemyLeg->transform.position, 0, 0.2, 0);
+
+    Object_SetCollideBoxes(&enemy->leg, collideBoxes_EnemyLeg, 1);
+
+    enemy->speed = 1;
 	enemy->health = 100;
 	enemy->damage = 5;
 	enemy->Critical_Rate = 50;//critical damage to player; should not be higher than 50
     enemy->findPathCD = 1;
+    enemy->attackDistance = 1.5;
     enemy->canSeePlayer = FALSE;
+    Vector3_Set(&enemy->moveDirection, 0, 0, 0);
 }
 
 void Enemy_Start(struct Enemy *enemy){
 	//TODO enemy start
 }
 
-void Enemy_Update(struct Enemy *enemy){
-
+void Enemy_Update(struct Enemy *enemy, double delta_time){
+    if (enemy->canSeePlayer){
+        struct Vector3 move = enemy->moveDirection,
+                posDiff = enemy->destination;
+        Vector3_Scale(&move, enemy->speed * delta_time);
+        Vector3_Subtract(&posDiff, &enemy->transform.position);
+        posDiff.y = 0;
+        if (Vector3_Magnitude(&move) > Vector3_Magnitude(&posDiff))
+            Transform_AddPosition(&enemy->transform, &posDiff);
+        else
+            Transform_AddPosition(&enemy->transform, &move);
+    }
 }
 
 struct Enemy* New_Enemy(struct EnemyMeshes *meshes){
@@ -96,9 +104,4 @@ void Enemy_Rotation(struct Enemy* enemy, struct Vector3 *angle){
     Object_Rotation(&enemy->body,angle);
     Vector3_Add(&enemy->transform.rotation, angle);
     Transform_RotationMatrixUpdate(&enemy->transform);
-}
-
-int Enemy_IsNeedFindPath(struct Enemy *enemy){
-    return TRUE;
-//    return ProgramRunTime() - enemy->previousFindTime > enemy->findPathCD;
 }

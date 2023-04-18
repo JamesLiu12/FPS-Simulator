@@ -22,7 +22,7 @@ void Scene_Init(struct Scene *scene);
 //The deleter of scene
 void Del_Scene(struct Scene *scene);
 
-void Scene_Update(struct Scene *scene);
+void Scene_Update(struct Scene *scene, double delta_time);
 
 //Showing all the object within scene in the view of canvas
 void Scene_Show(struct Scene *scene, struct Canvas *canvas);
@@ -39,5 +39,7 @@ bool Scene_IsPlayerInAttackRange(struct Scene *scene, struct Enemy *enemy);
 double Scene_DamageCalculation(struct Scene *scene, struct Enemy *enemy);
 
 double Scene_MinDistanceWall(struct Scene *scene, struct Line *ray);
+
+void Scene_PlayerShoot(struct Scene *scene);
 
 #endif //FPS_SIMULATOR_SCENE_H

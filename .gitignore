@@ -12,6 +12,7 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 playground.h
+playground.c
 .vscode
 FPS_Simulator.cbp
 .cmake/

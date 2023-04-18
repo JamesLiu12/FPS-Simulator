@@ -95,7 +95,8 @@ double CollideBox_RayDistance(struct CollideBox *box, struct Line *ray){
         Plane_LineIntersection(&planes[i], ray, &intersection);
         if (double_IsSameSign(intersection.x - ray->position.x, ray->direction.x)
         && (Triangle_IsPointInTriangle3D(&triangles[i * 2], &intersection)
-        || Triangle_IsPointInTriangle3D(&triangles[i * 2 + 1], &intersection))){
+        || Triangle_IsPointInTriangle3D(&triangles[i * 2 + 1], &intersection))
+        && !Vector3_Equal(&intersection, &ray->position)){
             double distance = Vector3_Distance3D(&ray->position, &intersection);
             if (distance < result) result = distance;
         }
