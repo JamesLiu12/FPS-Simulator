@@ -2,7 +2,7 @@
 #include <memory.h>
 #include <math.h>
 #include "util.h"
-#include <time.h>
+#include <sys/time.h>
 
 void swap(void *a, void *b, size_t size) {
     void *temp = malloc(size);
@@ -63,5 +63,7 @@ bool double_IsSameSign(double a, double b){
 }
 
 double ProgramRunTime(){
-    return (double)(clock() / CLK_TCK);
+    struct timeval t;
+    gettimeofday(&t, NULL);
+    return t.tv_sec + t.tv_usec * 1e-6;
 }
