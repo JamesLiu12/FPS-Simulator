@@ -4,10 +4,19 @@
 #include "../op_engine/op_engine.h"
 #include "models/models.h"
 
+struct Path{
+    struct Transform* current;
+    struct Path* next;
+};
+
 struct Enemy{
-    struct Object head, body, leg;
-    double health, atk, speed;
+    struct Object head, leg, body;
+    double speed, damage, health, findPathCD, attackDistance;
     struct Transform transform;
+	struct CollideBox collideBox;
+	double Critical_Rate;
+    int canSeePlayer;
+    struct Vector3 moveDirection, destination;
 };
 
 struct EnemyMeshes{
@@ -17,10 +26,16 @@ struct EnemyMeshes{
 void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes);
 struct Enemy* New_Enemy(struct EnemyMeshes *meshes);
 void Del_Enemy(struct Enemy *enemy);
+void Enemy_Start(struct Enemy *enemy);
+void Enemy_Update(struct Enemy *enemy, double delta_time);
+
+void Enemy_Move(struct Enemy* enemy, struct Vector3 *move); //enemy consists of three objects: head and body
+void Enemy_Rotation(struct Enemy *enemy, struct Vector3* angle);
 
 void EnemyMeshes_Init(struct EnemyMeshes *meshes, struct Mesh *head, struct Mesh *body, struct Mesh *leg);
 struct EnemyMeshes* New_EnemyMeshes(struct Mesh *head, struct Mesh *body, struct Mesh *leg);
 void Del_EnemyMeshes(struct EnemyMeshes *meshes);
 
+int Enemy_IsNeedFindPath(struct Enemy *enemy);
 
 #endif //FPS_SIMULATOR_ENEMY_H

@@ -7,16 +7,19 @@
 #include "transform.h"
 
 struct CollideBox{
-    struct Vector3 minVertex, maxVertex;
+    struct Transform transform;
+    struct Vector3 halfSize;
 };
 
 //Setter of CollideBox
-void CollideBox_Set(struct CollideBox *box, struct Vector3 *minVertex, struct Vector3 *maxVertex);
+void CollideBox_Init(struct CollideBox *box, struct Transform *father , double length, double height, double width);
+
+void Del_CollideBox(struct CollideBox *box);
 
 //Return the distance between ray and box, return INFINITY if the ray does not hit
-double CollideBox_RayDistance(struct CollideBox *box, struct Transform *transform, struct Line *ray);
+double CollideBox_RayDistance(struct CollideBox *box, struct Line *ray);
 
 //Return True <=> the two collide boxed are overlapped
-double CollideBox_IsCollide(struct CollideBox *b1, struct Transform *t1, struct CollideBox *b2, struct Transform *t2);
+int CollideBox_IsCollide(struct CollideBox *b1, struct CollideBox *b2);
 
 #endif //FPS_SIMULATOR_COLLIDE_BOX_H

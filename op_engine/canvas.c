@@ -99,7 +99,7 @@ void print_pixel(enum Tag tag, double distance){
 //    else if (tag == WALL) printf("\x1b[38;2;%d;%d;%dm██", brightness, brightness, brightness);
 //    else if (tag == FLOOR) printf("\x1b[38;2;%d;%d;%dm░░", brightness, brightness, brightness);
     else if (tag == WALL) printf("██");
-    else if (tag == FLOOR) printf("ff");
+    else if (tag == FLOOR) printf("░░");
     else if (tag == ENEMY_HEAD) printf("▓▓");
     else if (tag == ENEMY_LEG) printf("▒▒");
     else if (tag == ENEMY_BODY) printf("░░");
@@ -189,7 +189,7 @@ void Canvas_ProjectFromWorldToCamera(struct Canvas *canvas, struct Vector3 *from
     Vector3_Copy(from, to);
     Transform_UpdateGlobal(&canvas->camera_transform);
     Vector3_Subtract(to, &canvas->camera_transform.globalPosition);
-    Matrix3x3_Transform(&canvas->camera_transform.globalRotationMatrix, to);
+    Matrix3x3_TransformMatrix(&canvas->camera_transform.globalRotationMatrix, to);
 }
 
 void Canvas_ProjectFromCameraToScreen(struct Canvas *canvas, struct Vector3 *from, struct Vector3 *to) {

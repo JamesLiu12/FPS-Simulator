@@ -26,6 +26,9 @@ void Vector3_Normalize(struct Vector3 *v);
 //Return the square of module length of v
 double Vector3_MagnitudeSq(struct Vector3 *v);
 
+//Return the module length of v
+double Vector3_Magnitude(struct Vector3 *v);
+
 //Return the square of distance between v1 and v2
 double Vector3_DistanceSq3D(struct Vector3 *v1, struct Vector3 *v2);
 

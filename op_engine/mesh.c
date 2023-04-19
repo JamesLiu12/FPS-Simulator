@@ -1,9 +1,9 @@
 #include "mesh.h"
 
 void Face_Set(struct Face* face, unsigned int f1, unsigned int f2, unsigned int f3) {
-    face->f1 = f1;
-    face->f2 = f2;
-    face->f3 = f3;
+    face->f1 = f1 - 1;
+    face->f2 = f2 - 1;
+    face->f3 = f3 - 1;
 }
 
 struct Mesh *New_Mesh(unsigned int triangle_count, unsigned int vertex_count) {

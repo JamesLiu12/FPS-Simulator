@@ -23,8 +23,14 @@ void ArrayList_PushBack(struct ArrayList *list, void *element);
 //Delete the element at the back of the list
 void ArrayList_PopBack(struct ArrayList *list);
 
-//Return the pointer of the last element of the list
+//Return the pointer of the last element in the list
 void* ArrayList_Back(struct ArrayList *list);
+
+//Delete the first element in the list
+void ArrayList_PopFront(struct ArrayList *list);
+
+//Return the pointer of the first element in the list
+void* ArrayList_Front(struct ArrayList *list);
 
 //Delete the first occurrence of element in list, return True <=> successful delete an element in list
 bool ArrayList_DeleteElement(struct ArrayList *list, void* element);

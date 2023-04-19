@@ -5,6 +5,7 @@ double linear_interpolate(double from, double to, double proportion);
 int double_Equal(double a, double b);
 int double_IsZero(double a);
 bool double_IsSameSign(double a, double b);
+double ProgramRunTime();
 
 /*
  * Guassian_Elimination would give the solution of a group of functions, given the

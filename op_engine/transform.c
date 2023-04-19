@@ -50,7 +50,7 @@ void Transform_UpdateGlobal(struct Transform *transform){
     Vector3_Add(&transform->globalRotation, &transform->father->globalRotation);
     Vector3_Multiply(&transform->globalScale, &transform->father->globalScale);
 
-    Matrix3x3_Transform(&transform->father->globalRotationMatrix, &transform->globalPosition);
+    Matrix3x3_TransformMatrix(&transform->father->globalRotationMatrix, &transform->globalPosition);
     Vector3_Multiply(&transform->globalPosition, &transform->father->globalScale);
     Vector3_Add(&transform->globalPosition, &transform->father->globalPosition);
 
@@ -64,7 +64,7 @@ void Transform_AddChild(struct Transform *transform, struct Transform *child){
 }
 
 void Transform_ToGlobal(struct Transform *transform, struct Vector3 *vector){
-    Matrix3x3_Transform(&transform->globalRotationMatrix, vector);
+    Matrix3x3_TransformMatrix(&transform->globalRotationMatrix, vector);
     Vector3_Multiply(vector, &transform->globalScale);
     Vector3_Add(vector, &transform->globalPosition);
 }

@@ -48,6 +48,10 @@ double Vector3_MagnitudeSq(struct Vector3 *v){
     return v->x * v->x + v->y * v->y + v->z * v->z;
 }
 
+double Vector3_Magnitude(struct Vector3 *v){
+    return sqrt(Vector3_MagnitudeSq(v));
+}
+
 double Vector3_CrossProduct2D(struct Vector3 *v1, struct Vector3 *v2){
     return v1->x * v2->y - v2->x * v1->y;
 }

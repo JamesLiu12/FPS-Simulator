@@ -40,6 +40,15 @@ void* ArrayList_Back(struct ArrayList *list){
     return list->data + (list->size - 1) * list->element_size;
 }
 
+void ArrayList_PopFront(struct ArrayList *list){
+    if (ArrayList_Empty(list)) return;
+    ArrayList_DeleteElement(list, list->data);
+}
+
+void* ArrayList_Front(struct ArrayList *list){
+    return list->data;
+}
+
 bool ArrayList_DeleteElement(struct ArrayList *list, void* element){
     for (int i = 0; i < list->size; i++){
         void *thisElement = list->data + i * list->element_size;

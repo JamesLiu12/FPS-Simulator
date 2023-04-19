@@ -25,7 +25,9 @@ void Player_Init(struct Player *player){
     struct Vector3 v1, v2;
     Vector3_Set(&v1, -0.5, -1, -0.5);
     Vector3_Set(&v2, 0.5, 1, 0.5);
-    CollideBox_Set(&player->collideBox, &v1, &v2);
+    CollideBox_Init(&player->collideBox, NULL, 0.7, 1.8, 0.7);
+    player->collideBox.transform = player->transform;
+    player->collideBox.transform.position.y = 0.9;
 }
 
 struct Player* New_Player() {
@@ -48,7 +50,7 @@ void Player_Rotate(struct Player *player, struct Vector3* angle){
 
     struct Matrix3x3 RotationMatrix;
     Matrix3x3_FromEulerAngle(&RotationMatrix,angle,EULER_ANGLE_REVERSED);
-    Matrix3x3_Transform(&RotationMatrix,&player->facing);
+    Matrix3x3_TransformMatrix(&RotationMatrix, &player->facing);
     Vector3_Normalize(&player->facing);
 
     Canvas_CameraRotate(&player->canvas,angle);
@@ -59,7 +61,7 @@ void Player_Start(struct Player *player){
     Vector3_Set(&player->transform.position,0,1,0);
 }
 
-void Player_Update(struct Player *player){
+void Player_Update(struct Player *player, double delta_time){
     if(player->In_FireCD){
         player->IsFiring = 0 ;
         //TODO
@@ -148,9 +150,10 @@ void Player_RotateLeft(struct Player *player){
 }
 void Player_RotateRight(struct Player *player){
     struct Vector3 rotation;
-    Vector3_Set(&rotation, 0, -player->rotationSpeed, 0);
-    Player_Rotate(player, &rotation);
-}   
+    Vector3_Set(&rotation,0,-player->rotationSpeed,0);
+    Player_Rotate(player,&rotation);
+}
+
 void Player_ChangeHealth(struct Player *player, double deltaHealth){
     player->health += deltaHealth;
     if(player->health > player->maxHealth) player->health = player->maxHealth;

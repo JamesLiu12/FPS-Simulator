@@ -4,25 +4,27 @@
 #include "matrix.h"
 #include "vector.h"
 
-void Object_Set(struct Object *object, struct Mesh *mesh, struct Transform *father_transform, enum Tag tag,
-                struct CollideBox *collideBoxes, int collideBoxCount) {
+void Object_Init(struct Object *object, struct Mesh *mesh, struct Transform *father_transform, enum Tag tag) {
     object->mesh = mesh;
     Transform_Init(&object->transform, father_transform);
     object->tag = tag;
+}
+
+struct Object* Object_New(struct Mesh *mesh, struct Transform *father_transform, enum Tag tag){
+    struct Object *object = malloc(sizeof (struct Object));
+    Object_Init(object, mesh, father_transform, tag);
+    return object;
+}
+
+struct Object* Object_SetCollideBoxes(struct Object *object, struct CollideBox *collideBoxes, int collideBoxCount){
     object->collideBoxes = collideBoxes;
     object->collideBoxCount = collideBoxCount;
 }
 
-struct Object* Object_New(struct Mesh *mesh, struct Transform *father_transform, enum Tag tag,
-                          struct CollideBox *collideBoxes, int collideBoxCount){
-    struct Object *object = malloc(sizeof (struct Object));
-    Object_Set(object, mesh, father_transform, tag, collideBoxes, collideBoxCount);
-    return object;
-}
-
 void Del_Object(struct Object *object){
     Del_Transform(&object->transform);
-//    free(object);
+    for (int i = 0; i < object->collideBoxCount; i++) Del_CollideBox(&object->collideBoxes[i]);
+    free(object->collideBoxes);
 }
 
 void Object_Show(struct Object *object, struct Canvas *canvas) {

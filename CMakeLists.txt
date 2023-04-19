@@ -35,6 +35,8 @@ add_executable(
         Game/runner.h
         Game/runner.c
         Game/game.h
+        Game/weapon.h
+        Game/weapon.c
 
         op_engine/canvas.h
         op_engine/canvas.c
@@ -65,6 +67,7 @@ add_executable(
         util/util.h
         util/array_list.c
         util/array_list.h
+
 
     GameUI/Game_UI.h
     GameUI/ui_startmenu.h
