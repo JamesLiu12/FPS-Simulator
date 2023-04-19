@@ -101,9 +101,9 @@ void print_pixel(enum Tag tag, double distance){
     else if (tag == WALL) printf("██");
     else if (tag == FLOOR) printf("ff");
     else if (tag == ENEMY_HEAD) printf("▓▓");
-    else if (tag == ENEMY_LEG) printf("█░");
-    else if (tag == ENEMY_BODY) printf("▥▥");
-}
+    else if (tag == ENEMY_LEG) printf("▒▒");
+    else if (tag == ENEMY_BODY) printf("░░");
+}░▒▓█
 
 void Canvas_flush(struct Canvas* canvas){
     move_cursor_top_left();
