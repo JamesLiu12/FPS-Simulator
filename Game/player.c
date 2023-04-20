@@ -1,16 +1,13 @@
-
 #include "player.h"
 #include "../op_engine/op_engine.h"
-
-#include "runner.h"
 
 void Player_Init(struct Player *player){
     Canvas_Init(&player->canvas, 32, 64);
     player->maxHealth = 100;
     player->health = player->maxHealth;
     player->atk = 1;
-    player->moveSpeed = 0.1;
-    player->rotationSpeed = 0.1;
+    player->moveSpeed = 1;
+    player->rotationSpeed = 1;
     player->fireCDtime = 0.5;
     player->In_FireCD = 0;
     player->fireCDtime = 0.5;
@@ -20,12 +17,13 @@ void Player_Init(struct Player *player){
 
     Transform_Init(&player->transform, NULL);
     Transform_Init(&player->canvas.camera_transform, &player->transform);
-    Vector3_Set(&player->canvas.camera_transform.position, 0, 0.8, 0);
+    Vector3_Set(&player->canvas.camera_transform.position, 0, 1.8, 0);
 
     struct Vector3 v1, v2;
     Vector3_Set(&v1, -0.5, -1, -0.5);
     Vector3_Set(&v2, 0.5, 1, 0.5);
-    CollideBox_Init(&player->collideBox, NULL, 0.7, 1.8, 0.7);
+    CollideBox_Init(&player->collideBox, NULL, 0.7, 2.1, 0.7);
+    Vector3_Set(&player->collideBox.transform.position, 0, 1.06, 0);
     player->collideBox.transform = player->transform;
     player->collideBox.transform.position.y = 0.9;
 }
@@ -49,7 +47,7 @@ void Player_Rotate(struct Player *player, struct Vector3* angle){
     //Transform_RotationMatrixUpdate(&player->transform);
 
     struct Matrix3x3 RotationMatrix;
-    Matrix3x3_FromEulerAngle(&RotationMatrix,angle,EULER_ANGLE_REVERSED);
+    Matrix3x3_FromEulerAngle(&RotationMatrix,angle,EULER_ANGLE_NORMAL);
     Matrix3x3_TransformMatrix(&RotationMatrix, &player->facing);
     Vector3_Normalize(&player->facing);
 
@@ -65,25 +63,25 @@ void Player_Update(struct Player *player, double delta_time){
     if(player->In_FireCD){
         player->IsFiring = 0 ;
         //TODO
-        player->fireCDcounter -= 1/60;
+        player->fireCDcounter -= 0.5;
     }
     if(player->fireCDcounter <= 0) player->In_FireCD = 0;
-    //Player_Control(player);
+    Player_Control(player, delta_time);
 }
 
-void Player_Control(struct Player *player){
-    if(keydown(W)) Player_RotateUp(player);
-    if(keydown(S)) Player_RotateDown(player);
-    if(keydown(A)) Player_RotateLeft(player);
-    if(keydown(D)) Player_RotateRight(player);
+void Player_Control(struct Player *player, double delta_time){
+    if(keydown(UP)) Player_RotateUp(player, delta_time);
+    if(keydown(DOWN)) Player_RotateDown(player, delta_time);
+    if(keydown(LEFT)) Player_RotateLeft(player, delta_time);
+    if(keydown(RIGHT)) Player_RotateRight(player, delta_time);
 
-    if(keydown(UP)) Player_MoveForward(player);
-    if(keydown(DOWN)) Player_MoveBackward(player);
-    if(keydown(LEFT)) Player_MoveLeft(player);
-    if(keydown(RIGHT)) Player_MoveRight(player);
+    if(keydown(W)) Player_MoveForward(player, delta_time);
+    if(keydown(S)) Player_MoveBackward(player, delta_time);
+    if(keydown(A)) Player_MoveLeft(player, delta_time);
+    if(keydown(D)) Player_MoveRight(player, delta_time);
 
-    if(keydown(H)) Player_ChangeHealth(player,-5);
-    if(keydown(K)) Player_ChangeHealth(player,5);
+    if(keydown(H)) Player_ChangeHealth(player, -5);
+    if(keydown(K)) Player_ChangeHealth(player, 5);
 
     if(keydown(F)) Player_Shoot(player);
 }
@@ -96,61 +94,61 @@ void Player_Shoot(struct Player *player){
         }
     }
 }
-void Player_MoveForward(struct Player *player){
+void Player_MoveForward(struct Player *player, double delta_time){
     struct Vector3 movement;
     Vector3_Set(&movement, player->facing.x, 0, player->facing.z);
     Vector3_Normalize(&movement);
-    Vector3_Scale(&movement, player->moveSpeed);
+    Vector3_Scale(&movement, player->moveSpeed * delta_time);
     //Player_Move(player,&movement);
     Vector3_Copy(&movement, &player->moveDirection);
 }
-void Player_MoveBackward(struct Player *player){
+void Player_MoveBackward(struct Player *player, double delta_time){
     struct Vector3 movement;
     Vector3_Set(&movement, -player->facing.x, 0, -player->facing.z);
     Vector3_Normalize(&movement);
-    Vector3_Scale(&movement, player->moveSpeed);
+    Vector3_Scale(&movement, player->moveSpeed * delta_time);
     Vector3_Copy(&movement, &player->moveDirection);
     //Player_Move(player, &movement);
 }
-void Player_MoveLeft(struct Player *player){
+void Player_MoveLeft(struct Player *player, double delta_time){
     struct Vector3 movement;
     Vector3_Set(&movement,-player->facing.z,0,player->facing.x);
     Vector3_Normalize(&movement);
-    Vector3_Scale(&movement,player->moveSpeed);
+    Vector3_Scale(&movement,player->moveSpeed * delta_time);
     Vector3_Copy(&movement,&player->moveDirection);
     //Player_Move(player,&movement);
 }
-void Player_MoveRight(struct Player *player){
+void Player_MoveRight(struct Player *player, double delta_time){
     struct Vector3 movement;
     Vector3_Set(&movement, player->facing.z, 0, -player->facing.x);
     Vector3_Normalize(&movement);
-    Vector3_Scale(&movement, player->moveSpeed);
+    Vector3_Scale(&movement, player->moveSpeed * delta_time);
     Vector3_Copy(&movement, &player->moveDirection);
     //Player_Move(player,&movement);
 }
 
-void Player_RotateUp(struct Player *player){
+void Player_RotateUp(struct Player *player, double delta_time){
     struct Vector3 rotation;
     Vector3_Set(&rotation, player->facing.z, 0, -player->facing.x);
     Vector3_Normalize(&rotation);
-    Vector3_Scale(&rotation, player->rotationSpeed);
+    Vector3_Scale(&rotation, player->rotationSpeed * delta_time);
     Player_Rotate(player, &rotation);
 }
-void Player_RotateDown(struct Player *player){
+void Player_RotateDown(struct Player *player, double delta_time){
     struct Vector3 rotation;
     Vector3_Set(&rotation, -player->facing.z, 0, player->facing.x);
     Vector3_Normalize(&rotation);
-    Vector3_Scale(&rotation, player->rotationSpeed);
+    Vector3_Scale(&rotation, player->rotationSpeed * delta_time);
     Player_Rotate(player, &rotation);
 }
-void Player_RotateLeft(struct Player *player){
+void Player_RotateLeft(struct Player *player, double delta_time){
     struct Vector3 rotation;
-    Vector3_Set(&rotation, 0, player->rotationSpeed, 0);
+    Vector3_Set(&rotation, 0, player->rotationSpeed * delta_time, 0);
     Player_Rotate(player, &rotation);
 }
-void Player_RotateRight(struct Player *player){
+void Player_RotateRight(struct Player *player, double delta_time){
     struct Vector3 rotation;
-    Vector3_Set(&rotation,0,-player->rotationSpeed,0);
+    Vector3_Set(&rotation,0,-player->rotationSpeed * delta_time,0);
     Player_Rotate(player,&rotation);
 }
 

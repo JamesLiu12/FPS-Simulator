@@ -9,6 +9,7 @@
 #include "Game/player.h"
 #include "GameUI/ui_startmenu.h"
 #include "playground.h"
+#include "Game/runner.h"
 int main() {
     test();
     return 0;

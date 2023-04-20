@@ -16,7 +16,7 @@ void Scene_Init(struct Scene *scene){
     ArrayList_Init(&scene->list_Object, sizeof(struct Object*));
     ArrayList_Init(&scene->list_Enemy, sizeof(struct Enemy*));
     Player_Init(&scene->player);
-    Vector3_Set(&scene->player.transform.position, 0, 1, -3);
+    Vector3_Set(&scene->player.transform.position, 0, 0, -3);
 
 
     //Map_boundary origin coordinate (0,0,0)
@@ -90,7 +90,7 @@ void Scene_Init(struct Scene *scene){
     //Sample Enemy generate test
     struct Enemy *enemy = New_Enemy(&scene->enemyMeshes);
     ArrayList_PushBack(&scene->list_Enemy, &enemy);
-    Vector3_Set(&enemy->transform.position, 0, 1.05 ,0);
+    Vector3_Set(&enemy->transform.position, 0, 0 ,0);
     //Sample end
 }
 
@@ -141,9 +141,19 @@ void Scene_Update(struct Scene *scene, double delta_time){
         enemy->destination = playerPosition;
 
         Enemy_Update(enemy, delta_time);
+
+        if (Enemy_IsTargetInAttackRange(enemy, &playerPosition)){
+            //TODO Enemy攻击，记得判断CD
+        }
     }
 
     Player_Update(&scene->player, delta_time);
+    if (scene->player.IsFiring){
+        Scene_PlayerShoot(scene);
+    }
+    Canvas_clear(&scene->player.canvas);
+    Scene_Show(scene, &scene->player.canvas);
+    Canvas_flush(&scene->player.canvas);
 }
 
 void Scene_Show(struct Scene *scene, struct Canvas *canvas){
@@ -227,69 +237,6 @@ void Scene_EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **r
         *result_enemy = NULL;
         *result_tag = EMPTY;
     }
-}
-
-struct Path* Scene_EnemyFindPath(struct Scene* scene, struct Object *enemy){
-//    int searchDepth = 10;
-//    double stepLength = 2, angleNumber = 8;
-//    struct node{
-//        struct Vector3 position;
-//        int depth;
-//    };
-//    struct ArrayList queue;
-//    ArrayList_Init(&queue, sizeof(struct node));
-//    struct node firstNode;
-//    firstNode.position = enemy->transform.position;
-//    firstNode.depth = 0;
-//    ArrayList_PushBack(&queue, &firstNode);
-//    while (!ArrayList_Empty(&queue)){
-//        struct node thisNode = *(struct node*)ArrayList_Front(&queue);
-//        ArrayList_PopFront(&queue);
-//        for (int i = 0; i < angleNumber; i++){
-//            struct Vector3 angle;
-//            Vector3_Set(&angle, 0, M_PI / angleNumber * i, 0);
-//            struct Matrix3x3 rotationMatrix;
-//            Matrix3x3_FromEulerAngle(&rotationMatrix, &angle, FALSE);
-//            struct Vector3 move;
-//            Vector3_Set(&move, 0, 0, 1);
-//            Matrix3x3_TransformMatrix(&rotationMatrix, &move);
-//            Vector3_Scale(&move, stepLength);
-//
-//            struct Line ray;
-//            Line_Set(&ray, &thisNode.position, &move);
-//
-//            double minDistance;
-//
-//            for (int j = 0; j < scene->list_Object.size; j++){
-//                struct Object *object = ((struct Object**)scene->list_Object.data)[j];
-//                if (object->tag != WALL) continue;
-//                for (int k = 0; k < object->collideBoxCount; k++){
-//                    struct CollideBox *collideBox = &object->collideBoxes[k];
-//                    double distance = CollideBox_RayDistance(collideBox, &object->transform, &ray);
-//                    if (minDistance > distance) minDistance = distance;
-//                }
-//            }
-//
-//            if (minDistance < stepLength) continue;
-//
-//
-//            struct node newNode;
-//            newNode.position = thisNode.position;
-//            Vector3_Add(&newNode.position, &move);
-//            newNode.depth = thisNode.depth + 1;
-//        }
-//    }
-//    Del_ArrayList(&queue);
-}
-
-bool Scene_IsPlayerInAttackRange(struct Scene *scene, struct Enemy *enemy)//enemy's damage to player
-{
-    double damage = 0;
-    double distance = 1.5;//max distance for enemy to attack the player
-    if (sqrt(pow(enemy->transform.globalPosition.x - scene->player.transform.globalPosition.x,2) +
-             pow(enemy->transform.globalPosition.z - scene->player.transform.globalPosition.z,2)
-             >= distance)) return 0;
-    return 1;
 }
 
 double Scene_DamageCalculation(struct Scene *scene, struct Enemy *enemy)//enemy's damage to player
