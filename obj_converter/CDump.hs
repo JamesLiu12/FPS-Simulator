@@ -3,7 +3,6 @@ module CDump where
 import Obj
 import Data.List (intercalate)
 import Data.Char (toLower, toUpper)
-import GHC.Num (Integer(IN))
 
 cDumpFileTemplate :: String -> [Vertex] -> [Triangle] -> String
 cDumpFileTemplate modelName vertices triangles = 
