@@ -99,7 +99,7 @@ void Player_MoveForward(struct Player *player, double delta_time){
     Vector3_Set(&movement, player->facing.x, 0, player->facing.z);
     Vector3_Normalize(&movement);
     Vector3_Scale(&movement, player->moveSpeed * delta_time);
-    //Player_Move(player,&movement);
+    Player_Move(player,&movement);
     Vector3_Copy(&movement, &player->moveDirection);
 }
 void Player_MoveBackward(struct Player *player, double delta_time){
@@ -108,7 +108,7 @@ void Player_MoveBackward(struct Player *player, double delta_time){
     Vector3_Normalize(&movement);
     Vector3_Scale(&movement, player->moveSpeed * delta_time);
     Vector3_Copy(&movement, &player->moveDirection);
-    //Player_Move(player, &movement);
+    Player_Move(player, &movement);
 }
 void Player_MoveLeft(struct Player *player, double delta_time){
     struct Vector3 movement;
@@ -116,7 +116,7 @@ void Player_MoveLeft(struct Player *player, double delta_time){
     Vector3_Normalize(&movement);
     Vector3_Scale(&movement,player->moveSpeed * delta_time);
     Vector3_Copy(&movement,&player->moveDirection);
-    //Player_Move(player,&movement);
+    Player_Move(player,&movement);
 }
 void Player_MoveRight(struct Player *player, double delta_time){
     struct Vector3 movement;
@@ -124,7 +124,7 @@ void Player_MoveRight(struct Player *player, double delta_time){
     Vector3_Normalize(&movement);
     Vector3_Scale(&movement, player->moveSpeed * delta_time);
     Vector3_Copy(&movement, &player->moveDirection);
-    //Player_Move(player,&movement);
+    Player_Move(player,&movement);
 }
 
 void Player_RotateUp(struct Player *player, double delta_time){
