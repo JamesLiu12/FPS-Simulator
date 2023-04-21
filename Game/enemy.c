@@ -105,3 +105,8 @@ void Enemy_Rotation(struct Enemy* enemy, struct Vector3 *angle){
     Vector3_Add(&enemy->transform.rotation, angle);
     Transform_RotationMatrixUpdate(&enemy->transform);
 }
+int Enemy_IsTargetInAttackRange(struct Enemy *enemy, struct Vector3 *targetPosition){
+    return (sqrt(pow(enemy->transform.globalPosition.x - targetPosition->x,2) +
+             pow(enemy->transform.globalPosition.z - targetPosition->z,2))
+             < enemy->attackDistance);
+}

@@ -6,7 +6,6 @@
 struct Runner{
     int frame_rate, difficulty;
     int sensitivity;
-    //struct Scene scene;
     double delta_time, previousFrameTime;
 };
 

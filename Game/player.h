@@ -33,17 +33,17 @@ void Player_Start(struct Player *player);
 //What player does each frame
 void Player_Update(struct Player *player, double delta_time);
 
-void Player_MoveForward(struct Player *player);
-void Player_MoveBackward(struct Player *player);
-void Player_MoveLeft(struct Player *player);
-void Player_MoveRight(struct Player *player);
+void Player_MoveForward(struct Player *player, double delta_time);
+void Player_MoveBackward(struct Player *player, double delta_time);
+void Player_MoveLeft(struct Player *player, double delta_time);
+void Player_MoveRight(struct Player *player, double delta_time);
 
-void Player_RotateUp(struct Player *player);
-void Player_RotateDown(struct Player *player);
-void Player_RotateLeft(struct Player *player);
-void Player_RotateRight(struct Player *player);
+void Player_RotateUp(struct Player *player, double delta_time);
+void Player_RotateDown(struct Player *player, double delta_time);
+void Player_RotateLeft(struct Player *player, double delta_time);
+void Player_RotateRight(struct Player *player, double delta_time);
 
-void Player_Control(struct Player *player);
+void Player_Control(struct Player *player, double delta_time);
 
 void Player_Shoot(struct Player *player);
 void Player_ChangeHealth(struct Player *player,double deltaHealth);
