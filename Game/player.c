@@ -46,12 +46,15 @@ void Player_Rotate(struct Player *player, struct Vector3* angle){
     //Vector3_Add(&player->transform.rotation, angle);
     //Transform_RotationMatrixUpdate(&player->transform);
 
-    struct Matrix3x3 RotationMatrix;
-    Matrix3x3_FromEulerAngle(&RotationMatrix,angle,EULER_ANGLE_NORMAL);
-    Matrix3x3_TransformMatrix(&RotationMatrix, &player->facing);
-    Vector3_Normalize(&player->facing);
-
     Canvas_CameraRotate(&player->canvas,angle);
+    struct Vector3 BaseFacing;
+    Vector3_Set(&BaseFacing, 0, 0, 1);
+    struct Matrix3x3 RotationMatrix;
+    Matrix3x3_FromEulerAngle(&RotationMatrix,&player->canvas.camera_transform.rotation,EULER_ANGLE_REVERSED);
+    Matrix3x3_TransformMatrix(&RotationMatrix, &BaseFacing);
+    Vector3_Normalize(&BaseFacing);
+    Vector3_Copy(&BaseFacing,&player->facing);
+
 }
 
 void Player_Start(struct Player *player){
@@ -143,13 +146,33 @@ void Player_RotateDown(struct Player *player, double delta_time){
 }
 void Player_RotateLeft(struct Player *player, double delta_time){
     struct Vector3 rotation;
-    Vector3_Set(&rotation, 0, player->rotationSpeed * delta_time, 0);
+    struct Vector3 current_rotation;
+
+    Vector3_Copy(&player->canvas.camera_transform.rotation, &current_rotation);
+    Vector3_Set(&rotation, -current_rotation.x, 0, -current_rotation.z);
+    Player_Rotate(player, &rotation);
+    Vector3_Set(&rotation, 0, player->rotationSpeed, 0);
+    Player_Rotate(player, &rotation);
+    struct Matrix3x3 RotationMatrix;
+    Matrix3x3_FromEulerAngle(&RotationMatrix,&rotation, EULER_ANGLE_REVERSED);
+    Vector3_Set(&rotation, current_rotation.x, 0, current_rotation.z);
+    Matrix3x3_TransformMatrix(&RotationMatrix, &rotation);
     Player_Rotate(player, &rotation);
 }
 void Player_RotateRight(struct Player *player, double delta_time){
     struct Vector3 rotation;
-    Vector3_Set(&rotation,0,-player->rotationSpeed * delta_time,0);
-    Player_Rotate(player,&rotation);
+    struct Vector3 current_rotation;
+
+    Vector3_Copy(&player->canvas.camera_transform.rotation,&current_rotation);
+    Vector3_Set(&rotation, -current_rotation.x, 0, -current_rotation.z);
+    Player_Rotate(player, &rotation);
+    Vector3_Set(&rotation, 0, -player->rotationSpeed, 0);
+    Player_Rotate(player, &rotation);
+    struct Matrix3x3 RotationMatrix;
+    Matrix3x3_FromEulerAngle(&RotationMatrix, &rotation, EULER_ANGLE_REVERSED);
+    Vector3_Set(&rotation, current_rotation.x, 0, current_rotation.z);
+    Matrix3x3_TransformMatrix(&RotationMatrix, &rotation);
+    Player_Rotate(player, &rotation);
 }
 
 void Player_ChangeHealth(struct Player *player, double deltaHealth){

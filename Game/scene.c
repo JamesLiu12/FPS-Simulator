@@ -262,6 +262,7 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     //TODO
     //Delete it when the game is finished
     printf("%lf %lf %lf\n",scene->player.facing.x,scene->player.facing.y,scene->player.facing.z);
+    printf("%lf %lf %lf\n",scene->player.canvas.camera_transform.rotation.x,scene->player.canvas.camera_transform.rotation.y,scene->player.canvas.camera_transform.rotation.z);
     printf("%lf %lf %lf\n",scene->player.transform.position.x,scene->player.transform.position.y,scene->player.transform.position.z);
     printf("\033[16;60HX");
     Canvas_flush(canvas);
