@@ -18,7 +18,10 @@ void Scene_Init(struct Scene *scene){
     ArrayList_Init(&scene->list_Enemy, sizeof(struct Enemy*));
     Player_Init(&scene->player);
     Vector3_Set(&scene->player.transform.position, -17.5, 0, -17.5);
-
+//    Vector3_Set(&scene->player.transform.position, 0, 5, 0);
+//    struct Vector3 ang;
+//    Vector3_Set(&ang, M_PI / 2, 0, 0);
+//    Player_Rotate(&scene->player, &ang);
 
     //Map_new_Wall origin coordinate (0,0,0)
 
@@ -142,6 +145,7 @@ void Scene_Init(struct Scene *scene){
 
 
 
+
     //    Map_Floor origin coordinate (0,0,0)
     struct Transform transform_Floor;
     struct Mesh *mesh_Floor = ModelMap_new_OnlyFloor_New();
@@ -163,7 +167,7 @@ void Scene_Init(struct Scene *scene){
     //Sample Enemy generate test
     struct Enemy *enemy = New_Enemy(&scene->enemyMeshes);
     ArrayList_PushBack(&scene->list_Enemy, &enemy);
-    Vector3_Set(&enemy->transform.position, 0, 0 ,0);
+    Vector3_Set(&enemy->transform.position, -17.5, 0 ,-10);
     //Sample end
 }
 
@@ -213,7 +217,7 @@ void Scene_Update(struct Scene *scene, double delta_time){
         Vector3_Normalize(&enemy->moveDirection);
         enemy->destination = playerPosition;
 
-        Enemy_Update(enemy, delta_time);
+//        Enemy_Update(enemy, delta_time);
 
         if (Enemy_IsTargetInAttackRange(enemy, &playerPosition)){
             //TODO Enemy攻击，记得判断CD

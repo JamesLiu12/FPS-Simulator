@@ -19,7 +19,7 @@ getVertices =
     filter ((=="v") . head) >>>
     map getVertex
     where
-        getVertex [_, xRaw, yRaw, zRaw] = (read xRaw, read yRaw, read zRaw)
+        getVertex [_, xRaw, yRaw, zRaw] = (read xRaw, read zRaw, read yRaw)
 
 getFaces :: [[String]] -> [Triangle]
 getFaces x = getFaces3 x ++ getFaces4_1 x ++ getFaces4_2 x
