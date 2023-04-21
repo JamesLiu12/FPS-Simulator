@@ -17,14 +17,13 @@ void Scene_Init(struct Scene *scene){
     ArrayList_Init(&scene->list_Object, sizeof(struct Object*));
     ArrayList_Init(&scene->list_Enemy, sizeof(struct Enemy*));
     Player_Init(&scene->player);
-    Vector3_Set(&scene->player.transform.position, 0, 0, -3);
+    Vector3_Set(&scene->player.transform.position, -17.5, 0, -17.5);
 
 
     //Map_new_Wall origin coordinate (0,0,0)
 
     //Map_new_Walls
     struct Mesh *mesh_Wall = ModelMap_new_Wall_New();
-    ModelMap_new_Wall_Init(mesh_Wall);
     struct Object *Map_Wall = Object_New(mesh_Wall, NULL, WALL);
     //set collideBoxes:
     struct CollideBox *collideBoxes_Wall = (struct CollideBox *) malloc(sizeof(struct CollideBox) * 30);
@@ -137,7 +136,7 @@ void Scene_Init(struct Scene *scene){
     Vector3_Set(&collideBoxes_Wall[23].transform.position, 6.8, 1.25, 13.3);
     Vector3_Set(&collideBoxes_Wall[23].transform.rotation,0,M_PI/2,0);
 
-    Object_SetCollideBoxes(Map_Boundary, collideBoxes_Wall, 30);
+    Object_SetCollideBoxes(Map_Wall, collideBoxes_Wall, 30);
 
     ArrayList_PushBack(&scene->list_Object, &Map_Wall);
 
@@ -145,8 +144,7 @@ void Scene_Init(struct Scene *scene){
 
     //    Map_Floor origin coordinate (0,0,0)
     struct Transform transform_Floor;
-    struct Mesh *mesh_Floor = ModelFloor_New();
-    ModelFloor_Init(mesh_Floor);
+    struct Mesh *mesh_Floor = ModelMap_new_OnlyFloor_New();
     struct Object *Map_Floor = Object_New(mesh_Floor, NULL, FLOOR);
     struct CollideBox *collideBoxes_Floor = (struct CollideBox *) malloc(sizeof(struct CollideBox));
 

@@ -10,20 +10,24 @@ add_executable(
         main.c
 
 
-        Game/models/boundaries.h
-        Game/models/boundaries.c
-        Game/models/cube.h
-        Game/models/cube.c
+#        Game/models/boundaries.h
+#        Game/models/boundaries.c
+#        Game/models/cube.h
+#        Game/models/cube.c
+#        Game/models/floor.h
+#        Game/models/floor.c
+#        Game/models/wall.h
+#        Game/models/wall.c
         Game/models/enemy_body.h
         Game/models/enemy_body.c
         Game/models/enemy_head.h
         Game/models/enemy_head.c
         Game/models/enemy_leg.h
         Game/models/enemy_leg.c
-        Game/models/floor.h
-        Game/models/floor.c
-        Game/models/wall.h
-        Game/models/wall.c
+        Game/models/map_new_OnlyFloor.h
+        Game/models/map_new_OnlyFloor.c
+        Game/models/map_new_Wall.h
+        Game/models/map_new_Wall.c
         Game/models/models.h
 
         Game/scene.h
@@ -69,13 +73,16 @@ add_executable(
         util/array_list.h
 
 
-    GameUI/Game_UI.h
-    GameUI/ui_startmenu.h
-    GameUI/ui_startmenu.c
-    GameUI/ui_settingmenu.h
-    GameUI/ui_settingmenu.c
-    GameUI/ui_defeatmenu.h
-    GameUI/ui_defeatmenu.c
-    playground.h
+        GameUI/Game_UI.h
+        GameUI/ui_startmenu.h
+        GameUI/ui_startmenu.c
+        GameUI/ui_settingmenu.h
+        GameUI/ui_settingmenu.c
+        GameUI/ui_defeatmenu.h
+        GameUI/ui_defeatmenu.c
+
+        playground.h
+
+
 )
 target_link_libraries(FPS_Simulator m)

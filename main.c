@@ -7,16 +7,8 @@
 #include <signal.h>
 #include <unistd.h>
 #include "playground.h"
-static sig_atomic_t end = 0;
-static void sighandler(int signo)
-{
-    end = 1;
-}
 #include "Game/runner.h"
 int main() {
-    term_setup(sighandler);
-    system("clear");   
     test();
-    term_restore();
     return 0;
 }
