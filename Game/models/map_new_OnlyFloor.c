@@ -1,4 +1,4 @@
-#include "../mesh.h"
+#include "map_new_OnlyFloor.h"
 
 void ModelMap_new_OnlyFloor_Init(struct Mesh *map_new_onlyfloor) {
 	Vector3_Set(&map_new_onlyfloor->vertices[0], -20.0, 0.0, 20.0);

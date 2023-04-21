@@ -6,4 +6,4 @@
 void ModelMap_new_Wall_Init(struct Mesh *map_new_wall);
 struct Mesh* ModelMap_new_Wall_New();
 
-#endif //FPS_SIMULATOR_MAP_MAP_NEW_WALL_H
+#endif //FPS_SIMULATOR_MAP_NEW_WALL_H
