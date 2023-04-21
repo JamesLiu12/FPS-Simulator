@@ -12,6 +12,7 @@ static void sighandler(int signo)
 {
     end = 1;
 }
+#include "Game/runner.h"
 int main() {
     term_setup(sighandler);
     system("clear");   
