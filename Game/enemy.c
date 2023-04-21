@@ -1,7 +1,6 @@
 #include "enemy.h"
 #include "math.h"
 #include "../util/util.h"
-
 void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
     Transform_Init(&enemy->transform, NULL);
 
@@ -37,12 +36,15 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
     Object_SetCollideBoxes(&enemy->leg, collideBoxes_EnemyLeg, 1);
 
     enemy->speed = 1;
-	enemy->health = 100;
+    enemy->maxhealth = 100;
+	enemy->health = enemy->maxhealth;
 	enemy->damage = 5;
+    enemy->attackCD=1;
 	enemy->Critical_Rate = 50;//critical damage to player; should not be higher than 50
     enemy->findPathCD = 1;
     enemy->attackDistance = 1.5;
     enemy->canSeePlayer = FALSE;
+    enemy->DEADFLAG=0;
     Vector3_Set(&enemy->moveDirection, 0, 0, 0);
 }
 
@@ -104,4 +106,21 @@ void Enemy_Rotation(struct Enemy* enemy, struct Vector3 *angle){
     Object_Rotation(&enemy->body,angle);
     Vector3_Add(&enemy->transform.rotation, angle);
     Transform_RotationMatrixUpdate(&enemy->transform);
+}
+
+void Enemy_ChangeHealth(struct Enemy *enemy, double delta_health){
+    enemy->health += delta_health;
+    if(enemy->health > enemy->maxhealth) enemy->health = enemy->maxhealth;
+    if(enemy->health <= 0) enemy->DEADFLAG=1;
+}
+void Enemy_GetDamage(struct Enemy *enemy, enum Tag *tag, struct Weapon *weapon){
+    if(*tag == ENEMY_HEAD){
+        Enemy_ChangeHealth(enemy, -weapon->damage*weapon->head_rate);
+    }
+    if(*tag == ENEMY_BODY){
+        Enemy_ChangeHealth(enemy, -weapon->damage*weapon->body_rate);
+    }
+    if(*tag == ENEMY_LEG){
+        Enemy_ChangeHealth(enemy, -weapon->damage*weapon->leg_rate);
+    }
 }

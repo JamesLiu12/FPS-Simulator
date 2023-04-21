@@ -4,12 +4,15 @@
 #include "../op_engine/op_engine.h"
 
 enum WeaponName{
-    AK47
+    AK47,P1999
 };
 
 struct Weapon{
-    double speed, damage, critical_rate;
+    double fireCDtime, damage, reloadCDtime;
+    double head_rate,body_rate,leg_rate;
+    int bullet_number,magazine_size;
     enum WeaponName name;
+    char namestring[10];
 };
 
 

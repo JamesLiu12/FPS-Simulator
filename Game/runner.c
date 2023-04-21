@@ -15,42 +15,11 @@ void Runner_Init(struct Runner *runner,struct UI_SettingMenu *settingui){
 }
 int Runner_Run(struct Runner *runner){
     struct Scene scene1;
-
+    double deltatime;
     Scene_Init(&scene1);
-    
+    Player_Setting(&scene1.player,runner);
     //Scene_Load(&scene1,1);这里应该写个scene读取,做几个scene的预制件,多个地图//TODO
 
-    //Player_Setting(&scene1.player,runner);
-    /*
-    struct Player *player = New_Player(runner);
-    struct Vector3 rotation;
-    Vector3_Set(&rotation, 0.1, 0, 0);
-
-    struct Mesh *mesh = ModelCube_New();
-    struct Transform transform;
-    Transform_Init(&transform, NULL);
-    struct Object *obj1 = Object_New(mesh, &transform, FLOOR, NULL, 0),
-                  *obj2 = Object_New(mesh, &transform, WALL, NULL, 0);
-    Vector3_Set(&obj1->transform.position, 0, 0, 5);
-    Vector3_Set(&obj2->transform.position, 3, 3, 8);
-    struct Object *obj3 = Object_New(mesh, &transform, FLOOR, NULL, 0);
-    Vector3_Set(&obj3->transform.position, 5, 0, 0);
-    struct Object *obj4 = Object_New(mesh, &transform, FLOOR, NULL, 0);
-    Vector3_Set(&obj4->transform.position, -5, -2, 0);
-    //struct Vector3 rot;
-    //Vector3_Set(&rot, -1, 0, 0);
-    //Canvas_CameraRotate(&player->canvas, &rot);
-    //Player_Rotate(player,&rot);
-
-
-    /*for (int i = 0; i < 50; i++) {
-        Canvas_clear(&player->canvas);
-        Object_Show(obj1, &player->canvas);
-        Object_Show(obj2, &player->canvas);
-        Player_Rotate(player, &rotation);
-        Canvas_flush(&player->canvas);
-        getchar();
-    }*/
     int count;
     struct Vector3 ZeroVector;
     Vector3_Set(&ZeroVector,0,0,0);
@@ -59,6 +28,8 @@ int Runner_Run(struct Runner *runner){
     Vector3_Set(&New_moveZ,0,0,0);
     int isBlocked;
     while(1){
+        deltatime=ProgramRunTime()-runner->previousFrameTime;
+        runner->previousFrameTime=ProgramRunTime();
         count++;
         Vector3_Set(&scene1.player.moveDirection, 0, 0, 0);
         isBlocked=0;
@@ -94,29 +65,24 @@ int Runner_Run(struct Runner *runner){
                }
                if(isBlocked){Vector3_Set(&New_moveZ,0,0,-scene1.player.moveDirection.z);Player_Move(&scene1.player, &New_moveZ);}
                       }*/
-            if(keydown(ESC))return 1;
+            if(keydown(ESC)){break;}
             for(int i=0;i<10;i++)kbhit();// to clear input buffer
             if(keydown(SPACE))break;
-            
         }
-            Scene_Show(&scene1,&scene1.player.canvas);
-            printf("\ntime: %lf \n",ProgramRunTime());
-            /*Canvas_clear(&player->canvas);
-            Object_Show(obj1, &player->canvas);
-            Object_Show(obj2, &player->canvas);
-            Object_Show(obj3, &player->canvas);
-            Object_Show(obj4, &player->canvas);
-            Canvas_flush(&player->canvas);*/
-            if(scene1.player.DEADFLAG){return 0;}
-            usleep(10000000/runner->frame_rate);
-        //printf("count:  %d\n",count);
-        //usleep(5000);
-        //system("clear");
+            if(scene1.player.FIREFLAG==1){
+                Scene_PlayerShoot(&scene1);
+            }
+            Player_Update(&scene1.player, deltatime);
+            Clear_Enemy(&scene1);
+            Scene_Show(&scene1, &scene1.player.canvas);
+            //printf("\ntime: %lf \n",ProgramRunTime());
+            //printf("deltatime: %lf\n",deltatime);
+            //printf("\nfire:%d, inCD: %d, CDremaining: %lf", scene1.player.FIREFLAG, scene1.player.In_FireCD, scene1.player.fireCDcounter);
+            //printf("\nreload:%d, inCD: %d, CDremaining: %lf", scene1.player.RELOADFLAG, scene1.player.In_ReloadCD, scene1.player.reloadCDcounter);
+            
+            if(scene1.player.DEADFLAG){system("clear");return 0;}
+            usleep(1000000/runner->frame_rate+(int)((ProgramRunTime()-runner->previousFrameTime)*1000000));
     }
-//    for (int i = 0; i < canvas->height; i++){
-//        for (int j = 0; j < canvas->width; j++) printf("%f ", canvas->vram_depth[i * canvas->width + j]);
-//        puts("");
-//    }
     printf("\x1b[38;2;%d;%d;%dm", 0xee, 0xee, 0xee);
     printf("\x1b[48;2;%d;%d;%dm", 0, 0, 0);
     Del_Scene(&scene1);

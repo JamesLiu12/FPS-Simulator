@@ -122,14 +122,14 @@ void Launch_SettingMenu(struct UI_SettingMenu *settingui){
             {
             case 0:
                 settingui->framerate+=5;
-                if(settingui->framerate>=120)settingui->framerate=30;
+                if(settingui->framerate>120)settingui->framerate=120;
                 break;
             case 1:
                 settingui->difficulty++;
                 if(settingui->difficulty>2)settingui->difficulty=0;
                 break;
             case 2:
-                if(settingui->sensitivity<=115)settingui->sensitivity+=5;
+                if(settingui->sensitivity<=145)settingui->sensitivity+=5;
                 break;
             default:
                 break;
@@ -140,7 +140,7 @@ void Launch_SettingMenu(struct UI_SettingMenu *settingui){
             {
             case 0:
                 settingui->framerate-=5;
-                if(settingui->framerate>=120)settingui->framerate=30;
+                if(settingui->framerate<25)settingui->framerate=30;
                 break;
             case 1:
                 settingui->difficulty--;

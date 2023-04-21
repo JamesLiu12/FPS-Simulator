@@ -8,12 +8,10 @@ void Player_Init(struct Player *player){
     Canvas_Init(&player->canvas, 32, 64);
     player->maxHealth = 100;
     player->health = player->maxHealth;
-    player->atk = 1;
     player->moveSpeed = 0.1;
     player->rotationSpeed = 0.1;
-    player->fireCDtime = 0.5;
     player->In_FireCD = 0;
-    player->fireCDtime = 0.5;
+    player->FIREFLAG = 0;
     player->fireCDcounter = 0;
     player->DEADFLAG = 0;
     Vector3_Set(&player->facing,0,0,1);
@@ -28,6 +26,7 @@ void Player_Init(struct Player *player){
     CollideBox_Init(&player->collideBox, NULL, 0.7, 1.8, 0.7);
     player->collideBox.transform = player->transform;
     player->collideBox.transform.position.y = 0.9;
+    Weapon_Init(&player->weapon, P1999);
 }
 
 struct Player* New_Player() {
@@ -66,11 +65,21 @@ void Player_Start(struct Player *player){
 
 void Player_Update(struct Player *player, double delta_time){
     if(player->In_FireCD){
-        player->IsFiring = 0 ;
+        player->FIREFLAG = 0 ;
         //TODO
-        player->fireCDcounter -= 1/60;
+        player->fireCDcounter -= delta_time;
+        if(player->fireCDcounter <= 0) player->In_FireCD = 0;
     }
-    if(player->fireCDcounter <= 0) player->In_FireCD = 0;
+
+    if(player->weapon.bullet_number == 0) Player_Reload(player);
+    if(player->In_ReloadCD){
+        player->RELOADFLAG = 0;
+        player->reloadCDcounter -= delta_time;
+        if(player->reloadCDcounter <= 0){
+            player->In_ReloadCD = 0;
+        player->weapon.bullet_number = player->weapon.magazine_size;
+        }
+    }
     //Player_Control(player);
 }
 
@@ -89,13 +98,26 @@ void Player_Control(struct Player *player){
     if(keydown(K)) Player_ChangeHealth(player,5);
 
     if(keydown(F)) Player_Shoot(player);
+    if(keydown(R)) Player_Reload(player);
 }
 void Player_Shoot(struct Player *player){
-    if(!player->IsFiring){
+    if(!player->FIREFLAG){
         if(!player->In_FireCD){
-            player->IsFiring = 1;
+            if(player->weapon.bullet_number>0){
+            player->FIREFLAG = 1;
             player->In_FireCD = 1;
-            player->fireCDcounter = player->fireCDtime;
+            player->fireCDcounter = player->weapon.fireCDtime;
+            player->weapon.bullet_number -= 1;
+            }
+        }
+    }
+}
+void Player_Reload(struct Player *player){
+    if(!player->RELOADFLAG){
+        if(!player->In_ReloadCD){
+        player->RELOADFLAG = 1;
+        player->In_ReloadCD = 1;
+        player->reloadCDcounter = player->weapon.reloadCDtime;
         }
     }
 }

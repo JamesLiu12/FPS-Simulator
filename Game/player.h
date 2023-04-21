@@ -5,14 +5,15 @@
 
 struct Player{
     struct Canvas canvas;
-    double maxHealth, health, atk, moveSpeed, rotationSpeed, defence;
+    double maxHealth, health, moveSpeed, rotationSpeed, defence;
     struct Transform transform;
     struct CollideBox collideBox;
     struct Vector3 facing;
     struct Vector3 moveDirection;
-    double fireCDtime, fireCDcounter;
+    double fireCDcounter,reloadCDcounter;
     struct Weapon weapon;
-    int In_FireCD,IsFiring;
+    int In_FireCD,FIREFLAG;
+    int In_ReloadCD,RELOADFLAG;
     int DEADFLAG;
 };
 
@@ -46,5 +47,6 @@ void Player_RotateRight(struct Player *player);
 void Player_Control(struct Player *player);
 
 void Player_Shoot(struct Player *player);
+void Player_Reload(struct Player *player);
 void Player_ChangeHealth(struct Player *player,double deltaHealth);
 #endif //FPS_SIMULATOR_PLAYER_H
