@@ -98,12 +98,12 @@ void print_pixel(enum Tag tag, double distance){
     if (tag == EMPTY) printf("  ");
 //    else if (tag == WALL) printf("\x1b[38;2;%d;%d;%dm██", brightness, brightness, brightness);
 //    else if (tag == FLOOR) printf("\x1b[38;2;%d;%d;%dm░░", brightness, brightness, brightness);
-    else if (tag == WALL) printf("██");
+    else if (tag == WALL) {if (25<distance<40)printf("██");else if (15<distance<25)printf("██");else if (0<distance<15)printf("██");}
     else if (tag == FLOOR) printf("░░");
     else if (tag == ENEMY_HEAD) printf("▓▓");
-    else if (tag == ENEMY_LEG) printf("█░");
-    else if (tag == ENEMY_BODY) printf("▥▥");
-}
+    else if (tag == ENEMY_LEG) printf("▒▒");
+    else if (tag == ENEMY_BODY) printf("░░");
+}░▒▓█
 
 void Canvas_flush(struct Canvas* canvas){
     move_cursor_top_left();
