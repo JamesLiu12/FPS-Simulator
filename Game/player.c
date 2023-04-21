@@ -5,8 +5,8 @@ void Player_Init(struct Player *player){
     Canvas_Init(&player->canvas, 32, 64);
     player->maxHealth = 100;
     player->health = player->maxHealth;
-    player->moveSpeed = 0.1;
-    player->rotationSpeed = 0.1;
+    player->moveSpeed = 10;
+    player->rotationSpeed = 10;
     player->In_FireCD = 0;
     player->FIREFLAG = 0;
     player->fireCDcounter = 0;
@@ -82,18 +82,18 @@ void Player_Update(struct Player *player, double delta_time){
 }
 
 void Player_Control(struct Player *player, double delta_time){
-    if(keydown(UP)) Player_RotateUp(player, delta_time);
-    if(keydown(DOWN)) Player_RotateDown(player, delta_time);
-    if(keydown(LEFT)) Player_RotateLeft(player, delta_time);
-    if(keydown(RIGHT)) Player_RotateRight(player, delta_time);
+    if(keydown(W)) Player_RotateUp(player, delta_time);
+    if(keydown(S)) Player_RotateDown(player, delta_time);
+    if(keydown(A)) Player_RotateLeft(player, delta_time);
+    if(keydown(D)) Player_RotateRight(player, delta_time);
 
-    if(keydown(W)) Player_MoveForward(player, delta_time);
-    if(keydown(S)) Player_MoveBackward(player, delta_time);
-    if(keydown(A)) Player_MoveLeft(player, delta_time);
-    if(keydown(D)) Player_MoveRight(player, delta_time);
+    if(keydown(UP)) Player_MoveForward(player, delta_time);
+    if(keydown(DOWN)) Player_MoveBackward(player, delta_time);
+    if(keydown(LEFT)) Player_MoveLeft(player, delta_time);
+    if(keydown(RIGHT)) Player_MoveRight(player, delta_time);
 
-    if(keydown(H)) Player_ChangeHealth(player, -5);
-    if(keydown(K)) Player_ChangeHealth(player, 5);
+    //if(keydown(H)) Player_ChangeHealth(player, -5);
+    //if(keydown(K)) Player_ChangeHealth(player, 5);
 
     if(keydown(F)) Player_Shoot(player);
     if(keydown(R)) Player_Reload(player);
@@ -173,7 +173,7 @@ void Player_RotateLeft(struct Player *player, double delta_time){
     Vector3_Copy(&player->canvas.camera_transform.rotation, &current_rotation);
     Vector3_Set(&rotation, -current_rotation.x, 0, -current_rotation.z);
     Player_Rotate(player, &rotation);
-    Vector3_Set(&rotation, 0, player->rotationSpeed, 0);
+    Vector3_Set(&rotation, 0, player->rotationSpeed * delta_time, 0);
     Player_Rotate(player, &rotation);
     struct Matrix3x3 RotationMatrix;
     Matrix3x3_FromEulerAngle(&RotationMatrix,&rotation, EULER_ANGLE_REVERSED);
@@ -188,7 +188,7 @@ void Player_RotateRight(struct Player *player, double delta_time){
     Vector3_Copy(&player->canvas.camera_transform.rotation,&current_rotation);
     Vector3_Set(&rotation, -current_rotation.x, 0, -current_rotation.z);
     Player_Rotate(player, &rotation);
-    Vector3_Set(&rotation, 0, -player->rotationSpeed, 0);
+    Vector3_Set(&rotation, 0, -player->rotationSpeed * delta_time, 0);
     Player_Rotate(player, &rotation);
     struct Matrix3x3 RotationMatrix;
     Matrix3x3_FromEulerAngle(&RotationMatrix, &rotation, EULER_ANGLE_REVERSED);

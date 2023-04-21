@@ -215,13 +215,13 @@ void Scene_Update(struct Scene *scene, double delta_time){
 
         Enemy_Update(enemy, delta_time);
 
-        if (Enemy_IsTargetInAttackRange(enemy, &playerPosition)){
-            //TODO Enemy攻击，记得判断CD
-        }
+        //if (Enemy_IsTargetInAttackRange(enemy, &playerPosition)){
+        //    //TODO Enemy攻击，记得判断CD
+        //}
     }
 
     Player_Update(&scene->player, delta_time);
-    if (scene->player.IsFiring){
+    if (scene->player.FIREFLAG){
         Scene_PlayerShoot(scene);
     }
     Canvas_clear(&scene->player.canvas);

@@ -34,7 +34,7 @@ int Runner_Run(struct Runner *runner){
         Vector3_Set(&scene1.player.moveDirection, 0, 0, 0);
         isBlocked=0;
         if(kbhit()){
-            Player_Control(&scene1.player);
+            Player_Control(&scene1.player,deltatime);
             Player_Move(&scene1.player, &scene1.player.moveDirection);
            /*if(!Vector3_Equal(&ZeroVector,&scene1.player.moveDirection)){
                Vector3_Set(&New_moveX,scene1.player.moveDirection.x,0,0);
@@ -100,5 +100,5 @@ void Del_Runner(struct Runner *runner){
     free(runner);
 }
 void Player_Setting(struct Player *player,struct Runner *runner){
-    player->rotationSpeed= 0.1 * runner->sensitivity / 100;
+    player->rotationSpeed= 10 * runner->sensitivity / 100;
 }
