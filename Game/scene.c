@@ -219,13 +219,13 @@ void Scene_Update(struct Scene *scene, double delta_time){
 
 //        Enemy_Update(enemy, delta_time);
 
-        if (Enemy_IsTargetInAttackRange(enemy, &playerPosition)){
-            //TODO Enemy攻击，记得判断CD
-        }
+        //if (Enemy_IsTargetInAttackRange(enemy, &playerPosition)){
+        //    //TODO Enemy攻击，记得判断CD
+        //}
     }
 
     Player_Update(&scene->player, delta_time);
-    if (scene->player.IsFiring){
+    if (scene->player.FIREFLAG){
         Scene_PlayerShoot(scene);
     }
     Canvas_clear(&scene->player.canvas);
@@ -249,24 +249,47 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
         Object_Show(body, canvas);
         Object_Show(leg, canvas);
     }
-    printf("\n");
+    printf("\033[16;60HX");
+    printf("\033[36;100H");
+    printf("\n\n");
+    if(scene->player.In_ReloadCD==1){
+        for(int i=0;i<100;i++)printf(" ");
+        printf("Reloading\n");
+    }
+    else {
+        printf("\r");
+        for(int i=0;i<120;i++)printf(" ");
+        printf("\n");
+        }
+    for(int i=0;i<52;i++)printf("-");
+    for(int i=0;i<26;i++)printf(" ");
     for(int i=0;i<52;i++)printf("-");
     printf("\n|");
     int temp=50*scene->player.health/100;
     for(int i=0;i<temp;i++)printf("█");
     for(int i=0;i<50-temp;i++)printf(" ");
+    printf("|");
+    for(int i=0;i<26;i++)printf(" ");
+    printf("|");
+    temp=50*scene->player.weapon.bullet_number/scene->player.weapon.magazine_size;
+    for(int i=0;i<50-temp;i++)printf(" ");
+    for(int i=0;i<temp;i++)printf("█");
     printf("|\n");
+    for(int i=0;i<52;i++)printf("-");
+    for(int i=0;i<26;i++)printf(" ");
     for(int i=0;i<52;i++)printf("-");
     printf("\n");
     for(int i=0;i<16;i++)printf(" ");
-    printf("HP : %.2lf / %.0lf \n",scene->player.health,scene->player.maxHealth);
+    printf("HP : %.2lf / %.0lf ",scene->player.health,scene->player.maxHealth);
+    for(int i=0;i<58;i++)printf(" ");
+    printf("%s : %d / %d \n",scene->player.weapon.namestring,scene->player.weapon.bullet_number,scene->player.weapon.magazine_size);
     //The following 2 lines are for debugging
     //TODO
     //Delete it when the game is finished
-    printf("%lf %lf %lf\n",scene->player.facing.x,scene->player.facing.y,scene->player.facing.z);
-    printf("%lf %lf %lf\n",scene->player.canvas.camera_transform.rotation.x,scene->player.canvas.camera_transform.rotation.y,scene->player.canvas.camera_transform.rotation.z);
-    printf("%lf %lf %lf\n",scene->player.transform.position.x,scene->player.transform.position.y,scene->player.transform.position.z);
-    printf("\033[16;60HX");
+    // printf("%lf %lf %lf\n",scene->player.facing.x,scene->player.facing.y,scene->player.facing.z);
+    // printf("%lf %lf %lf\n",scene->player.canvas.camera_transform.rotation.x,scene->player.canvas.camera_transform.rotation.y,scene->player.canvas.camera_transform.rotation.z);
+    // printf("%lf %lf %lf\n",scene->player.transform.position.x,scene->player.transform.position.y,scene->player.transform.position.z);
+    
     Canvas_flush(canvas);
 }   
 
@@ -347,7 +370,13 @@ void Scene_PlayerShoot(struct Scene *scene){
     enum Tag tag;
     Scene_EnemyCollided(scene, &ray, &enemy, &tag);
     if (enemy == NULL) return;
-    //TODO 被射中之后干啥，冷却计算啥的
-    puts("TMD，老子被射了，真tnd痛");
+    Enemy_GetDamage(enemy, &tag, &scene->player.weapon);
 
+}
+
+void Clear_Enemy(struct Scene *scene){
+    for(int i = 0; i < scene->list_Enemy.size; i++){
+        struct Enemy *enemy = ((struct Enemy **)scene->list_Enemy.data)[i];
+        if(enemy->DEADFLAG == 1){if(ArrayList_DeleteElement(&scene->list_Enemy,scene->list_Enemy.data + i*scene->list_Enemy.element_size))Del_Enemy(enemy);}
+    }
 }

@@ -5,12 +5,10 @@ void Player_Init(struct Player *player){
     Canvas_Init(&player->canvas, 32, 64);
     player->maxHealth = 100;
     player->health = player->maxHealth;
-    player->atk = 1;
-    player->moveSpeed = 1;
-    player->rotationSpeed = 1;
-    player->fireCDtime = 0.5;
+    player->moveSpeed = 10;
+    player->rotationSpeed = 10;
     player->In_FireCD = 0;
-    player->fireCDtime = 0.5;
+    player->FIREFLAG = 0;
     player->fireCDcounter = 0;
     player->DEADFLAG = 0;
     Vector3_Set(&player->facing,0,0,1);
@@ -26,6 +24,7 @@ void Player_Init(struct Player *player){
     Vector3_Set(&player->collideBox.transform.position, 0, 1.06, 0);
     player->collideBox.transform = player->transform;
     player->collideBox.transform.position.y = 0.9;
+    Weapon_Init(&player->weapon, P1999);
 }
 
 struct Player* New_Player() {
@@ -64,36 +63,59 @@ void Player_Start(struct Player *player){
 
 void Player_Update(struct Player *player, double delta_time){
     if(player->In_FireCD){
-        player->IsFiring = 0 ;
+        player->FIREFLAG = 0 ;
         //TODO
-        player->fireCDcounter -= 0.5;
+        player->fireCDcounter -= delta_time;
+        if(player->fireCDcounter <= 0) player->In_FireCD = 0;
     }
-    if(player->fireCDcounter <= 0) player->In_FireCD = 0;
-    Player_Control(player, delta_time);
+
+    if(player->weapon.bullet_number == 0) Player_Reload(player);
+    if(player->In_ReloadCD){
+        player->RELOADFLAG = 0;
+        player->reloadCDcounter -= delta_time;
+        if(player->reloadCDcounter <= 0){
+            player->In_ReloadCD = 0;
+        player->weapon.bullet_number = player->weapon.magazine_size;
+        }
+    }
+    //Player_Control(player);
 }
 
 void Player_Control(struct Player *player, double delta_time){
-    if(keydown(UP)) Player_RotateUp(player, delta_time);
-    if(keydown(DOWN)) Player_RotateDown(player, delta_time);
-    if(keydown(LEFT)) Player_RotateLeft(player, delta_time);
-    if(keydown(RIGHT)) Player_RotateRight(player, delta_time);
+    if(keydown(W)) Player_RotateUp(player, delta_time);
+    if(keydown(S)) Player_RotateDown(player, delta_time);
+    if(keydown(A)) Player_RotateLeft(player, delta_time);
+    if(keydown(D)) Player_RotateRight(player, delta_time);
 
-    if(keydown(W)) Player_MoveForward(player, delta_time);
-    if(keydown(S)) Player_MoveBackward(player, delta_time);
-    if(keydown(A)) Player_MoveLeft(player, delta_time);
-    if(keydown(D)) Player_MoveRight(player, delta_time);
+    if(keydown(UP)) Player_MoveForward(player, delta_time);
+    if(keydown(DOWN)) Player_MoveBackward(player, delta_time);
+    if(keydown(LEFT)) Player_MoveLeft(player, delta_time);
+    if(keydown(RIGHT)) Player_MoveRight(player, delta_time);
 
-    if(keydown(H)) Player_ChangeHealth(player, -5);
-    if(keydown(K)) Player_ChangeHealth(player, 5);
+    //if(keydown(H)) Player_ChangeHealth(player, -5);
+    //if(keydown(K)) Player_ChangeHealth(player, 5);
 
     if(keydown(F)) Player_Shoot(player);
+    if(keydown(R)) Player_Reload(player);
 }
 void Player_Shoot(struct Player *player){
-    if(!player->IsFiring){
+    if(!player->FIREFLAG){
         if(!player->In_FireCD){
-            player->IsFiring = 1;
+            if(player->weapon.bullet_number>0){
+            player->FIREFLAG = 1;
             player->In_FireCD = 1;
-            player->fireCDcounter = player->fireCDtime;
+            player->fireCDcounter = player->weapon.fireCDtime;
+            player->weapon.bullet_number -= 1;
+            }
+        }
+    }
+}
+void Player_Reload(struct Player *player){
+    if(!player->RELOADFLAG){
+        if(!player->In_ReloadCD){
+        player->RELOADFLAG = 1;
+        player->In_ReloadCD = 1;
+        player->reloadCDcounter = player->weapon.reloadCDtime;
         }
     }
 }
@@ -151,7 +173,7 @@ void Player_RotateLeft(struct Player *player, double delta_time){
     Vector3_Copy(&player->canvas.camera_transform.rotation, &current_rotation);
     Vector3_Set(&rotation, -current_rotation.x, 0, -current_rotation.z);
     Player_Rotate(player, &rotation);
-    Vector3_Set(&rotation, 0, player->rotationSpeed, 0);
+    Vector3_Set(&rotation, 0, player->rotationSpeed * delta_time, 0);
     Player_Rotate(player, &rotation);
     struct Matrix3x3 RotationMatrix;
     Matrix3x3_FromEulerAngle(&RotationMatrix,&rotation, EULER_ANGLE_REVERSED);
@@ -166,7 +188,7 @@ void Player_RotateRight(struct Player *player, double delta_time){
     Vector3_Copy(&player->canvas.camera_transform.rotation,&current_rotation);
     Vector3_Set(&rotation, -current_rotation.x, 0, -current_rotation.z);
     Player_Rotate(player, &rotation);
-    Vector3_Set(&rotation, 0, -player->rotationSpeed, 0);
+    Vector3_Set(&rotation, 0, -player->rotationSpeed * delta_time, 0);
     Player_Rotate(player, &rotation);
     struct Matrix3x3 RotationMatrix;
     Matrix3x3_FromEulerAngle(&RotationMatrix, &rotation, EULER_ANGLE_REVERSED);

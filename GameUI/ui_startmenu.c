@@ -82,6 +82,7 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
     int end;
     struct Runner runner;
     STARTMENUORIGIN:
+    for(int i=0;i<20;i++)kbhit();
     operation=0;
     while(operation!=3){
         system("clear");
@@ -102,10 +103,12 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
         return;
     }
     STARTUI_ENTER:
+    for(int i=0;i<20;i++)kbhit();
     switch(startui->pointer){
         case 0:
             Runner_Init(&runner,&startui->settingui);
             end=Runner_Run(&runner);
+            system("clear");
             //Del_Runner(&runner);
             if(end){
                 //TODO

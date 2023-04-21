@@ -3,15 +3,22 @@
 
 #include "../op_engine/op_engine.h"
 #include "models/models.h"
+#include "weapon.h"
+struct Path{
+    struct Transform* current;
+    struct Path* next;
+};
 
 struct Enemy{
     struct Object head, leg, body;
-    double speed, damage, health, findPathCD, attackDistance;
+    double speed, damage, maxhealth, health, findPathCD, attackDistance;
+    double attackCD;
     struct Transform transform;
 	struct CollideBox collideBox;
 	double Critical_Rate;
     int canSeePlayer;
     struct Vector3 moveDirection, destination;
+    int DEADFLAG;
 };
 
 struct EnemyMeshes{
@@ -33,5 +40,8 @@ void Del_EnemyMeshes(struct EnemyMeshes *meshes);
 
 //enemy's damage to player
 int Enemy_IsTargetInAttackRange(struct Enemy *enemy, struct Vector3 *targetPosition);
+
+void Enemy_ChangeHealth(struct Enemy *enemy, double delta_health);
+void Enemy_GetDamage(struct Enemy *enemy, enum Tag *tag, struct Weapon *weapon);
 
 #endif //FPS_SIMULATOR_ENEMY_H
