@@ -38,7 +38,8 @@ void EnemyMeshes_Init(struct EnemyMeshes *meshes, struct Mesh *head, struct Mesh
 struct EnemyMeshes* New_EnemyMeshes(struct Mesh *head, struct Mesh *body, struct Mesh *leg);
 void Del_EnemyMeshes(struct EnemyMeshes *meshes);
 
-int Enemy_IsNeedFindPath(struct Enemy *enemy);
+//enemy's damage to player
+int Enemy_IsTargetInAttackRange(struct Enemy *enemy, struct Vector3 *targetPosition);
 
 void Enemy_ChangeHealth(struct Enemy *enemy, double delta_health);
 void Enemy_GetDamage(struct Enemy *enemy, enum Tag *tag, struct Weapon *weapon);
