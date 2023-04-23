@@ -139,16 +139,23 @@ void Scene_Init(struct Scene *scene){
     Vector3_Set(&collideBoxes_Wall[29].transform.position, 6.8, 1.25, 13.3);
     Vector3_Set(&collideBoxes_Wall[29].transform.rotation,0,M_PI/2,0);
 
-    CollideBox_Init(&collideBoxes_Wall[30], &Map_Wall->transform, 1, 2.5, 1);
-    Vector3_Set(&collideBoxes_Wall[30].transform.position, -17.5, 0 ,-10);
-    Vector3_Set(&collideBoxes_Wall[30].transform.rotation,0,0,0);
-
-    Object_SetCollideBoxes(Map_Wall, collideBoxes_Wall, 31);
+    Object_SetCollideBoxes(Map_Wall, collideBoxes_Wall, 30);
 
     ArrayList_PushBack(&scene->list_Object, &Map_Wall);
 
 
+//    Map_EndGate origin coordinate (0,0,0)
+    struct Transform transform_EndGate;
+    struct Mesh *mesh_EndGate = ModelMap_new_EndGate_New();
+    struct Object *Map_EndGate = Object_New(mesh_EndGate, NULL, END);
+    struct CollideBox *collideBoxes_EndGate = (struct CollideBox *) malloc(sizeof(struct CollideBox));
 
+    CollideBox_Init(&collideBoxes_EndGate[0], &Map_EndGate->transform, 0.66, 4.06, 7);
+    Vector3_Set(&collideBoxes_EndGate[0].transform.position, 57.8, 2.07, -0.1);
+
+    Object_SetCollideBoxes(Map_EndGate, collideBoxes_EndGate, 1);
+
+    ArrayList_PushBack(&scene->list_Object, &Map_EndGate);
 
     //    Map_Floor origin coordinate (0,0,0)
     struct Transform transform_Floor;
@@ -157,7 +164,7 @@ void Scene_Init(struct Scene *scene){
     struct CollideBox *collideBoxes_Floor = (struct CollideBox *) malloc(sizeof(struct CollideBox));
 
     CollideBox_Init(&collideBoxes_Floor[0], &Map_Floor->transform, 80, 0.1, 40);
-    Vector3_Set(&collideBoxes_Floor[0].transform.position, 0, 0, 0);
+    Vector3_Set(&collideBoxes_Floor[0].transform.position, 0,0,0);
 
     Object_SetCollideBoxes(Map_Floor, collideBoxes_Floor, 1);
 
@@ -224,7 +231,6 @@ void Scene_Update(struct Scene *scene, double delta_time){
         Vector3_Normalize(&enemy->moveDirection);
         enemy->destination = playerPosition;
 
-
         if (Enemy_IsTargetInAttackRange(enemy, &playerPosition)){
             Enemy_Attack(enemy);
             if(enemy->ATTACKFLAG)Player_ChangeHealth(&scene->player,-enemy->damage*(1+enemy->Critical_Damage*(rand()%100>enemy->Critical_Rate)));
@@ -283,7 +289,6 @@ void Scene_Update(struct Scene *scene, double delta_time){
     Clear_Enemy(scene);
     Canvas_clear(&scene->player.canvas);
     Scene_Show(scene, &scene->player.canvas);
-    Canvas_flush(&scene->player.canvas);
 }
 
 void Scene_Show(struct Scene *scene, struct Canvas *canvas){
