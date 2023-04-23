@@ -13,5 +13,5 @@ int Runner_Run(struct Runner *runner);//return 0 for losing, 1 for victory
 void Runner_Init(struct Runner *runner,struct UI_SettingMenu *settingui);
 void Runner_Load(struct Runner *runner);
 void Del_Runner(struct Runner *runner);
-void Player_Setting(struct Player *player,struct Runner *runner);
+void Runner_SetPlayerRotationSpeed(struct Player *player, struct Runner *runner);
 #endif //FPS_SIMULATOR_RUNNER_H

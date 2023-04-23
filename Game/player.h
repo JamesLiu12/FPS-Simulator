@@ -49,5 +49,5 @@ void Player_Control(struct Player *player, double delta_time);
 void Player_Shoot(struct Player *player);
 void Player_Reload(struct Player *player);
 void Player_ChangeHealth(struct Player *player,double deltaHealth);
-void Player_Teleport(struct Player *player,double x,double y,double z);
+void Player_SetPosition(struct Player *player, double x, double y, double z);
 #endif //FPS_SIMULATOR_PLAYER_H

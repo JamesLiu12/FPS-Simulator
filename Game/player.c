@@ -5,7 +5,7 @@ void Player_Init(struct Player *player){
     Canvas_Init(&player->canvas, 32, 64);
     player->maxHealth = 100;
     player->health = player->maxHealth;
-    player->moveSpeed = 1;
+    player->moveSpeed = 100;
     player->rotationSpeed = 10;
     player->In_FireCD = 0;
     player->FIREFLAG = 0;
@@ -17,13 +17,9 @@ void Player_Init(struct Player *player){
     Transform_Init(&player->canvas.camera_transform, &player->transform);
     Vector3_Set(&player->canvas.camera_transform.position, 0, 1.8, 0);
 
-    struct Vector3 v1, v2;
-    Vector3_Set(&v1, -0.5, -1, -0.5);
-    Vector3_Set(&v2, 0.5, 1, 0.5);
     CollideBox_Init(&player->collideBox, &player->transform, 1, 2.1, 1);
     Vector3_Set(&player->collideBox.transform.position, 0, 1.06, 0);
-    player->collideBox.transform = player->transform;
-    player->collideBox.transform.position.y = 0.9;
+    Vector3_Set(&player->moveDirection, 0, 0 ,0);
     Weapon_Init(&player->weapon, AK47);
 }
 
@@ -41,7 +37,7 @@ void Player_Move(struct Player *player, struct Vector3* move){
     Vector3_Add(&player->transform.position, move);
     Vector3_Add(&player->collideBox.transform.position,move);
 }
-void Player_Teleport(struct Player *player,double x,double y,double z){
+void Player_SetPosition(struct Player *player, double x, double y, double z){
     Vector3_Set(&player->transform.position,x,y,z);
     Vector3_Set(&player->collideBox.transform.position,x,y,z);
 }
@@ -83,7 +79,7 @@ void Player_Update(struct Player *player, double delta_time){
         }
     }
     Vector3_Set(&player->moveDirection,0,0,0);
-    //Player_Control(player);
+    Player_Control(player, delta_time);
 }
 
 void Player_Control(struct Player *player, double delta_time){

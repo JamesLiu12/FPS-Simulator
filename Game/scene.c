@@ -17,7 +17,7 @@ void Scene_Init(struct Scene *scene){
     ArrayList_Init(&scene->list_Object, sizeof(struct Object*));
     ArrayList_Init(&scene->list_Enemy, sizeof(struct Enemy*));
     Player_Init(&scene->player);
-    Player_Teleport(&scene->player, -17.5, 0, -17.5);
+    Player_SetPosition(&scene->player, -17.5, 0, -17.5);
 //    Vector3_Set(&scene->player.transform.position, 0, 5, 0);
 //    struct Vector3 ang;
 //    Vector3_Set(&ang, M_PI / 2, 0, 0);
@@ -256,12 +256,14 @@ void Scene_Update(struct Scene *scene, double delta_time){
             if(BlockFlag){
             Vector3_Set(&TryToMove, 0, 0, -enemy->moveDirection.z);
             Enemy_Move(enemy,&TryToMove);
-            }}
+            }
+        }
     }
 
 
+    Player_Update(&scene->player, delta_time);
     if (scene->player.FIREFLAG){
-                Scene_PlayerShoot(scene);
+        Scene_PlayerShoot(scene);
     }
     Player_Move(&scene->player, &scene->player.moveDirection);
     if(Vector3_Magnitude(&scene->player.moveDirection)>0){
@@ -285,7 +287,6 @@ void Scene_Update(struct Scene *scene, double delta_time){
         Player_Move(&scene->player,&TryToMove);
         }
     }
-    Player_Update(&scene->player, delta_time);
     Clear_Enemy(scene);
     Canvas_clear(&scene->player.canvas);
     Scene_Show(scene, &scene->player.canvas);
