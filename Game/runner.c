@@ -22,6 +22,9 @@ int Runner_Run(struct Runner *runner){
     while(1){
         delta_time= ProgramRunTime() - runner->previousFrameTime;
         runner->previousFrameTime = ProgramRunTime();
+#ifdef _WIN32
+        delta_time *= 0.1;
+#endif
         if(kbhit()){
             if(keydown(ESC)){
                 break;

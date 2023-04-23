@@ -35,11 +35,9 @@ void Del_Player(struct Player *player){
 
 void Player_Move(struct Player *player, struct Vector3* move){
     Vector3_Add(&player->transform.position, move);
-    Vector3_Add(&player->collideBox.transform.position,move);
 }
 void Player_SetPosition(struct Player *player, double x, double y, double z){
     Vector3_Set(&player->transform.position,x,y,z);
-    Vector3_Set(&player->collideBox.transform.position,x,y,z);
 }
 void Player_Rotate(struct Player *player, struct Vector3* angle){
     //Vector3_Add(&player->transform.rotation, angle);

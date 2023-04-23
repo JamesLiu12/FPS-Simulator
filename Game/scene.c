@@ -266,6 +266,7 @@ void Scene_Update(struct Scene *scene, double delta_time){
         Scene_PlayerShoot(scene);
     }
     Player_Move(&scene->player, &scene->player.moveDirection);
+
     if(Vector3_Magnitude(&scene->player.moveDirection)>0){
         BlockFlag=0;
         Vector3_Set(&TryToMove, scene->player.moveDirection.x,0,0);
@@ -348,8 +349,10 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     // printf("%lf %lf %lf\n",scene->player.facing.x,scene->player.facing.y,scene->player.facing.z);
     // printf("%lf %lf %lf\n",scene->player.canvas.camera_transform.rotation.x,scene->player.canvas.camera_transform.rotation.y,scene->player.canvas.camera_transform.rotation.z);
     // printf("%lf %lf %lf\n",scene->player.transform.position.x,scene->player.transform.position.y,scene->player.transform.position.z);
+    Transform_UpdateGlobal(&scene->player.collideBox.transform);
+    Transform_UpdateGlobal(&scene->player.transform);
     printf("%lf %lf %lf\n",scene->player.collideBox.transform.globalPosition.x,scene->player.collideBox.transform.globalPosition.y,scene->player.collideBox.transform.globalPosition.z);
-    
+    printf("%lf %lf %lf\n",scene->player.transform.globalPosition.x,scene->player.transform.globalPosition.y,scene->player.transform.globalPosition.z);
     Canvas_flush(canvas);
 }   
 
