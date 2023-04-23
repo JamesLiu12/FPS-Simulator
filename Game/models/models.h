@@ -6,6 +6,7 @@
 #include "enemy_body.h"
 #include "enemy_head.h"
 #include "enemy_leg.h"
+#include "map_new_EndGate.h"
 
 
 
