@@ -6,6 +6,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include "playground.h"
+#ifdef __linux__
 static sig_atomic_t end = 0;
 static void sighandler(int signo)
 {
@@ -19,3 +20,10 @@ int main() {
     term_restore();
     return 0;
 }
+#endif
+#ifdef __windows__
+int main() { 
+    test();
+    return 0;
+}
+#endif

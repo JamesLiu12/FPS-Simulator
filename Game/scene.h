@@ -37,4 +37,6 @@ double Scene_MinDistanceWall(struct Scene *scene, struct Line *ray);
 void Scene_PlayerShoot(struct Scene *scene);
 //Clear dead enemies each frame
 void Clear_Enemy(struct Scene *scene);
+int Scene_Collided_Enemy(struct Scene *scene, struct CollideBox *collidebox);
+int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox);
 #endif //FPS_SIMULATOR_SCENE_H
