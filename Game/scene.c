@@ -144,7 +144,18 @@ void Scene_Init(struct Scene *scene){
     ArrayList_PushBack(&scene->list_Object, &Map_Wall);
 
 
+//    Map_EndGate origin coordinate (0,0,0)
+    struct Transform transform_EndGate;
+    struct Mesh *mesh_EndGate = ModelMap_new_EndGate_New();
+    struct Object *Map_EndGate = Object_New(mesh_EndGate, NULL, END);
+    struct CollideBox *collideBoxes_EndGate = (struct CollideBox *) malloc(sizeof(struct CollideBox));
 
+    CollideBox_Init(&collideBoxes_EndGate[0], &Map_EndGate->transform, 0.66, 4.06, 7);
+    Vector3_Set(&collideBoxes_EndGate[0].transform.position, 57.8, 2.07, -0.1);
+
+    Object_SetCollideBoxes(Map_EndGate, collideBoxes_EndGate, 1);
+
+    ArrayList_PushBack(&scene->list_Object, &Map_EndGate);
 
     //    Map_Floor origin coordinate (0,0,0)
     struct Transform transform_Floor;
@@ -153,7 +164,7 @@ void Scene_Init(struct Scene *scene){
     struct CollideBox *collideBoxes_Floor = (struct CollideBox *) malloc(sizeof(struct CollideBox));
 
     CollideBox_Init(&collideBoxes_Floor[0], &Map_Floor->transform, 80, 0.1, 40);
-    Vector3_Set(&collideBoxes_Floor[0].transform.position, 0, 0, 0);
+    Vector3_Set(&collideBoxes_Floor[0].transform.position, 0,0,0);
 
     Object_SetCollideBoxes(Map_Floor, collideBoxes_Floor, 1);
 
