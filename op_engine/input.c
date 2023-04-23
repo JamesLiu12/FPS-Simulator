@@ -71,10 +71,8 @@ int keydown(const char* key){
 #endif
 #ifdef _WIN32
 #include <conio.h>
-int keydown(const char* key){
-    if (_kbhit()){
-        return _getch() == *key;
-    }
-    return 0;
+static char get[4]= {0};
+int kbhit(){
+    return _kbhit();
 }
 #endif

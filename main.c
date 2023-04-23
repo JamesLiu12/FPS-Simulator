@@ -21,7 +21,7 @@ int main() {
     return 0;
 }
 #endif
-#ifdef __windows__
+#ifdef _WIN32
 int main() { 
     test();
     return 0;
