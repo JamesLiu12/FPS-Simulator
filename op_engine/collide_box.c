@@ -122,13 +122,13 @@ bool hasSeparatingAxis(struct Vector3 *posDiff, struct Vector3 *axis, struct Col
     vec = axis_b1->Z;
     Vector3_Scale(&vec, b1->halfSize.z);
     sum += fabs(Vector3_DotProduct3D(&vec, axis));
-    vec = axis_b1->X;
+    vec = axis_b2->X;
     Vector3_Scale(&vec, b2->halfSize.x);
     sum += fabs(Vector3_DotProduct3D(&vec, axis));
-    vec = axis_b1->Y;
+    vec = axis_b2->Y;
     Vector3_Scale(&vec, b2->halfSize.y);
     sum += fabs(Vector3_DotProduct3D(&vec, axis));
-    vec = axis_b1->Z;
+    vec = axis_b2->Z;
     Vector3_Scale(&vec, b2->halfSize.z);
     sum += fabs(Vector3_DotProduct3D(&vec, axis));
 
@@ -147,16 +147,16 @@ int CollideBox_IsCollide(struct CollideBox *b1, struct CollideBox *b2){
     Vector3_Set(&axis_b1.X, 1, 0, 0);
     Vector3_Set(&axis_b1.Y, 0, 1, 0);
     Vector3_Set(&axis_b1.Z, 0, 0, 1);
-    Matrix3x3_TransformEular(&axis_b1.X, &b1->transform.globalRotation);
-    Matrix3x3_TransformEular(&axis_b1.Y, &b1->transform.globalRotation);
-    Matrix3x3_TransformEular(&axis_b1.Z, &b1->transform.globalRotation);
+    Matrix3x3_TransformEular(&b1->transform.globalRotation, &axis_b1.X);
+    Matrix3x3_TransformEular(&b1->transform.globalRotation, &axis_b1.Y);
+    Matrix3x3_TransformEular(&b1->transform.globalRotation, &axis_b1.Z);
 
     Vector3_Set(&axis_b2.X, 1, 0, 0);
     Vector3_Set(&axis_b2.Y, 0, 1, 0);
     Vector3_Set(&axis_b2.Z, 0, 0, 1);
-    Matrix3x3_TransformEular(&axis_b2.X, &b2->transform.globalRotation);
-    Matrix3x3_TransformEular(&axis_b2.Y, &b2->transform.globalRotation);
-    Matrix3x3_TransformEular(&axis_b2.Z, &b2->transform.globalRotation);
+    Matrix3x3_TransformEular(&b2->transform.globalRotation, &axis_b2.X);
+    Matrix3x3_TransformEular(&b2->transform.globalRotation, &axis_b2.Y);
+    Matrix3x3_TransformEular(&b2->transform.globalRotation, &axis_b2.Z);
 
     struct Axis axis_c1, axis_c2, axis_c3;
     axis_c1.X = axis_b1.X;

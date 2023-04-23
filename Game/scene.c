@@ -145,7 +145,6 @@ void Scene_Init(struct Scene *scene){
 
 
 //    Map_EndGate origin coordinate (0,0,0)
-    struct Transform transform_EndGate;
     struct Mesh *mesh_EndGate = ModelMap_new_EndGate_New();
     struct Object *Map_EndGate = Object_New(mesh_EndGate, NULL, END);
     struct CollideBox *collideBoxes_EndGate = (struct CollideBox *) malloc(sizeof(struct CollideBox));
@@ -158,13 +157,12 @@ void Scene_Init(struct Scene *scene){
     ArrayList_PushBack(&scene->list_Object, &Map_EndGate);
 
     //    Map_Floor origin coordinate (0,0,0)
-    struct Transform transform_Floor;
     struct Mesh *mesh_Floor = ModelMap_new_OnlyFloor_New();
     struct Object *Map_Floor = Object_New(mesh_Floor, NULL, FLOOR);
     struct CollideBox *collideBoxes_Floor = (struct CollideBox *) malloc(sizeof(struct CollideBox));
 
     CollideBox_Init(&collideBoxes_Floor[0], &Map_Floor->transform, 80, 0.1, 40);
-    Vector3_Set(&collideBoxes_Floor[0].transform.position, 0,0,0);
+    Vector3_Set(&collideBoxes_Floor[0].transform.position, 0,-1,0);
 
     Object_SetCollideBoxes(Map_Floor, collideBoxes_Floor, 1);
 
@@ -266,6 +264,17 @@ void Scene_Update(struct Scene *scene, double delta_time){
         Scene_PlayerShoot(scene);
     }
     Player_Move(&scene->player, &scene->player.moveDirection);
+
+#if DEBUG
+    if (Scene_Collided_Enemy(scene, &scene->player.collideBox)){
+        puts("Collide Enemy");
+        getchar();
+    }
+    if (Scene_Collided_Object(scene, &scene->player.collideBox)){
+        puts("Collide Object");
+        getchar();
+    }
+#endif
 
     if(Vector3_Magnitude(&scene->player.moveDirection)>0){
         BlockFlag=0;
@@ -454,7 +463,12 @@ int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox){
     for(int i = 0; i < scene->list_Object.size ; i++){
             struct Object *object = ((struct Object**)scene->list_Object.data)[i];
             for(int j = 0; j < object->collideBoxCount ;j++){
-                if(CollideBox_IsCollide(collidebox,&object->collideBoxes[j])){ return 1; }
+                if(CollideBox_IsCollide(collidebox,&object->collideBoxes[j])){
+#if DEBUG
+                    printf("%d %d\n", i, j);
+#endif
+                    return 1;
+                }
             }
         }
     return 0;
