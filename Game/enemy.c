@@ -39,8 +39,11 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
     enemy->maxhealth = 100;
 	enemy->health = enemy->maxhealth;
 	enemy->damage = 5;
-    enemy->attackCD=1;
-	enemy->Critical_Rate = 50;//critical damage to player; should not be higher than 50
+    enemy->attackCDtime=1;
+    enemy->attackcounter=0;
+    enemy->inattackCD=0;
+	enemy->Critical_Rate = 50;//the possibility of a critical hit, %
+    enemy->Critical_Damage = 0.5;// the critical damage is 150%
     enemy->findPathCD = 1;
     enemy->attackDistance = 1.5;
     enemy->canSeePlayer = FALSE;
@@ -60,12 +63,24 @@ void Enemy_Update(struct Enemy *enemy, double delta_time){
         Vector3_Subtract(&posDiff, &enemy->transform.position);
         posDiff.y = 0;
         if (Vector3_Magnitude(&move) > Vector3_Magnitude(&posDiff))
-            Transform_AddPosition(&enemy->transform, &posDiff);
+            Vector3_Copy(&posDiff,&enemy->moveDirection);
         else
             Transform_AddPosition(&enemy->transform, &move);
+            Vector3_Copy(&move,&enemy->moveDirection);
+    }
+    if (enemy->inattackCD){
+        enemy->ATTACKFLAG=0;
+        enemy->attackcounter-=delta_time;
+        if(enemy->attackcounter<=0)enemy->inattackCD=0;
     }
 }
-
+void Enemy_Attack(struct Enemy *enemy){
+    if(!enemy->inattackCD){
+        enemy->ATTACKFLAG=1;
+        enemy->inattackCD=1;
+        enemy->attackcounter=enemy->attackCDtime;
+    }
+}
 struct Enemy* New_Enemy(struct EnemyMeshes *meshes){
     struct Enemy *enemy = (struct Enemy*)malloc(sizeof(struct Enemy));
     Enemy_Init(enemy, meshes);
@@ -123,4 +138,8 @@ void Enemy_GetDamage(struct Enemy *enemy, enum Tag *tag, struct Weapon *weapon){
     if(*tag == ENEMY_LEG){
         Enemy_ChangeHealth(enemy, -weapon->damage*weapon->leg_rate);
     }
+}
+int Enemy_IsTargetInAttackRange(struct Enemy *enemy, struct Vector3 *targetPosition){
+    if(Vector3_Distance3D(&enemy->transform.globalPosition,targetPosition)<enemy->attackDistance)return 1;
+    return 0;
 }

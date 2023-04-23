@@ -17,7 +17,7 @@ void Scene_Init(struct Scene *scene){
     ArrayList_Init(&scene->list_Object, sizeof(struct Object*));
     ArrayList_Init(&scene->list_Enemy, sizeof(struct Enemy*));
     Player_Init(&scene->player);
-    Vector3_Set(&scene->player.transform.position, -17.5, 0, -17.5);
+    Player_Teleport(&scene->player, -17.5, 0, -17.5);
 //    Vector3_Set(&scene->player.transform.position, 0, 5, 0);
 //    struct Vector3 ang;
 //    Vector3_Set(&ang, M_PI / 2, 0, 0);
@@ -29,7 +29,7 @@ void Scene_Init(struct Scene *scene){
     struct Mesh *mesh_Wall = ModelMap_new_Wall_New();
     struct Object *Map_Wall = Object_New(mesh_Wall, NULL, WALL);
     //set collideBoxes:
-    struct CollideBox *collideBoxes_Wall = (struct CollideBox *) malloc(sizeof(struct CollideBox) * 30);
+    struct CollideBox *collideBoxes_Wall = (struct CollideBox *) malloc(sizeof(struct CollideBox) * 31);
 
     //Wall      Name Rule: from blender collection
     CollideBox_Init(&collideBoxes_Wall[0], &Map_Wall->transform, 80, 2.5, 0.2);
@@ -202,8 +202,11 @@ void Del_Scene(struct Scene *scene){
 }
 
 void Scene_Update(struct Scene *scene, double delta_time){
-
+    struct Vector3 TryToMove;
+    int BlockFlag;
     Transform_UpdateGlobal(&scene->player.transform);
+    Transform_UpdateGlobal(&scene->player.collideBox.transform);
+    
     for (int i = 0; i < scene->list_Enemy.size; i++){
         struct Enemy *enemy = ((struct Enemy**)scene->list_Enemy.data)[i];
 
@@ -228,17 +231,62 @@ void Scene_Update(struct Scene *scene, double delta_time){
         Vector3_Normalize(&enemy->moveDirection);
         enemy->destination = playerPosition;
 
+        if (Enemy_IsTargetInAttackRange(enemy, &playerPosition)){
+            Enemy_Attack(enemy);
+            if(enemy->ATTACKFLAG)Player_ChangeHealth(&scene->player,-enemy->damage*(1+enemy->Critical_Damage*(rand()%100>enemy->Critical_Rate)));
+        }
         Enemy_Update(enemy, delta_time);
 
-        //if (Enemy_IsTargetInAttackRange(enemy, &playerPosition)){
-        //    //TODO Enemy攻击，记得判断CD
-        //}
+        if(Vector3_Magnitude(&enemy->moveDirection)>0){
+            BlockFlag=0;
+            Vector3_Set(&TryToMove, enemy->moveDirection.x,0,0);
+            Enemy_Move(enemy,&TryToMove);
+            if(Scene_Collided_Enemy(scene, enemy->head.collideBoxes)) BlockFlag = 1;
+            else if(Scene_Collided_Object(scene, enemy->head.collideBoxes)) BlockFlag = 1;
+            if(BlockFlag){
+            Vector3_Set(&TryToMove, -enemy->moveDirection.x, 0, 0);
+            Enemy_Move(enemy,&TryToMove);
+            }
+
+            BlockFlag=0;
+            Vector3_Set(&TryToMove, 0, 0, enemy->moveDirection.z);
+            Enemy_Move(enemy,&TryToMove);
+            if(Scene_Collided_Enemy(scene, enemy->head.collideBoxes)) BlockFlag = 1;
+            else if(Scene_Collided_Object(scene, enemy->head.collideBoxes)) BlockFlag = 1;
+            if(BlockFlag){
+            Vector3_Set(&TryToMove, 0, 0, -enemy->moveDirection.z);
+            Enemy_Move(enemy,&TryToMove);
+            }}
     }
 
-    Player_Update(&scene->player, delta_time);
+
     if (scene->player.FIREFLAG){
-        Scene_PlayerShoot(scene);
+                Scene_PlayerShoot(scene);
     }
+    Player_Move(&scene->player, &scene->player.moveDirection);
+    if(Vector3_Magnitude(&scene->player.moveDirection)>0){
+        BlockFlag=0;
+        Vector3_Set(&TryToMove, scene->player.moveDirection.x,0,0);
+        Player_Move(&scene->player, &TryToMove);
+        if(Scene_Collided_Enemy(scene, &scene->player.collideBox)) BlockFlag = 1;
+        else if(Scene_Collided_Object(scene, &scene->player.collideBox)) BlockFlag = 1;
+        if(BlockFlag){
+        Vector3_Set(&TryToMove, -scene->player.moveDirection.x, 0, 0);
+        Player_Move(&scene->player, &TryToMove);
+        }
+
+        BlockFlag=0;
+        Vector3_Set(&TryToMove, 0, 0, scene->player.moveDirection.z);
+        Player_Move(&scene->player, &TryToMove);
+        if(Scene_Collided_Enemy(scene, &scene->player.collideBox)) BlockFlag = 1;
+        else if(Scene_Collided_Object(scene, &scene->player.collideBox)) BlockFlag = 1;
+        if(BlockFlag){
+        Vector3_Set(&TryToMove, 0, 0, -scene->player.moveDirection.z);
+        Player_Move(&scene->player,&TryToMove);
+        }
+    }
+    Player_Update(&scene->player, delta_time);
+    Clear_Enemy(scene);
     Canvas_clear(&scene->player.canvas);
     Scene_Show(scene, &scene->player.canvas);
 }
@@ -299,6 +347,7 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     // printf("%lf %lf %lf\n",scene->player.facing.x,scene->player.facing.y,scene->player.facing.z);
     // printf("%lf %lf %lf\n",scene->player.canvas.camera_transform.rotation.x,scene->player.canvas.camera_transform.rotation.y,scene->player.canvas.camera_transform.rotation.z);
     // printf("%lf %lf %lf\n",scene->player.transform.position.x,scene->player.transform.position.y,scene->player.transform.position.z);
+    printf("%lf %lf %lf\n",scene->player.collideBox.transform.globalPosition.x,scene->player.collideBox.transform.globalPosition.y,scene->player.collideBox.transform.globalPosition.z);
     
     Canvas_flush(canvas);
 }   
@@ -389,4 +438,20 @@ void Clear_Enemy(struct Scene *scene){
         struct Enemy *enemy = ((struct Enemy **)scene->list_Enemy.data)[i];
         if(enemy->DEADFLAG == 1){if(ArrayList_DeleteElement(&scene->list_Enemy,scene->list_Enemy.data + i*scene->list_Enemy.element_size))Del_Enemy(enemy);}
     }
+}
+int Scene_Collided_Enemy(struct Scene *scene, struct CollideBox *collidebox){
+    for(int i = 0; i < scene->list_Enemy.size ; i++){
+            struct Enemy *enemy = ((struct Enemy**)scene->list_Enemy.data)[i];
+            if(CollideBox_IsCollide(collidebox,&enemy->head.collideBoxes[0])){ return 1; }
+        }
+    return 0;
+}
+int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox){
+    for(int i = 0; i < scene->list_Object.size ; i++){
+            struct Object *object = ((struct Object**)scene->list_Object.data)[i];
+            for(int j = 0; j < object->collideBoxCount ;j++){
+                if(CollideBox_IsCollide(collidebox,&object->collideBoxes[j])){ return 1; }
+            }
+        }
+    return 0;
 }
