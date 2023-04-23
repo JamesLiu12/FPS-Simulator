@@ -4,7 +4,7 @@
 #include "../op_engine/op_engine.h"
 
 enum WeaponName{
-    AK47,P1999
+    AK47, P1999
 };
 
 struct Weapon{
@@ -19,6 +19,7 @@ struct Weapon{
 //Initializer of weapon (corresponding to player)
 void Weapon_Init(struct Weapon* weapon, enum WeaponName weaponName);
 struct Weapon* New_Weapon(enum WeaponName weaponName);
+void Weapon_CoverCanvas(struct Weapon *weapon, struct Canvas *canvas);
 
 
 #endif //FPS_SIMULATOR_WEAPON_H

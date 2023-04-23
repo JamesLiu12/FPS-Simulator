@@ -12,15 +12,16 @@ struct ScreenProjection {
     double x_displacement, y_displacement;
 };
 
-struct Color {
-    unsigned char red, green, blue;
-};
+//struct Color {
+//    unsigned char red, green, blue;
+//};
 
 //Canvas for displaying
 struct Canvas {
     unsigned short height, width;
 
-    unsigned char *vram_red, *vram_green, *vram_blue;
+//    unsigned char *vram_red, *vram_green, *vram_blue;
+    unsigned char *vram_char;
     double *vram_depth;
     enum Tag *vram_tag;
 
@@ -29,7 +30,7 @@ struct Canvas {
     struct Plane view_planes[4];
     struct Line view_rays[4];
 
-    struct Color color;
+//    struct Color color;
 
     double field_of_view;
     struct ScreenProjection screen_projection;
@@ -70,6 +71,8 @@ void Canvas_CameraMove(struct Canvas *canvas, struct Vector3 *displacement);
 void Canvas_CameraRotate(struct Canvas *canvas, struct Vector3 *rotation);
 
 void Canvas_CalculateScreenProjection(struct Canvas* canvas);
+
+void Canvas_AddCover(struct Canvas *canvas, int row, int column, unsigned char ch);
 
 #define OP_CANVAS
 #endif

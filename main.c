@@ -13,9 +13,9 @@ static void sighandler(int signo)
 }
 #include "Game/runner.h"
 int main() {
-    term_setup(sighandler);
-    system("clear");   
+//    term_setup(sighandler);
+//    system("clear");
     test();
-    term_restore();
+//    term_restore();
     return 0;
 }

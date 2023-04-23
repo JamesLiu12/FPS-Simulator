@@ -1,4 +1,4 @@
-#include "../mesh.h"
+#include "map_new_EndGate.h"
 
 void ModelMap_new_EndGate_Init(struct Mesh *map_new_endgate) {
 	Vector3_Set(&map_new_endgate->vertices[0], 57.484146, 4.8842e-2, -3.600599);
