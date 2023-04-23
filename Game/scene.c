@@ -135,9 +135,9 @@ void Scene_Init(struct Scene *scene){
     CollideBox_Init(&collideBoxes_Wall[28], &Map_Wall->transform, 3, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[28].transform.position, 8.4, 1.25, 12);
     //Wall_029
-    CollideBox_Init(&collideBoxes_Wall[23], &Map_Wall->transform, 2.8, 2.5, 0.2);
-    Vector3_Set(&collideBoxes_Wall[23].transform.position, 6.8, 1.25, 13.3);
-    Vector3_Set(&collideBoxes_Wall[23].transform.rotation,0,M_PI/2,0);
+    CollideBox_Init(&collideBoxes_Wall[29], &Map_Wall->transform, 2.8, 2.5, 0.2);
+    Vector3_Set(&collideBoxes_Wall[29].transform.position, 6.8, 1.25, 13.3);
+    Vector3_Set(&collideBoxes_Wall[29].transform.rotation,0,M_PI/2,0);
 
     Object_SetCollideBoxes(Map_Wall, collideBoxes_Wall, 30);
 
@@ -217,7 +217,7 @@ void Scene_Update(struct Scene *scene, double delta_time){
         Vector3_Normalize(&enemy->moveDirection);
         enemy->destination = playerPosition;
 
-//        Enemy_Update(enemy, delta_time);
+        Enemy_Update(enemy, delta_time);
 
         //if (Enemy_IsTargetInAttackRange(enemy, &playerPosition)){
         //    //TODO Enemy攻击，记得判断CD
@@ -230,7 +230,6 @@ void Scene_Update(struct Scene *scene, double delta_time){
     }
     Canvas_clear(&scene->player.canvas);
     Scene_Show(scene, &scene->player.canvas);
-    Canvas_flush(&scene->player.canvas);
 }
 
 void Scene_Show(struct Scene *scene, struct Canvas *canvas){
