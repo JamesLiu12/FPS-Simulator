@@ -3,9 +3,9 @@
 
 void Player_Init(struct Player *player){
     Canvas_Init(&player->canvas, 32, 64);
-    player->maxHealth = 100;
+    player->maxHealth = 10;
     player->health = player->maxHealth;
-    player->moveSpeed = 100;
+    player->moveSpeed = 10;
     player->rotationSpeed = 10;
     player->In_FireCD = 0;
     player->FIREFLAG = 0;

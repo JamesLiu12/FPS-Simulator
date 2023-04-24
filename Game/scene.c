@@ -268,11 +268,11 @@ void Scene_Update(struct Scene *scene, double delta_time){
 #if DEBUG
     if (Scene_Collided_Enemy(scene, &scene->player.collideBox)){
         puts("Collide Enemy");
-        getchar();
+//        getchar();
     }
     if (Scene_Collided_Object(scene, &scene->player.collideBox)){
         puts("Collide Object");
-        getchar();
+//        getchar();
     }
 #endif
 
