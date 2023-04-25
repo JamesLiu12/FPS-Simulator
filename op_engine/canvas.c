@@ -87,7 +87,6 @@ void Del_Canvas(struct Canvas* canvas){
 //    free(canvas->vram_green);
 //    free(canvas->vram_blue);
     free(canvas->vram_depth);
-//    free(canvas);
 }
 
 int get_brightness(double depth){
@@ -109,6 +108,7 @@ void print_pixel(enum Tag tag, double distance){
     else if (tag == ENEMY_LEG) printf("▓▓");
     else if (tag == ENEMY_BODY) printf("▒▒");
     else if (tag == END) printf("??");
+    else if (tag == STAR) printf("\033[31m██\033[0m");
 }//░▒▓█
 
 void Canvas_flush(struct Canvas* canvas){
@@ -121,13 +121,7 @@ void Canvas_flush(struct Canvas* canvas){
         for (width = 0; width < canvas->width; width++) {
 
             vram_index = height * canvas->width + width;
-
-            if (canvas->vram_tag[vram_index] != COVER){
-                print_pixel(canvas->vram_tag[vram_index], canvas->vram_depth[vram_index]);
-            }
-            else{
-                printf("%c", canvas->vram_char[vram_index]);
-            }
+            print_pixel(canvas->vram_tag[vram_index], canvas->vram_depth[vram_index]);
         }
         putchar('\n');
     }
@@ -408,9 +402,8 @@ void Canvas_CameraRotate(struct Canvas *canvas, struct Vector3 *rotation) {
             EULER_ANGLE_REVERSED);
 }
 
-void Canvas_AddCover(struct Canvas *canvas, int row, int column, unsigned char ch){
+void Canvas_AddCover(struct Canvas *canvas, int row, int column, enum Tag tag){
     int vram_index = row * canvas->width + column;
-    canvas->vram_char[vram_index] = ch;
     canvas->vram_depth[vram_index] = 0;
-    canvas->vram_tag[vram_index] = COVER;
+    canvas->vram_tag[vram_index] = tag;
 }

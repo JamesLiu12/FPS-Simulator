@@ -356,16 +356,14 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     printf("HP : %.2lf / %.0lf ",scene->player.health,scene->player.maxHealth);
     for(int i=0;i<58;i++)printf(" ");
     printf("%s : %d / %d \n",scene->player.weapon.namestring,scene->player.weapon.bullet_number,scene->player.weapon.magazine_size);
-    //The following 2 lines are for debugging
-    //TODO
-    //Delete it when the game is finished
-    // printf("%lf %lf %lf\n",scene->player.facing.x,scene->player.facing.y,scene->player.facing.z);
-    // printf("%lf %lf %lf\n",scene->player.canvas.camera_transform.rotation.x,scene->player.canvas.camera_transform.rotation.y,scene->player.canvas.camera_transform.rotation.z);
-    // printf("%lf %lf %lf\n",scene->player.transform.position.x,scene->player.transform.position.y,scene->player.transform.position.z);
-    Transform_UpdateGlobal(&scene->player.collideBox.transform);
-    Transform_UpdateGlobal(&scene->player.transform);
-    // printf("%lf %lf %lf\n",scene->player.collideBox.transform.globalPosition.x,scene->player.collideBox.transform.globalPosition.y,scene->player.collideBox.transform.globalPosition.z);
-    // printf("%lf %lf %lf\n",scene->player.transform.globalPosition.x,scene->player.transform.globalPosition.y,scene->player.transform.globalPosition.z);
+    Canvas_AddCover(&scene->player.canvas, scene->player.canvas.height / 2 - 1,
+                    scene->player.canvas.width / 2 - 1, STAR);
+    Canvas_AddCover(&scene->player.canvas, scene->player.canvas.height / 2 - 1,
+                    scene->player.canvas.width / 2, STAR);
+    Canvas_AddCover(&scene->player.canvas, scene->player.canvas.height / 2,
+                    scene->player.canvas.width / 2 - 1, STAR);
+    Canvas_AddCover(&scene->player.canvas, scene->player.canvas.height / 2,
+                    scene->player.canvas.width / 2, STAR);
     Canvas_flush(canvas);
 }   
 

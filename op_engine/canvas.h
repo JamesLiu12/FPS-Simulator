@@ -21,7 +21,6 @@ struct Canvas {
     unsigned short height, width;
 
 //    unsigned char *vram_red, *vram_green, *vram_blue;
-    unsigned char *vram_char;
     double *vram_depth;
     enum Tag *vram_tag;
 
@@ -72,7 +71,7 @@ void Canvas_CameraRotate(struct Canvas *canvas, struct Vector3 *rotation);
 
 void Canvas_CalculateScreenProjection(struct Canvas* canvas);
 
-void Canvas_AddCover(struct Canvas *canvas, int row, int column, unsigned char ch);
+void Canvas_AddCover(struct Canvas *canvas, int row, int column, enum Tag tag);
 
 #define OP_CANVAS
 #endif
