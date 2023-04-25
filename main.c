@@ -24,8 +24,10 @@ int main() {
 }
 #endif
 #ifdef _WIN32
-int main() { 
-    test();
+int main() {
+    struct UI_StartMenu *startui=New_UI_StartMenu();
+    UI_StartMenu_Init(startui);
+    Launch_StartMenu(startui);
     return 0;
 }
 #endif

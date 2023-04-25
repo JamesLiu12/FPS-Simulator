@@ -100,7 +100,11 @@ void Launch_SettingMenu(struct UI_SettingMenu *settingui){
     settingui->pointer=0;
     while(operation!=3){
         if(RETURNFLAG==1)break;
+#ifdef __linux__
         system("clear");
+#elif _WIN32
+        system("cls");
+#endif
         SettingMenu_Show(settingui);
         operation=Fetch_Operation();
         switch (operation)
