@@ -5,7 +5,6 @@ CMakeCache.txt
 CMakeFiles
 CMakeScripts
 Testing
-Makefile
 cmake_install.cmake
 install_manifest.txt
 compile_commands.json
@@ -16,3 +15,6 @@ playground.c
 .vscode
 FPS_Simulator.cbp
 .cmake/
+*.o
+bin/FPS_Simulator
+FPS_Simulator

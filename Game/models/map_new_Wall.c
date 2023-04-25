@@ -1,4 +1,4 @@
-#include "../mesh.h"
+#include "map_new_Wall.h"
 
 void ModelMap_new_Wall_Init(struct Mesh *map_new_wall) {
 	Vector3_Set(&map_new_wall->vertices[0], -20.0, -19.9, 0.0);

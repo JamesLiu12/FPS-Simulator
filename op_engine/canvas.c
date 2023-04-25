@@ -19,15 +19,15 @@ void Canvas_Init(struct Canvas *canvas, short height, short width){
     unsigned int depth_size = height * width * sizeof(double);
     unsigned int tag_size = height * width * sizeof(enum Tag);
 
-    canvas->vram_red = (unsigned char*)malloc(vram_size);
-    canvas->vram_green = (unsigned char*)malloc(vram_size);
-    canvas->vram_blue = (unsigned char*)malloc(vram_size);
+//    canvas->vram_red = (unsigned char*)malloc(vram_size);
+//    canvas->vram_green = (unsigned char*)malloc(vram_size);
+//    canvas->vram_blue = (unsigned char*)malloc(vram_size);
     canvas->vram_depth = (double*)malloc(depth_size);
     canvas->vram_tag = (enum Tag*)malloc(tag_size);
 
-    canvas->color.red = (char)255;
-    canvas->color.green = (char)255;
-    canvas->color.blue = (char)255;
+//    canvas->color.red = (char)255;
+//    canvas->color.green = (char)255;
+//    canvas->color.blue = (char)255;
 
     Transform_Init(&canvas->camera_transform, NULL);
 
@@ -83,9 +83,9 @@ void Canvas_InitView(struct Canvas *canvas){
 }
 
 void Del_Canvas(struct Canvas* canvas){
-    free(canvas->vram_red);
-    free(canvas->vram_green);
-    free(canvas->vram_blue);
+//    free(canvas->vram_red);
+//    free(canvas->vram_green);
+//    free(canvas->vram_blue);
     free(canvas->vram_depth);
 //    free(canvas);
 }
@@ -122,40 +122,12 @@ void Canvas_flush(struct Canvas* canvas){
 
             vram_index = height * canvas->width + width;
 
-//            brightness = (int)(
-//                    0.2126 * canvas->vram_red[vram_index] +
-//                    0.7152 * canvas->vram_green[vram_index] +
-//                    0.0722 * canvas->vram_blue[vram_index]);
-
-//#ifdef OP_ENGINE_CHROMATIC
-//            printf("\x1b[38;2;%d;%d;%dm",
-//                   canvas->vram_red[vram_index],
-//                   canvas->vram_green[vram_index],
-//                   canvas->vram_blue[vram_index]);
-//            putchar(0xe2);
-//            putchar(0x96);
-//            putchar(0x88);
-//            putchar(0xe2);
-//            putchar(0x96);
-//            putchar(0x88);
-//#endif
-
-//#ifndef OP_ENGINE_CHROMATIC
-//            if (canvas->vram_tag[vram_index] != EMPTY) {
-//                // Blocks of different brightness ░▒▓█ ▖ ▗ ▘ ▙ ▚ ▛ ▜ ▝ ▞ ▟
-//                //faster version of printf("██");
-//                putchar(0xe2);
-//                putchar(0x96);
-//                putchar(0x88);
-//                putchar(0xe2);
-//                putchar(0x96);
-//                putchar(0x88);
-//            } else {
-//                putchar(' ');
-//                putchar(' ');
-//            }
-//#endif
-            print_pixel(canvas->vram_tag[vram_index], canvas->vram_depth[vram_index]);
+            if (canvas->vram_tag[vram_index] != COVER){
+                print_pixel(canvas->vram_tag[vram_index], canvas->vram_depth[vram_index]);
+            }
+            else{
+                printf("%c", canvas->vram_char[vram_index]);
+            }
         }
         putchar('\n');
     }
@@ -165,9 +137,9 @@ void Canvas_clear(struct Canvas* canvas){
     unsigned int vram_size = canvas->height * canvas->width * sizeof(unsigned char);
     unsigned int depth_size = canvas->height * canvas->width * sizeof(double);
 
-    memset(canvas->vram_red, 0, vram_size);
-    memset(canvas->vram_green, 0, vram_size);
-    memset(canvas->vram_blue, 0, vram_size);
+//    memset(canvas->vram_red, 0, vram_size);
+//    memset(canvas->vram_green, 0, vram_size);
+//    memset(canvas->vram_blue, 0, vram_size);
     for (int i = 0; i < canvas->height * canvas->width; i++) {
         canvas->vram_depth[i] = INFINITY;
         canvas->vram_tag[i] = EMPTY;
@@ -222,9 +194,9 @@ void vram_write(struct Canvas *canvas, int vram_index, double distance, enum Tag
     }
     canvas->vram_depth[vram_index] = distance;
     canvas->vram_tag[vram_index] = tag;
-    canvas->vram_red[vram_index] = canvas->color.red;
-    canvas->vram_green[vram_index] = canvas->color.green;
-    canvas->vram_blue[vram_index] = canvas->color.blue;
+//    canvas->vram_red[vram_index] = canvas->color.red;
+//    canvas->vram_green[vram_index] = canvas->color.green;
+//    canvas->vram_blue[vram_index] = canvas->color.blue;
 }
 
 void Canvas_DrawPoint(struct Canvas *canvas, struct Vector3 *point, enum Tag tag){
@@ -434,4 +406,11 @@ void Canvas_CameraRotate(struct Canvas *canvas, struct Vector3 *rotation) {
             &canvas->camera_transform.rotationMatrix,
             &canvas->camera_transform.rotation,
             EULER_ANGLE_REVERSED);
+}
+
+void Canvas_AddCover(struct Canvas *canvas, int row, int column, unsigned char ch){
+    int vram_index = row * canvas->width + column;
+    canvas->vram_char[vram_index] = ch;
+    canvas->vram_depth[vram_index] = 0;
+    canvas->vram_tag[vram_index] = COVER;
 }

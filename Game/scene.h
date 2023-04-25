@@ -14,6 +14,7 @@ struct Scene{
 
     //The meshes used to create an enemy
     struct EnemyMeshes enemyMeshes;
+    struct ArrayList list_EnemySpawnPoint;
 };
 
 //The initializer of scene
@@ -37,4 +38,7 @@ double Scene_MinDistanceWall(struct Scene *scene, struct Line *ray);
 void Scene_PlayerShoot(struct Scene *scene);
 //Clear dead enemies each frame
 void Clear_Enemy(struct Scene *scene);
+int Scene_Collided_Enemy(struct Scene *scene, struct CollideBox *collidebox);
+int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox);
+void Scene_Add_EnemySpawnPoint(struct Scene *scene,double x, double y,double z);
 #endif //FPS_SIMULATOR_SCENE_H

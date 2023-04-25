@@ -12,13 +12,13 @@ struct Path{
 struct Enemy{
     struct Object head, leg, body;
     double speed, damage, maxhealth, health, findPathCD, attackDistance;
-    double attackCD;
+    double attackCDtime,attackcounter;
     struct Transform transform;
-	struct CollideBox collideBox;
-	double Critical_Rate;
+	//struct CollideBox collideBox;
+	double Critical_Rate,Critical_Damage;
     int canSeePlayer;
     struct Vector3 moveDirection, destination;
-    int DEADFLAG;
+    int DEADFLAG,inattackCD,ATTACKFLAG;
 };
 
 struct EnemyMeshes{
@@ -43,5 +43,5 @@ int Enemy_IsTargetInAttackRange(struct Enemy *enemy, struct Vector3 *targetPosit
 
 void Enemy_ChangeHealth(struct Enemy *enemy, double delta_health);
 void Enemy_GetDamage(struct Enemy *enemy, enum Tag *tag, struct Weapon *weapon);
-
+void Enemy_Attack(struct Enemy *enemy);
 #endif //FPS_SIMULATOR_ENEMY_H

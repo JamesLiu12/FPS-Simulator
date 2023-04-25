@@ -5,7 +5,7 @@ void Player_Init(struct Player *player){
     Canvas_Init(&player->canvas, 32, 64);
     player->maxHealth = 100;
     player->health = player->maxHealth;
-    player->moveSpeed = 1;
+    player->moveSpeed = 10;
     player->rotationSpeed = 10;
     player->In_FireCD = 0;
     player->FIREFLAG = 0;
@@ -17,14 +17,10 @@ void Player_Init(struct Player *player){
     Transform_Init(&player->canvas.camera_transform, &player->transform);
     Vector3_Set(&player->canvas.camera_transform.position, 0, 1.8, 0);
 
-    struct Vector3 v1, v2;
-    Vector3_Set(&v1, -0.5, -1, -0.5);
-    Vector3_Set(&v2, 0.5, 1, 0.5);
-    CollideBox_Init(&player->collideBox, NULL, 0.7, 2.1, 0.7);
+    CollideBox_Init(&player->collideBox, &player->transform, 1, 2.1, 1);
     Vector3_Set(&player->collideBox.transform.position, 0, 1.06, 0);
-    player->collideBox.transform = player->transform;
-    player->collideBox.transform.position.y = 0.9;
-    Weapon_Init(&player->weapon, P1999);
+    Vector3_Set(&player->moveDirection, 0, 0 ,0);
+    Weapon_Init(&player->weapon, AK47);
 }
 
 struct Player* New_Player() {
@@ -40,7 +36,9 @@ void Del_Player(struct Player *player){
 void Player_Move(struct Player *player, struct Vector3* move){
     Vector3_Add(&player->transform.position, move);
 }
-
+void Player_SetPosition(struct Player *player, double x, double y, double z){
+    Vector3_Set(&player->transform.position,x,y,z);
+}
 void Player_Rotate(struct Player *player, struct Vector3* angle){
     //Vector3_Add(&player->transform.rotation, angle);
     //Transform_RotationMatrixUpdate(&player->transform);
@@ -78,7 +76,8 @@ void Player_Update(struct Player *player, double delta_time){
         player->weapon.bullet_number = player->weapon.magazine_size;
         }
     }
-    //Player_Control(player);
+    Vector3_Set(&player->moveDirection,0,0,0);
+    Player_Control(player, delta_time);
 }
 
 void Player_Control(struct Player *player, double delta_time){
@@ -100,7 +99,7 @@ void Player_Control(struct Player *player, double delta_time){
 }
 void Player_Shoot(struct Player *player){
     if(!player->FIREFLAG){
-        if(!player->In_FireCD){
+        if(!player->In_FireCD && !player->In_ReloadCD){
             if(player->weapon.bullet_number>0){
             player->FIREFLAG = 1;
             player->In_FireCD = 1;
@@ -124,7 +123,7 @@ void Player_MoveForward(struct Player *player, double delta_time){
     Vector3_Set(&movement, player->facing.x, 0, player->facing.z);
     Vector3_Normalize(&movement);
     Vector3_Scale(&movement, player->moveSpeed * delta_time);
-    Player_Move(player,&movement);
+    //Player_Move(player,&movement);
     Vector3_Copy(&movement, &player->moveDirection);
 }
 void Player_MoveBackward(struct Player *player, double delta_time){
@@ -133,7 +132,8 @@ void Player_MoveBackward(struct Player *player, double delta_time){
     Vector3_Normalize(&movement);
     Vector3_Scale(&movement, player->moveSpeed * delta_time);
     Vector3_Copy(&movement, &player->moveDirection);
-    Player_Move(player, &movement);
+    //Player_Move(player, &movement);
+    Vector3_Copy(&movement, &player->moveDirection);
 }
 void Player_MoveLeft(struct Player *player, double delta_time){
     struct Vector3 movement;
@@ -141,7 +141,8 @@ void Player_MoveLeft(struct Player *player, double delta_time){
     Vector3_Normalize(&movement);
     Vector3_Scale(&movement,player->moveSpeed * delta_time);
     Vector3_Copy(&movement,&player->moveDirection);
-    Player_Move(player,&movement);
+    //Player_Move(player,&movement);
+    Vector3_Copy(&movement, &player->moveDirection);
 }
 void Player_MoveRight(struct Player *player, double delta_time){
     struct Vector3 movement;
@@ -149,7 +150,8 @@ void Player_MoveRight(struct Player *player, double delta_time){
     Vector3_Normalize(&movement);
     Vector3_Scale(&movement, player->moveSpeed * delta_time);
     Vector3_Copy(&movement, &player->moveDirection);
-    Player_Move(player,&movement);
+    //Player_Move(player,&movement);
+    Vector3_Copy(&movement, &player->moveDirection);
 }
 
 void Player_RotateUp(struct Player *player, double delta_time){

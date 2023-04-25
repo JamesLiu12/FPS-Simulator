@@ -1,9 +1,11 @@
 #include "weapon.h"
 #include "string.h"
+#include "../op_engine/canvas.h"
+
 void Weapon_Init(struct Weapon* weapon, enum WeaponName weaponName){
 
     if (weaponName == AK47){
-        weapon->damage = 10;
+        weapon->damage = 15;
         weapon->fireCDtime = 0.1;
         weapon->reloadCDtime=2;
         weapon->magazine_size=30;
@@ -30,4 +32,10 @@ struct Weapon* New_Weapon(enum WeaponName weaponName){
     struct Weapon* weapon = (struct Weapon*)malloc(sizeof(struct Weapon));
     Weapon_Init(weapon, weaponName);
     return weapon;
+}
+
+void Weapon_CoverCanvas(struct Weapon *weapon, struct Canvas *canvas){
+    if (weapon->name == AK47){
+        
+    }
 }
