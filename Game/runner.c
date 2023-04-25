@@ -28,14 +28,23 @@ int Runner_Run(struct Runner *runner){
 #endif
         if(kbhit()){
             if(keydown(ESC)){
-                break;
+                scene.player.WINFLAG=1;
             }
         }
         Scene_Update(&scene, delta_time);
 
         if(scene.player.DEADFLAG){
+            #ifdef __linux__
             system("clear");
+            #endif
             end=0;
+            break;
+        }
+        if(scene.player.WINFLAG){
+            #ifdef __linux__
+            system("clear");
+            #endif
+            end=1;
             break;
         }
         usleep(1000000 / runner->frame_rate);
@@ -58,5 +67,5 @@ void Del_Runner(struct Runner *runner){
     free(runner);
 }
 void Runner_SetPlayerRotationSpeed(struct Player *player, struct Runner *runner){
-    player->rotationSpeed= 10 * runner->sensitivity / 100;
+    player->rotationSpeed= 5 * runner->sensitivity / 100;
 }

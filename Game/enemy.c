@@ -35,17 +35,18 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
 
     Object_SetCollideBoxes(&enemy->leg, collideBoxes_EnemyLeg, 1);
 
-    enemy->speed = 1;
+    enemy->speed = 1.3;
     enemy->maxhealth = 100;
 	enemy->health = enemy->maxhealth;
-	enemy->damage = 5;
+	enemy->damage = 3;
     enemy->attackCDtime=1;
     enemy->attackcounter=0;
     enemy->inattackCD=0;
-	enemy->Critical_Rate = 50;//the possibility of a critical hit, %
+	enemy->Critical_Rate = 15;//the possibility of a critical hit, %
     enemy->Critical_Damage = 0.5;// the critical damage is 150%
     enemy->findPathCD = 1;
-    enemy->attackDistance = 1.5;
+    enemy->attackDistance = 1.3;
+    enemy->senseDistance = 20;
     enemy->canSeePlayer = FALSE;
     enemy->DEADFLAG=0;
     Vector3_Set(&enemy->moveDirection, 0, 0, 0);
@@ -62,11 +63,17 @@ void Enemy_Update(struct Enemy *enemy, double delta_time){
         Vector3_Scale(&move, enemy->speed * delta_time);
         Vector3_Subtract(&posDiff, &enemy->transform.position);
         posDiff.y = 0;
-        if (Vector3_Magnitude(&move) > Vector3_Magnitude(&posDiff))
-            Vector3_Copy(&posDiff,&enemy->moveDirection);
-        else
-            Transform_AddPosition(&enemy->transform, &move);
-            Vector3_Copy(&move,&enemy->moveDirection);
+        if (Vector3_Magnitude(&move) > Vector3_Magnitude(&posDiff)){
+            Vector3_Set(&enemy->moveDirection, posDiff.x, 0, posDiff.z);
+            //Vector3_Normalize(&enemy->moveDirection);
+            }
+        else{
+            Vector3_Set(&enemy->moveDirection, move.x, 0, move.z);
+            //Vector3_Normalize(&enemy->moveDirection);
+            }
+    }
+    else {
+        Vector3_Scale(&enemy->moveDirection,0);
     }
     if (enemy->inattackCD){
         enemy->ATTACKFLAG=0;
@@ -75,7 +82,7 @@ void Enemy_Update(struct Enemy *enemy, double delta_time){
     }
 }
 void Enemy_Attack(struct Enemy *enemy){
-    if(!enemy->inattackCD){
+    if(!enemy->inattackCD && enemy->canSeePlayer){
         enemy->ATTACKFLAG=1;
         enemy->inattackCD=1;
         enemy->attackcounter=enemy->attackCDtime;
