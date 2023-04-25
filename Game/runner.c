@@ -14,6 +14,7 @@ void Runner_Init(struct Runner *runner,struct UI_SettingMenu *settingui){
     runner->previousFrameTime = ProgramRunTime();
 }
 int Runner_Run(struct Runner *runner){
+    int end=1;
     struct Scene scene;
     double delta_time;
     Scene_Init(&scene);
@@ -34,7 +35,8 @@ int Runner_Run(struct Runner *runner){
 
         if(scene.player.DEADFLAG){
             system("clear");
-            return 0;
+            end=0;
+            break;
         }
         usleep(1000000 / runner->frame_rate);
     }
@@ -43,7 +45,7 @@ int Runner_Run(struct Runner *runner){
     Del_Scene(&scene);
     system("clear");
     printf("Goodbye!\n");
-    return 1;
+    return end;
     //TODO
     //For each frame
 }
@@ -52,6 +54,7 @@ void Runner_Load(struct Runner *runner){
     Runner_Run(runner);
 }
 void Del_Runner(struct Runner *runner){
+    
     free(runner);
 }
 void Runner_SetPlayerRotationSpeed(struct Player *player, struct Runner *runner){
