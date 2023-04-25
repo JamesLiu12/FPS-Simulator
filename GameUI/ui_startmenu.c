@@ -304,9 +304,9 @@ void Victory(){
         for(int j=0;j<24;j++){printf("_");}
         for(int j=0;j<30-i;j++){printf("-");}
         printf("\n");
-        usleep(200000);
+        usleep(150000);
     }
-    sleep(2);
+    sleep(1);
     system("clear");
     for(int i=0;i<100;i++)kbhit();
     printeye();
@@ -325,11 +325,12 @@ void Victory(){
     strcpy(a,"*mystery voice*: See you at the entrance\n\npress to continue");
     printdialog(a);
     while(1){if(kbhit())break;}
-    
-    for(int i=0;i<40;i++){
+
+    strcpy(a,"Your vision gradually fades");
+
+    for(int i=0;i<20;i++){
     system("clear");
     printeye();
-    strcpy(a,"Your vision gradually fades");
     printdialog(a);
     printf("\033[1;1H");
     for(int j=1;j<=i;j++){
@@ -342,6 +343,39 @@ void Victory(){
     usleep(150000);
     }
     
+    strcpy(a,"                        Victory");
+
+    for(int i=20;i<27;i++){
+    system("clear");
+    printeye();
+    printdialog(a);
+    printf("\033[1;1H");
+    for(int j=1;j<=i;j++){
+        //printf("\033[0J");
+        printf("\033[%d;1H",j);
+        printf("\r");
+        printchar(120,' ');
+        printf("\n");
+    }
+    usleep(150000);
+    }
+
+    strcpy(a,"                        Victory  ?");
+
+    for(int i=27;i<40;i++){
+    system("clear");
+    printeye();
+    printdialog(a);
+    printf("\033[1;1H");
+    for(int j=1;j<=i;j++){
+        //printf("\033[0J");
+        printf("\033[%d;1H",j);
+        printf("\r");
+        printchar(120,' ');
+        printf("\n");
+    }
+    usleep(150000);
+    }
     //usleep(200000);
 
     usleep(1000000);

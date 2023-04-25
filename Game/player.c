@@ -11,6 +11,7 @@ void Player_Init(struct Player *player){
     player->FIREFLAG = 0;
     player->fireCDcounter = 0;
     player->DEADFLAG = 0;
+    player->WINFLAG = 0;
     Vector3_Set(&player->facing,0,0,1);
 
     Transform_Init(&player->transform, NULL);

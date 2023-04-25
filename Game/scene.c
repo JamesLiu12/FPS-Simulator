@@ -203,7 +203,7 @@ void Scene_Init(struct Scene *scene){
         ArrayList_PushBack(&scene->list_Enemy, &enemy);
         //Vector3_Set(&enemy->transform.position,-17+i/2.0,0,-17+i/2.0);
         Vector3_Copy(((struct Vector3**)scene->list_EnemySpawnPoint.data)[pointnumber],&enemy->transform.position);
-        struct Vector3 *randomvector=Vector3_New((rand()%200)/100.0-1.0,0,(rand()%200)/100.0-1.0);
+        struct Vector3 *randomvector=Vector3_New((rand()%100)/100.0-0.5,0,(rand()%100)/100.0-0.5);
         Vector3_Add(&enemy->transform.position,randomvector);
     }
     //Sample end
@@ -256,39 +256,22 @@ void Scene_Update(struct Scene *scene, double delta_time){
         Line_Set(&ray, &enemyPosition, &positionDiff);
 
         double distanceBetween = Vector3_Distance3D(&enemyPosition, &playerPosition);
-        enemy->canSeePlayer = Scene_MinDistanceWall(scene, &ray) > distanceBetween;
-
+        enemy->canSeePlayer = (Scene_MinDistanceWall(scene, &ray) > distanceBetween) && (distanceBetween < enemy->senseDistance);
         enemy->moveDirection = positionDiff;
         Vector3_Normalize(&enemy->moveDirection);
         enemy->destination = playerPosition;
-
         if (Enemy_IsTargetInAttackRange(enemy, &playerPosition)){
             Enemy_Attack(enemy);
             if(enemy->ATTACKFLAG)Player_ChangeHealth(&scene->player,-enemy->damage*(1+enemy->Critical_Damage*(rand()%100>enemy->Critical_Rate)));
         }
         Enemy_Update(enemy, delta_time);
-
-        if(Vector3_Magnitude(&enemy->moveDirection)>0){
-            BlockFlag=0;
-            Vector3_Set(&TryToMove, enemy->moveDirection.x,0,0);
-            Enemy_Move(enemy,&TryToMove);
-            if(Scene_Collided_Enemy(scene, enemy->head.collideBoxes)) BlockFlag = 1;
-            else if(Scene_Collided_Object(scene, enemy->head.collideBoxes)) BlockFlag = 1;
-            if(BlockFlag){
-            Vector3_Set(&TryToMove, -enemy->moveDirection.x, 0, 0);
-            Enemy_Move(enemy,&TryToMove);
-            }
-
-            BlockFlag=0;
-            Vector3_Set(&TryToMove, 0, 0, enemy->moveDirection.z);
-            Enemy_Move(enemy,&TryToMove);
-            if(Scene_Collided_Enemy(scene, enemy->head.collideBoxes)) BlockFlag = 1;
-            else if(Scene_Collided_Object(scene, enemy->head.collideBoxes)) BlockFlag = 1;
-            if(BlockFlag){
-            Vector3_Set(&TryToMove, 0, 0, -enemy->moveDirection.z);
-            Enemy_Move(enemy,&TryToMove);
-            }
+        Enemy_Move(enemy,&enemy->moveDirection);
+        if( Scene_Collided_Object(scene, &enemy->body.collideBoxes[0]) || 
+            CollideBox_IsCollide(&enemy->body.collideBoxes[0], &scene->player.collideBox)){
+            Vector3_Scale(&enemy->moveDirection, -1);
+            Enemy_Move(enemy,&enemy->moveDirection);
         }
+
     }
 
 
@@ -297,6 +280,14 @@ void Scene_Update(struct Scene *scene, double delta_time){
         Scene_PlayerShoot(scene);
     }
     Player_Move(&scene->player, &scene->player.moveDirection);
+    if(CollideBox_IsCollide(&scene->player.collideBox, ((struct Object**)scene->list_Object.data)[1]->collideBoxes)){
+        scene->player.WINFLAG=1;
+    }
+    if( Scene_Collided_Object(scene,&scene->player.collideBox)){
+        Vector3_Scale(&scene->player.moveDirection, -1);
+        Player_Move(&scene->player, &scene->player.moveDirection);
+    }
+    
 
 #if DEBUG
     if (Scene_Collided_Enemy(scene, &scene->player.collideBox)){
@@ -373,8 +364,8 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     // printf("%lf %lf %lf\n",scene->player.transform.position.x,scene->player.transform.position.y,scene->player.transform.position.z);
     Transform_UpdateGlobal(&scene->player.collideBox.transform);
     Transform_UpdateGlobal(&scene->player.transform);
-    printf("%lf %lf %lf\n",scene->player.collideBox.transform.globalPosition.x,scene->player.collideBox.transform.globalPosition.y,scene->player.collideBox.transform.globalPosition.z);
-    printf("%lf %lf %lf\n",scene->player.transform.globalPosition.x,scene->player.transform.globalPosition.y,scene->player.transform.globalPosition.z);
+    // printf("%lf %lf %lf\n",scene->player.collideBox.transform.globalPosition.x,scene->player.collideBox.transform.globalPosition.y,scene->player.collideBox.transform.globalPosition.z);
+    // printf("%lf %lf %lf\n",scene->player.transform.globalPosition.x,scene->player.transform.globalPosition.y,scene->player.transform.globalPosition.z);
     Canvas_flush(canvas);
 }   
 
@@ -478,7 +469,7 @@ int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox){
             for(int j = 0; j < object->collideBoxCount ;j++){
                 if(CollideBox_IsCollide(collidebox,&object->collideBoxes[j])){
 #if DEBUG
-                    printf("%d %d\n", i, j);
+                    //printf("%d %d OBJECT\n", i, j);
 #endif
                     return 1;
                 }
