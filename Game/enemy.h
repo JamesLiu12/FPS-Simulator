@@ -11,7 +11,7 @@ struct Path{
 
 struct Enemy{
     struct Object head, leg, body;
-    double speed, damage, maxhealth, health, findPathCD, attackDistance;
+    double speed, damage, maxhealth, health, findPathCD, attackDistance, senseDistance;
     double attackCDtime,attackcounter;
     struct Transform transform;
 	//struct CollideBox collideBox;

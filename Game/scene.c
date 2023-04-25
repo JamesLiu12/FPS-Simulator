@@ -256,12 +256,10 @@ void Scene_Update(struct Scene *scene, double delta_time){
         Line_Set(&ray, &enemyPosition, &positionDiff);
 
         double distanceBetween = Vector3_Distance3D(&enemyPosition, &playerPosition);
-        enemy->canSeePlayer = Scene_MinDistanceWall(scene, &ray) > distanceBetween;
-
+        enemy->canSeePlayer = (Scene_MinDistanceWall(scene, &ray) > distanceBetween) && (distanceBetween < enemy->senseDistance);
         enemy->moveDirection = positionDiff;
         Vector3_Normalize(&enemy->moveDirection);
         enemy->destination = playerPosition;
-        Vector3_Scale(&enemy->moveDirection,0);
         if (Enemy_IsTargetInAttackRange(enemy, &playerPosition)){
             Enemy_Attack(enemy);
             if(enemy->ATTACKFLAG)Player_ChangeHealth(&scene->player,-enemy->damage*(1+enemy->Critical_Damage*(rand()%100>enemy->Critical_Rate)));

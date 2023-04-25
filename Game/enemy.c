@@ -35,7 +35,7 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
 
     Object_SetCollideBoxes(&enemy->leg, collideBoxes_EnemyLeg, 1);
 
-    enemy->speed = 1;
+    enemy->speed = 1.3;
     enemy->maxhealth = 100;
 	enemy->health = enemy->maxhealth;
 	enemy->damage = 3;
@@ -46,6 +46,7 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
     enemy->Critical_Damage = 0.5;// the critical damage is 150%
     enemy->findPathCD = 1;
     enemy->attackDistance = 1.3;
+    enemy->senseDistance = 20;
     enemy->canSeePlayer = FALSE;
     enemy->DEADFLAG=0;
     Vector3_Set(&enemy->moveDirection, 0, 0, 0);
@@ -70,6 +71,9 @@ void Enemy_Update(struct Enemy *enemy, double delta_time){
             Vector3_Set(&enemy->moveDirection, move.x, 0, move.z);
             //Vector3_Normalize(&enemy->moveDirection);
             }
+    }
+    else {
+        Vector3_Scale(&enemy->moveDirection,0);
     }
     if (enemy->inattackCD){
         enemy->ATTACKFLAG=0;
