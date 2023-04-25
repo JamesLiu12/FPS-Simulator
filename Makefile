@@ -16,9 +16,6 @@ CHECK_DIR:
 subsystem:
 	for dir in $(SUBDIRS); do $(MAKE) -C $$dir; done
 
-$(OBJ_DIR)/playground.o : playground.c
-	@$(CC) -c $^ -o $@
-
 $(OBJ_DIR)/main.o : main.c
 	@$(CC) -c $^ -o $@
 

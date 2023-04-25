@@ -5,7 +5,6 @@
 #include <string.h>
 #include <signal.h>
 #include <unistd.h>
-#include "playground.h"
 #ifdef __linux__
 static sig_atomic_t end = 0;
 static void sighandler(int signo)
