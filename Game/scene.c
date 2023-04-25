@@ -57,10 +57,10 @@ void Scene_Init(struct Scene *scene){
     //Wall_006
     CollideBox_Init(&collideBoxes_Wall[6], &Map_Wall->transform, 40, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[6].transform.position, 30, 1.25, 15);
-    //Wall_007
+    //Wall_007__ERROR FIX
     CollideBox_Init(&collideBoxes_Wall[7], &Map_Wall->transform, 13, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[7].transform.position, 0.5, 1.25, -10);
-    Vector3_Set(&collideBoxes_Wall[7].transform.rotation,0,-M_PI/2,0);
+    Vector3_Set(&collideBoxes_Wall[7].transform.rotation,0,-M_PI/4,0);
     //Wall_008
     CollideBox_Init(&collideBoxes_Wall[8], &Map_Wall->transform, 15, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[8].transform.position, 25, 1.25, -2.5);
@@ -70,8 +70,8 @@ void Scene_Init(struct Scene *scene){
     Vector3_Set(&collideBoxes_Wall[9].transform.position, -3.5, 1.25, -3.5);
     Vector3_Set(&collideBoxes_Wall[9].transform.rotation,0,M_PI/4,0);
     //Wall_010
-    CollideBox_Init(&collideBoxes_Wall[10], &Map_Wall->transform, 9.02, 2.5, 0.2);
-    Vector3_Set(&collideBoxes_Wall[10].transform.position, 10, 1.25, 10);
+    CollideBox_Init(&collideBoxes_Wall[10], &Map_Wall->transform, 9, 2.5, 0.2);
+    Vector3_Set(&collideBoxes_Wall[10].transform.position, 10, 1.25, 10.55);
     Vector3_Set(&collideBoxes_Wall[10].transform.rotation,0,M_PI/2,0);
     //Wall_011
     CollideBox_Init(&collideBoxes_Wall[11], &Map_Wall->transform, 30, 2.5, 0.2);
@@ -83,27 +83,27 @@ void Scene_Init(struct Scene *scene){
     //Wall_013
     CollideBox_Init(&collideBoxes_Wall[13], &Map_Wall->transform, 16, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[13].transform.position, -2, 1.25, -15);
-    //Wall_014
+    //Wall_014__ERROR FIX
     CollideBox_Init(&collideBoxes_Wall[14], &Map_Wall->transform, 5, 2.5, 0.2);
-    Vector3_Set(&collideBoxes_Wall[14].transform.position, 10, 1.25, -12.4);
+    Vector3_Set(&collideBoxes_Wall[14].transform.position, 10, 1.25, -12.5);
     Vector3_Set(&collideBoxes_Wall[14].transform.rotation,0,M_PI/2,0);
     //Wall_015
     CollideBox_Init(&collideBoxes_Wall[15], &Map_Wall->transform, 40, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[15].transform.position, 40, 1.25, -15);
-    //Wall_016
+    //Wall_016__ERROR FIX
     CollideBox_Init(&collideBoxes_Wall[16], &Map_Wall->transform, 5, 2.5, 0.2);
-    Vector3_Set(&collideBoxes_Wall[16].transform.position, 12.5, 1.25, 1.25);
-    //Wall_017
+    Vector3_Set(&collideBoxes_Wall[16].transform.position, 12.5, 1.25, -10);
+    //Wall_017__ERROR FIX
     CollideBox_Init(&collideBoxes_Wall[17], &Map_Wall->transform, 30, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[17].transform.position, 15, 1.25, -5);
     Vector3_Set(&collideBoxes_Wall[17].transform.rotation,0,M_PI/2,0);
-    //Wall_018
+    //Wall_018__ERROR FIX
     CollideBox_Init(&collideBoxes_Wall[18], &Map_Wall->transform, 20, 2.5, 0.2);
-    Vector3_Set(&collideBoxes_Wall[18].transform.position, 20, 1.25, 1.25);
+    Vector3_Set(&collideBoxes_Wall[18].transform.position, 20, 1.25, -5);
     Vector3_Set(&collideBoxes_Wall[18].transform.rotation,0,M_PI/2,0);
-    //Wall_019
+    //Wall_019__ERROR FIX
     CollideBox_Init(&collideBoxes_Wall[19], &Map_Wall->transform, 20, 2.5, 0.2);
-    Vector3_Set(&collideBoxes_Wall[19].transform.position, 44.85, 1.25, 1.25);
+    Vector3_Set(&collideBoxes_Wall[19].transform.position, 45, 1.25, -5);
     Vector3_Set(&collideBoxes_Wall[19].transform.rotation,0,M_PI/2,0);
     //Wall_020
     CollideBox_Init(&collideBoxes_Wall[20], &Map_Wall->transform, 25, 2.5, 0.2);
@@ -131,13 +131,13 @@ void Scene_Init(struct Scene *scene){
     Vector3_Set(&collideBoxes_Wall[26].transform.position, 32.5, 1.25, -5);
     //Wall_027
     CollideBox_Init(&collideBoxes_Wall[27], &Map_Wall->transform, 16, 2.5, 0.2);
-    Vector3_Set(&collideBoxes_Wall[27].transform.position, -1.29, 1.25, 14.88);
+    Vector3_Set(&collideBoxes_Wall[27].transform.position, -1.3, 1.25, 15);
     //Wall_028
     CollideBox_Init(&collideBoxes_Wall[28], &Map_Wall->transform, 3, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[28].transform.position, 8.4, 1.25, 12);
     //Wall_029
-    CollideBox_Init(&collideBoxes_Wall[29], &Map_Wall->transform, 2.8, 2.5, 0.2);
-    Vector3_Set(&collideBoxes_Wall[29].transform.position, 6.8, 1.25, 13.3);
+    CollideBox_Init(&collideBoxes_Wall[29], &Map_Wall->transform, 3, 2.5, 0.2);
+    Vector3_Set(&collideBoxes_Wall[29].transform.position, 6.8, 1.25, 13.5);
     Vector3_Set(&collideBoxes_Wall[29].transform.rotation,0,M_PI/2,0);
 
     Object_SetCollideBoxes(Map_Wall, collideBoxes_Wall, 30);
