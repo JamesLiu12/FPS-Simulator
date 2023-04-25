@@ -3,7 +3,7 @@
 
 void Player_Init(struct Player *player){
     Canvas_Init(&player->canvas, 32, 64);
-    player->maxHealth = 10;
+    player->maxHealth = 100;
     player->health = player->maxHealth;
     player->moveSpeed = 10;
     player->rotationSpeed = 10;

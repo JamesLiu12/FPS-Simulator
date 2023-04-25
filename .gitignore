@@ -15,3 +15,6 @@ playground.c
 .vscode
 FPS_Simulator.cbp
 .cmake/
+*.o
+bin/FPS_Simulator
+FPS_Simulator

@@ -16,6 +16,7 @@ void Scene_Init(struct Scene *scene){
     srand((int)time(NULL));
     ArrayList_Init(&scene->list_Object, sizeof(struct Object*));
     ArrayList_Init(&scene->list_Enemy, sizeof(struct Enemy*));
+    ArrayList_Init(&scene->list_EnemySpawnPoint,sizeof(struct Vector3));
     Player_Init(&scene->player);
     Player_SetPosition(&scene->player, -17.5, 0, -17.5);
 //    Vector3_Set(&scene->player.transform.position, 0, 5, 0);
@@ -168,15 +169,31 @@ void Scene_Init(struct Scene *scene){
 
     ArrayList_PushBack(&scene->list_Object, &Map_Floor);
 
+    Scene_Add_EnemySpawnPoint(scene, -11, 0, -17);
+    Scene_Add_EnemySpawnPoint(scene, 0.7, 0, 0.6);
+    Scene_Add_EnemySpawnPoint(scene, 7.3, 0, 0.6);
+    Scene_Add_EnemySpawnPoint(scene, 7.3, 0, -7.2);
+    Scene_Add_EnemySpawnPoint(scene, 0.7, 0, 0.6);
+    Scene_Add_EnemySpawnPoint(scene, 0.7, 0, 0.6);
+    Scene_Add_EnemySpawnPoint(scene, 0.7, 0, 0.6);
+    Scene_Add_EnemySpawnPoint(scene, 0.7, 0, 0.6);
+    Scene_Add_EnemySpawnPoint(scene, 0.7, 0, 0.6);
+    Scene_Add_EnemySpawnPoint(scene, 0.7, 0, 0.6);
+    Scene_Add_EnemySpawnPoint(scene, 0.7, 0, 0.6);
+    Scene_Add_EnemySpawnPoint(scene, 0.7, 0, 0.6);
+    //Scene_Add_EnemySpawnPoint(scene, );
     //Initialize the meshes of enemy
     EnemyMeshes_Init(&scene->enemyMeshes,
                      ModelEnemy_Head_New(), ModelEnemy_Body_New(), ModelEnemy_Leg_New());
 
     printf("\033[32;16O");
+
     //Sample Enemy generate test
-    struct Enemy *enemy = New_Enemy(&scene->enemyMeshes);
-    ArrayList_PushBack(&scene->list_Enemy, &enemy);
-    Vector3_Set(&enemy->transform.position, -17.5, 0 ,-10);
+    for(int i=0; i < 30; i++){
+        struct Enemy *enemy = New_Enemy(&scene->enemyMeshes);
+        ArrayList_PushBack(&scene->list_Enemy, &enemy);
+        Vector3_Set(&enemy->transform.position, -17.5, 0 ,-10);
+    }
     //Sample end
 }
 
@@ -334,7 +351,7 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     for(int i=0;i<26;i++)printf(" ");
     for(int i=0;i<52;i++)printf("-");
     printf("\n|");
-    int temp=50*scene->player.health/100;
+    int temp=50*scene->player.health/scene->player.maxHealth;
     for(int i=0;i<temp;i++)printf("█");
     for(int i=0;i<50-temp;i++)printf(" ");
     printf("|");
@@ -472,4 +489,8 @@ int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox){
             }
         }
     return 0;
+}
+void Scene_Add_EnemySpawnPoint(struct Scene *scene,double x, double y,double z){
+    struct Vector3 *vector=Vector3_New(x,y,z);
+    ArrayList_PushBack(&scene->list_EnemySpawnPoint,vector);
 }
