@@ -38,11 +38,11 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
     enemy->speed = 1;
     enemy->maxhealth = 100;
 	enemy->health = enemy->maxhealth;
-	enemy->damage = 5;
+	enemy->damage = 3;
     enemy->attackCDtime=1;
     enemy->attackcounter=0;
     enemy->inattackCD=0;
-	enemy->Critical_Rate = 50;//the possibility of a critical hit, %
+	enemy->Critical_Rate = 15;//the possibility of a critical hit, %
     enemy->Critical_Damage = 0.5;// the critical damage is 150%
     enemy->findPathCD = 1;
     enemy->attackDistance = 1.3;

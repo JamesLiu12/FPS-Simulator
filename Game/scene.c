@@ -95,7 +95,7 @@ void Scene_Init(struct Scene *scene){
     Vector3_Set(&collideBoxes_Wall[16].transform.position, 12.5, 1.25, 1.25);
     //Wall_017
     CollideBox_Init(&collideBoxes_Wall[17], &Map_Wall->transform, 30, 2.5, 0.2);
-    Vector3_Set(&collideBoxes_Wall[17].transform.position, 15, 1.25, 1.25);
+    Vector3_Set(&collideBoxes_Wall[17].transform.position, 15, 1.25, -5);
     Vector3_Set(&collideBoxes_Wall[17].transform.rotation,0,M_PI/2,0);
     //Wall_018
     CollideBox_Init(&collideBoxes_Wall[18], &Map_Wall->transform, 20, 2.5, 0.2);
@@ -261,14 +261,15 @@ void Scene_Update(struct Scene *scene, double delta_time){
         enemy->moveDirection = positionDiff;
         Vector3_Normalize(&enemy->moveDirection);
         enemy->destination = playerPosition;
-
+        Vector3_Scale(&enemy->moveDirection,0);
         if (Enemy_IsTargetInAttackRange(enemy, &playerPosition)){
             Enemy_Attack(enemy);
             if(enemy->ATTACKFLAG)Player_ChangeHealth(&scene->player,-enemy->damage*(1+enemy->Critical_Damage*(rand()%100>enemy->Critical_Rate)));
         }
         Enemy_Update(enemy, delta_time);
         Enemy_Move(enemy,&enemy->moveDirection);
-        if( Scene_Collided_Object(scene, &enemy->body.collideBoxes[0]) || CollideBox_IsCollide(&enemy->body.collideBoxes[0], &scene->player.collideBox)){
+        if( Scene_Collided_Object(scene, &enemy->body.collideBoxes[0]) || 
+            CollideBox_IsCollide(&enemy->body.collideBoxes[0], &scene->player.collideBox)){
             Vector3_Scale(&enemy->moveDirection, -1);
             Enemy_Move(enemy,&enemy->moveDirection);
         }
@@ -281,10 +282,14 @@ void Scene_Update(struct Scene *scene, double delta_time){
         Scene_PlayerShoot(scene);
     }
     Player_Move(&scene->player, &scene->player.moveDirection);
-    if(Scene_Collided_Enemy(scene, &scene->player.collideBox) || Scene_Collided_Object(scene,&scene->player.collideBox)){
+    if(CollideBox_IsCollide(&scene->player.collideBox, ((struct Object**)scene->list_Object.data)[1]->collideBoxes)){
+        scene->player.WINFLAG=1;
+    }
+    if( Scene_Collided_Object(scene,&scene->player.collideBox)){
         Vector3_Scale(&scene->player.moveDirection, -1);
         Player_Move(&scene->player, &scene->player.moveDirection);
     }
+    
 
 #if DEBUG
     if (Scene_Collided_Enemy(scene, &scene->player.collideBox)){

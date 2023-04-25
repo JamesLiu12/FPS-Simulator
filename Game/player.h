@@ -14,7 +14,7 @@ struct Player{
     struct Weapon weapon;
     int In_FireCD,FIREFLAG;
     int In_ReloadCD,RELOADFLAG;
-    int DEADFLAG;
+    int DEADFLAG,WINFLAG;
 };
 
 //Initializer of player
