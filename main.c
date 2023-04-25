@@ -16,7 +16,9 @@ static void sighandler(int signo)
 int main() {
     term_setup(sighandler);
     system("clear");
-    test();
+    struct UI_StartMenu *startui=New_UI_StartMenu();
+    UI_StartMenu_Init(startui);
+    Launch_StartMenu(startui);
     term_restore();
     return 0;
 }

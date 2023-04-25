@@ -16,6 +16,7 @@ void Scene_Init(struct Scene *scene){
     srand((int)time(NULL));
     ArrayList_Init(&scene->list_Object, sizeof(struct Object*));
     ArrayList_Init(&scene->list_Enemy, sizeof(struct Enemy*));
+    ArrayList_Init(&scene->list_EnemySpawnPoint,sizeof(struct Vector3*));
     Player_Init(&scene->player);
     Player_SetPosition(&scene->player, -17.5, 0, -17.5);
 //    Vector3_Set(&scene->player.transform.position, 0, 5, 0);
@@ -29,7 +30,7 @@ void Scene_Init(struct Scene *scene){
     struct Mesh *mesh_Wall = ModelMap_new_Wall_New();
     struct Object *Map_Wall = Object_New(mesh_Wall, NULL, WALL);
     //set collideBoxes:
-    struct CollideBox *collideBoxes_Wall = (struct CollideBox *) malloc(sizeof(struct CollideBox) * 31);
+    struct CollideBox *collideBoxes_Wall = (struct CollideBox *) malloc(sizeof(struct CollideBox) * 30);
 
     //Wall      Name Rule: from blender collection
     CollideBox_Init(&collideBoxes_Wall[0], &Map_Wall->transform, 80, 2.5, 0.2);
@@ -168,15 +169,43 @@ void Scene_Init(struct Scene *scene){
 
     ArrayList_PushBack(&scene->list_Object, &Map_Floor);
 
+    Scene_Add_EnemySpawnPoint(scene, -11, 0, -17);
+    Scene_Add_EnemySpawnPoint(scene, 0.7, 0, 0.6);
+    Scene_Add_EnemySpawnPoint(scene, 7.3, 0, 0.6);
+    Scene_Add_EnemySpawnPoint(scene, 7.3, 0, -7.2);
+    Scene_Add_EnemySpawnPoint(scene, 14.5, 0, 16.7);
+    Scene_Add_EnemySpawnPoint(scene, 26.1, 0, 16.7);
+    Scene_Add_EnemySpawnPoint(scene, 38, 0, 16.7);
+    Scene_Add_EnemySpawnPoint(scene, 49, 0, 16.7);
+    Scene_Add_EnemySpawnPoint(scene, 17.5, 0, -7.2);
+    Scene_Add_EnemySpawnPoint(scene, 24.3, 0, -7.1);
+    Scene_Add_EnemySpawnPoint(scene, 26.1, 0, -16.2);
+    Scene_Add_EnemySpawnPoint(scene, 38.2, 0, 16.3);
+    Scene_Add_EnemySpawnPoint(scene, 41.1, 0, 2.77);
+    Scene_Add_EnemySpawnPoint(scene, 41.1, 0, -4.6);
+    Scene_Add_EnemySpawnPoint(scene, 10, 0, -7.2);
+    Scene_Add_EnemySpawnPoint(scene, 19, 0, -7.2);
+    Scene_Add_EnemySpawnPoint(scene, 20, 0, 16.7);
+
+    
+    //Scene_Add_EnemySpawnPoint(scene, );
     //Initialize the meshes of enemy
     EnemyMeshes_Init(&scene->enemyMeshes,
                      ModelEnemy_Head_New(), ModelEnemy_Body_New(), ModelEnemy_Leg_New());
 
     printf("\033[32;16O");
-    //Sample Enemy generate test
-    struct Enemy *enemy = New_Enemy(&scene->enemyMeshes);
-    ArrayList_PushBack(&scene->list_Enemy, &enemy);
-    Vector3_Set(&enemy->transform.position, -17.5, 0 ,-10);
+
+    //Sample Enemy generate test 
+    int pointnumber;
+    for(int i=0; i < 60; i++){
+        pointnumber = rand()%(scene->list_EnemySpawnPoint.size);
+        struct Enemy *enemy = New_Enemy(&scene->enemyMeshes);
+        ArrayList_PushBack(&scene->list_Enemy, &enemy);
+        //Vector3_Set(&enemy->transform.position,-17+i/2.0,0,-17+i/2.0);
+        Vector3_Copy(((struct Vector3**)scene->list_EnemySpawnPoint.data)[pointnumber],&enemy->transform.position);
+        struct Vector3 *randomvector=Vector3_New((rand()%200)/100.0-1.0,0,(rand()%200)/100.0-1.0);
+        Vector3_Add(&enemy->transform.position,randomvector);
+    }
     //Sample end
 }
 
@@ -193,9 +222,13 @@ void Del_Scene(struct Scene *scene){
         Del_Enemy(enemy);
         free(enemy);
     }
-
+    for (int i = 0; i < scene->list_EnemySpawnPoint.size; i++){
+        struct Vector3 *vector = ((struct Vector3**)scene->list_EnemySpawnPoint.data)[i];
+        free(vector);
+    }
     Del_ArrayList(&scene->list_Object);
     Del_ArrayList(&scene->list_Enemy);
+    Del_ArrayList(&scene->list_EnemySpawnPoint);
     Del_Player(&scene->player);
 }
 
@@ -276,27 +309,7 @@ void Scene_Update(struct Scene *scene, double delta_time){
     }
 #endif
 
-    if(Vector3_Magnitude(&scene->player.moveDirection)>0){
-        BlockFlag=0;
-        Vector3_Set(&TryToMove, scene->player.moveDirection.x,0,0);
-        Player_Move(&scene->player, &TryToMove);
-        if(Scene_Collided_Enemy(scene, &scene->player.collideBox)) BlockFlag = 1;
-        else if(Scene_Collided_Object(scene, &scene->player.collideBox)) BlockFlag = 1;
-        if(BlockFlag){
-        Vector3_Set(&TryToMove, -scene->player.moveDirection.x, 0, 0);
-        Player_Move(&scene->player, &TryToMove);
-        }
-
-        BlockFlag=0;
-        Vector3_Set(&TryToMove, 0, 0, scene->player.moveDirection.z);
-        Player_Move(&scene->player, &TryToMove);
-        if(Scene_Collided_Enemy(scene, &scene->player.collideBox)) BlockFlag = 1;
-        else if(Scene_Collided_Object(scene, &scene->player.collideBox)) BlockFlag = 1;
-        if(BlockFlag){
-        Vector3_Set(&TryToMove, 0, 0, -scene->player.moveDirection.z);
-        Player_Move(&scene->player,&TryToMove);
-        }
-    }
+    for (int i = 0; i < 10 ; i++)kbhit();
     Clear_Enemy(scene);
     Canvas_clear(&scene->player.canvas);
     Scene_Show(scene, &scene->player.canvas);
@@ -334,7 +347,7 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     for(int i=0;i<26;i++)printf(" ");
     for(int i=0;i<52;i++)printf("-");
     printf("\n|");
-    int temp=50*scene->player.health/100;
+    int temp=50*scene->player.health/scene->player.maxHealth;
     for(int i=0;i<temp;i++)printf("█");
     for(int i=0;i<50-temp;i++)printf(" ");
     printf("|");
@@ -472,4 +485,8 @@ int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox){
             }
         }
     return 0;
+}
+void Scene_Add_EnemySpawnPoint(struct Scene *scene,double x, double y,double z){
+    struct Vector3 *vector=Vector3_New(x,y,z);
+    ArrayList_PushBack(&scene->list_EnemySpawnPoint,&vector);
 }
