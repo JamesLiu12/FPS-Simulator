@@ -256,7 +256,7 @@ void Scene_Update(struct Scene *scene, double delta_time){
         Line_Set(&ray, &enemyPosition, &positionDiff);
 
         double distanceBetween = Vector3_Distance3D(&enemyPosition, &playerPosition);
-        enemy->canSeePlayer = (Scene_MinDistanceWall(scene, &ray) > distanceBetween) && (distanceBetween < enemy->senseDistance);
+        enemy->canSeeTarget = (Scene_MinDistanceWall(scene, &ray) > distanceBetween) && (distanceBetween < enemy->senseDistance);
         enemy->moveDirection = positionDiff;
         Vector3_Normalize(&enemy->moveDirection);
         enemy->destination = playerPosition;
@@ -283,7 +283,7 @@ void Scene_Update(struct Scene *scene, double delta_time){
     if(CollideBox_IsCollide(&scene->player.collideBox, ((struct Object**)scene->list_Object.data)[1]->collideBoxes)){
         scene->player.WINFLAG=1;
     }
-    if( Scene_Collided_Object(scene,&scene->player.collideBox)){
+    if(Scene_Collided_Object(scene,&scene->player.collideBox)){
         Vector3_Scale(&scene->player.moveDirection, -1);
         Player_Move(&scene->player, &scene->player.moveDirection);
     }
@@ -306,12 +306,29 @@ void Scene_Update(struct Scene *scene, double delta_time){
     Scene_Show(scene, &scene->player.canvas);
 }
 
+//print information bar in the position start_row and start_col, with bar_length and ratio
+void print_bar(int bar_length, double ratio, int start_row, int start_col){
+    move_cursor_to(start_row, start_col);
+    for (int i = 0; i < bar_length + 2; i++) printf("-");
+    move_cursor_to(start_row + 1, start_col);
+    printf("|");
+    for (int i = 0; i < bar_length * ratio; i++) printf("█");
+    for (int i = 0; i < bar_length - bar_length * ratio; i++) printf(" ");
+    printf("|");
+    move_cursor_to(start_row + 2, start_col);
+    for (int i = 0; i < bar_length + 2; i++) printf("-");
+}
+
 void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     Canvas_clear(canvas);
+
+    //Draw all the object
     for (int i = 0; i < scene->list_Object.size; i++){
         struct Object *object = ((struct Object**)scene->list_Object.data)[i];
         Object_Show(object, canvas);
     }
+
+    //Draw all the enemy
     for (int i = 0; i < scene->list_Enemy.size; i++){
         struct Enemy *enemy = ((struct Enemy**)scene->list_Enemy.data)[i];
         struct Object
@@ -322,40 +339,65 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
         Object_Show(body, canvas);
         Object_Show(leg, canvas);
     }
+
+    //Print if it is loading the bullet now
     printf("\033[16;60HX");
     printf("\033[36;100H");
     printf("\n\n");
-    if(scene->player.In_ReloadCD==1){
-        for(int i=0;i<100;i++)printf(" ");
+    if (scene->player.In_ReloadCD==1){
+        for (int i = 0; i < 100; i++) printf(" ");
         printf("Reloading\n");
     }
-    else {
+    else{
         printf("\r");
-        for(int i=0;i<120;i++)printf(" ");
+        for (int i = 0; i < 120; i++) printf(" ");
         printf("\n");
+    }
+
+    //Get the position of the cursor
+    int row = canvas->height + 1, col = 0;
+
+    //The maximum length of the bar
+    int bar_length = 50;
+
+    //Display player health
+    print_bar(bar_length, scene->player.health / scene->player.maxHealth,
+              row + 4, col + 5);
+    move_cursor_to(row + 7, col + 5 + 10);
+    printf("Player HP : %.2lf / %.0lf ", scene->player.health, scene->player.maxHealth);
+
+    //Display bullet number
+    print_bar(bar_length, scene->player.weapon.bullet_number / scene->player.weapon.magazine_size,
+              row + 4, col + 16 + bar_length);
+    move_cursor_to(row + 7, col + 16 + 16 + bar_length);
+    printf("%s : %d / %d ",scene->player.weapon.namestring, scene->player.weapon.bullet_number,
+           scene->player.weapon.magazine_size);
+
+    //Display Enemy health
+    struct Line ray;
+    Transform_UpdateGlobal(&scene->player.canvas.camera_transform);
+    struct Vector3 direction;
+    Vector3_Set(&direction, 0, 0, 1);
+    Matrix3x3_TransformEuler(&scene->player.canvas.camera_transform.globalRotation, &direction);
+    Line_Set(&ray, &scene->player.canvas.camera_transform.globalPosition, &direction);
+    struct Enemy *enemy;
+    enum Tag tag;
+    Scene_EnemyCollided(scene, &ray, &enemy, &tag);
+    if (enemy != NULL){
+        print_bar(bar_length, enemy->health / enemy->maxHealth,
+                  row + 10, col + 5);
+        move_cursor_to(row + 13, col + 5 + 11);
+        printf("Enemy HP : %.2lf / %.0lf ", enemy->health, enemy->maxHealth);
+    }
+    else{
+        move_cursor_to(row + 10, col + 5);
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < bar_length + 5; j++) printf(" ");
+            puts("");
         }
-    for(int i=0;i<52;i++)printf("-");
-    for(int i=0;i<26;i++)printf(" ");
-    for(int i=0;i<52;i++)printf("-");
-    printf("\n|");
-    int temp=50*scene->player.health/scene->player.maxHealth;
-    for(int i=0;i<temp;i++)printf("█");
-    for(int i=0;i<50-temp;i++)printf(" ");
-    printf("|");
-    for(int i=0;i<26;i++)printf(" ");
-    printf("|");
-    temp=50*scene->player.weapon.bullet_number/scene->player.weapon.magazine_size;
-    for(int i=0;i<50-temp;i++)printf(" ");
-    for(int i=0;i<temp;i++)printf("█");
-    printf("|\n");
-    for(int i=0;i<52;i++)printf("-");
-    for(int i=0;i<26;i++)printf(" ");
-    for(int i=0;i<52;i++)printf("-");
-    printf("\n");
-    for(int i=0;i<16;i++)printf(" ");
-    printf("HP : %.2lf / %.0lf ",scene->player.health,scene->player.maxHealth);
-    for(int i=0;i<58;i++)printf(" ");
-    printf("%s : %d / %d \n",scene->player.weapon.namestring,scene->player.weapon.bullet_number,scene->player.weapon.magazine_size);
+    }
+
+    //Draw the STAR in the center of canvas
     Canvas_AddCover(&scene->player.canvas, scene->player.canvas.height / 2 - 1,
                     scene->player.canvas.width / 2 - 1, STAR);
     Canvas_flush(canvas);
@@ -433,7 +475,10 @@ double Scene_MinDistanceWall(struct Scene *scene, struct Line *ray){
 void Scene_PlayerShoot(struct Scene *scene){
     struct Line ray;
     Transform_UpdateGlobal(&scene->player.canvas.camera_transform);
-    Line_Set(&ray, &scene->player.canvas.camera_transform.globalPosition, &scene->player.facing);
+    struct Vector3 direction;
+    Vector3_Set(&direction, 0, 0, 1);
+    Matrix3x3_TransformEuler(&scene->player.canvas.camera_transform.globalRotation, &direction);
+    Line_Set(&ray, &scene->player.canvas.camera_transform.globalPosition, &direction);
     struct Enemy *enemy;
     enum Tag tag;
     Scene_EnemyCollided(scene, &ray, &enemy, &tag);

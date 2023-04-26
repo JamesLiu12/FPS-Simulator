@@ -36,8 +36,8 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
     Object_SetCollideBoxes(&enemy->leg, collideBoxes_EnemyLeg, 1);
 
     enemy->speed = 1.3;
-    enemy->maxhealth = 100;
-	enemy->health = enemy->maxhealth;
+    enemy->maxHealth = 100;
+	enemy->health = enemy->maxHealth;
 	enemy->damage = 3;
     enemy->attackCDtime=1;
     enemy->attackcounter=0;
@@ -47,7 +47,7 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
     enemy->findPathCD = 1;
     enemy->attackDistance = 1.3;
     enemy->senseDistance = 20;
-    enemy->canSeePlayer = FALSE;
+    enemy->canSeeTarget = FALSE;
     enemy->DEADFLAG=0;
     Vector3_Set(&enemy->moveDirection, 0, 0, 0);
 }
@@ -57,7 +57,7 @@ void Enemy_Start(struct Enemy *enemy){
 }
 
 void Enemy_Update(struct Enemy *enemy, double delta_time){
-    if (enemy->canSeePlayer){
+    if (enemy->canSeeTarget){
         struct Vector3 move = enemy->moveDirection,
                 posDiff = enemy->destination;
         Vector3_Scale(&move, enemy->speed * delta_time);
@@ -82,7 +82,7 @@ void Enemy_Update(struct Enemy *enemy, double delta_time){
     }
 }
 void Enemy_Attack(struct Enemy *enemy){
-    if(!enemy->inattackCD && enemy->canSeePlayer){
+    if(!enemy->inattackCD && enemy->canSeeTarget){
         enemy->ATTACKFLAG=1;
         enemy->inattackCD=1;
         enemy->attackcounter=enemy->attackCDtime;
@@ -132,7 +132,7 @@ void Enemy_Rotation(struct Enemy* enemy, struct Vector3 *angle){
 
 void Enemy_ChangeHealth(struct Enemy *enemy, double delta_health){
     enemy->health += delta_health;
-    if(enemy->health > enemy->maxhealth) enemy->health = enemy->maxhealth;
+    if(enemy->health > enemy->maxHealth) enemy->health = enemy->maxHealth;
     if(enemy->health <= 0) enemy->DEADFLAG=1;
 }
 void Enemy_GetDamage(struct Enemy *enemy, enum Tag *tag, struct Weapon *weapon){

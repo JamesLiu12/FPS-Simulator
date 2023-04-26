@@ -94,6 +94,8 @@ double CollideBox_RayDistance(struct CollideBox *box, struct Line *ray){
         struct Vector3 intersection;
         Plane_LineIntersection(&planes[i], ray, &intersection);
         if (double_IsSameSign(intersection.x - ray->position.x, ray->direction.x)
+        && double_IsSameSign(intersection.y - ray->position.y, ray->direction.y)
+        && double_IsSameSign(intersection.z - ray->position.z, ray->direction.z)
         && (Triangle_IsPointInTriangle3D(&triangles[i * 2], &intersection)
         || Triangle_IsPointInTriangle3D(&triangles[i * 2 + 1], &intersection))
         && !Vector3_Equal(&intersection, &ray->position)){
@@ -147,16 +149,16 @@ int CollideBox_IsCollide(struct CollideBox *b1, struct CollideBox *b2){
     Vector3_Set(&axis_b1.X, 1, 0, 0);
     Vector3_Set(&axis_b1.Y, 0, 1, 0);
     Vector3_Set(&axis_b1.Z, 0, 0, 1);
-    Matrix3x3_TransformEular(&b1->transform.globalRotation, &axis_b1.X);
-    Matrix3x3_TransformEular(&b1->transform.globalRotation, &axis_b1.Y);
-    Matrix3x3_TransformEular(&b1->transform.globalRotation, &axis_b1.Z);
+    Matrix3x3_TransformEuler(&b1->transform.globalRotation, &axis_b1.X);
+    Matrix3x3_TransformEuler(&b1->transform.globalRotation, &axis_b1.Y);
+    Matrix3x3_TransformEuler(&b1->transform.globalRotation, &axis_b1.Z);
 
     Vector3_Set(&axis_b2.X, 1, 0, 0);
     Vector3_Set(&axis_b2.Y, 0, 1, 0);
     Vector3_Set(&axis_b2.Z, 0, 0, 1);
-    Matrix3x3_TransformEular(&b2->transform.globalRotation, &axis_b2.X);
-    Matrix3x3_TransformEular(&b2->transform.globalRotation, &axis_b2.Y);
-    Matrix3x3_TransformEular(&b2->transform.globalRotation, &axis_b2.Z);
+    Matrix3x3_TransformEuler(&b2->transform.globalRotation, &axis_b2.X);
+    Matrix3x3_TransformEuler(&b2->transform.globalRotation, &axis_b2.Y);
+    Matrix3x3_TransformEuler(&b2->transform.globalRotation, &axis_b2.Z);
 
     struct Axis axis_c1, axis_c2, axis_c3;
     axis_c1.X = axis_b1.X;

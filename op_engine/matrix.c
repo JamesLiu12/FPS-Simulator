@@ -40,9 +40,9 @@ void Matrix3x3_TransformMatrix(struct Matrix3x3 *m, struct Vector3 *v) {
     v->z = result_z;
 }
 
-void Matrix3x3_TransformEular(struct Vector3 *angle, struct Vector3 *v){
+void Matrix3x3_TransformEuler(struct Vector3 *angle, struct Vector3 *v){
     struct Matrix3x3 m;
-    Matrix3x3_FromEulerAngle(&m, angle, FALSE);
+    Matrix3x3_FromEulerAngle(&m, angle, TRUE);
     Matrix3x3_TransformMatrix(&m, v);
 }
 
@@ -70,3 +70,27 @@ void Matrix3x3_FromEulerAngle(struct Matrix3x3 *m, struct Vector3 *ea, char reve
     m->data[2][2] = cos(yaw) * cos(pinch);
 }
 
+void Matrix3x3_ToEuler(struct Matrix3x3 *m, struct Vector3 *v) {
+    double cos_pitch = sqrt(m->data[0][0] * m->data[0][0] + m->data[1][0] * m->data[1][0]);
+    double roll, pitch, yaw;
+    if (cos_pitch > 1e-6) {
+        pitch = atan2(-m->data[2][0], cos_pitch);
+        yaw = atan2(m->data[0][1] / cos_pitch, m->data[1][1] / cos_pitch);
+        roll = atan2(m->data[2][1] / cos_pitch, m->data[2][2] / cos_pitch);
+    } else {
+        pitch = atan2(-m->data[2][0], cos_pitch);
+        yaw = atan2(-m->data[1][2], m->data[1][1]);
+        roll = 0;
+    }
+    v->x = roll;
+    v->y = pitch;
+    v->z = yaw;
+}
+
+void Matrix3x3_Copy(struct Matrix3x3 *from, struct Matrix3x3 *to){
+    for (int i = 0; i < 3; i++){
+        for (int j = 0; j < 3; j++){
+            to->data[i][j] = from->data[i][j];
+        }
+    }
+}

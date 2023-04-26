@@ -3,6 +3,7 @@
 #include <math.h>
 #include "util.h"
 #include <sys/time.h>
+#include <stdio.h>
 
 void swap(void *a, void *b, size_t size) {
     void *temp = malloc(size);
@@ -66,4 +67,14 @@ double ProgramRunTime(){
     struct timeval t;
     gettimeofday(&t, NULL);
     return t.tv_sec + t.tv_usec * 1e-6;
+}
+
+void move_cursor_to(int row, int col) {
+    printf("\033[%d;%dH", row, col);
+}
+
+void get_cursor_position(int *row, int *col){
+    printf("\x1b[6n");
+//    fflush(stdout);
+    scanf("\x1b[%d;%dR", row, col);
 }

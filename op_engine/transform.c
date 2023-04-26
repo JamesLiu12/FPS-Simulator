@@ -58,13 +58,54 @@ void Transform_UpdateGlobal(struct Transform *transform){
             &transform->globalRotationMatrix, &transform->globalRotation, EULER_ANGLE_NORMAL);
 }
 
+//void Transform_UpdateGlobal(struct Transform *transform) {
+//    // 如果存在父物体，先更新父物体的全局信息
+//    if (transform->father != NULL) {
+//        Transform_UpdateGlobal(transform->father);
+//    }
+//
+//    // 更新子物体的全局信息
+//    transform->globalPosition = transform->position;
+//    transform->globalRotation = transform->rotation;
+//    transform->globalScale = transform->scale;
+//    Matrix3x3_FromEulerAngle(
+//            &transform->globalRotationMatrix, &transform->globalRotation, EULER_ANGLE_NORMAL);
+//
+//    Matrix3x3_FromEulerAngle(
+//            &transform->rotationMatrix, &transform->rotation, EULER_ANGLE_NORMAL);
+//
+//    if (transform->father != NULL) {
+//        // 将子物体和父物体的局部欧拉角转换为旋转矩阵
+//
+//        // 将两个旋转矩阵相乘以获得子物体的全局旋转矩阵
+//        Matrix3x3_Copy(&transform->father->globalRotationMatrix, &transform->globalRotationMatrix);
+//        Matrix3x3_Multiply(&transform->globalRotationMatrix, &transform->rotationMatrix);
+//
+//        // 将全局旋转矩阵转换回欧拉角
+//        Matrix3x3_ToEuler(&transform->globalRotationMatrix, &transform->globalRotation);
+//
+//        // 更新子物体的全局缩放
+//        Vector3_Multiply(&transform->globalScale, &transform->father->globalScale);
+//
+//        // 更新子物体的全局位置
+//        Matrix3x3_TransformMatrix(&transform->father->globalRotationMatrix, &transform->globalPosition);
+//        Vector3_Multiply(&transform->globalPosition, &transform->father->globalScale);
+//        Vector3_Add(&transform->globalPosition, &transform->father->globalPosition);
+//    }
+//
+//    // 更新子物体的全局旋转矩阵
+//    Matrix3x3_FromEulerAngle(
+//            &transform->globalRotationMatrix, &transform->globalRotation, EULER_ANGLE_NORMAL);
+//}
+
 void Transform_AddChild(struct Transform *transform, struct Transform *child){
     ArrayList_PushBack(&transform->list_child, child);
     transform->childCount++;
 }
 
 void Transform_ToGlobal(struct Transform *transform, struct Vector3 *vector){
-    Matrix3x3_TransformMatrix(&transform->globalRotationMatrix, vector);
+//    Matrix3x3_TransformMatrix(&transform->globalRotationMatrix, vector);
+    Matrix3x3_TransformEuler(&transform->globalRotation, vector);
     Vector3_Multiply(vector, &transform->globalScale);
     Vector3_Add(vector, &transform->globalPosition);
 }
@@ -75,6 +116,7 @@ void Transform_AddPosition(struct Transform *transform, struct Vector3 *position
 
 void Transform_AddRotation(struct Transform *transform, struct Vector3 *rotation){
     Vector3_Add(&transform->rotation, rotation);
+    Matrix3x3_FromEulerAngle(&transform->rotationMatrix, &transform->rotation, EULER_ANGLE_NORMAL);
 }
 
 void Transform_CopyValues(struct Transform *from, struct Transform *to){

@@ -13,6 +13,13 @@ double ProgramRunTime();
  * number_col: the number of unknown number plus one
  */
 void Gaussian_Elimination(double **a, int number_row, int number_col);
+
+//move the cursor to the position (row, col)
+void move_cursor_to(int row, int col);
+
+//Get the current position of the cursor
+void get_cursor_position(int *row, int *col);
+
 #define TRUE 1
 #define FALSE 0
 #define EPSILON 1e-6
