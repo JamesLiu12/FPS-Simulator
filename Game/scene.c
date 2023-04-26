@@ -358,12 +358,6 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     printf("%s : %d / %d \n",scene->player.weapon.namestring,scene->player.weapon.bullet_number,scene->player.weapon.magazine_size);
     Canvas_AddCover(&scene->player.canvas, scene->player.canvas.height / 2 - 1,
                     scene->player.canvas.width / 2 - 1, STAR);
-    Canvas_AddCover(&scene->player.canvas, scene->player.canvas.height / 2 - 1,
-                    scene->player.canvas.width / 2, STAR);
-    Canvas_AddCover(&scene->player.canvas, scene->player.canvas.height / 2,
-                    scene->player.canvas.width / 2 - 1, STAR);
-    Canvas_AddCover(&scene->player.canvas, scene->player.canvas.height / 2,
-                    scene->player.canvas.width / 2, STAR);
     Canvas_flush(canvas);
 }   
 

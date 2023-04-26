@@ -2,7 +2,7 @@
 #include "../op_engine/op_engine.h"
 
 void Player_Init(struct Player *player){
-    Canvas_Init(&player->canvas, 32, 64);
+    Canvas_Init(&player->canvas, 33, 65);
     player->maxHealth = 100;
     player->health = player->maxHealth;
     player->moveSpeed = 10;
