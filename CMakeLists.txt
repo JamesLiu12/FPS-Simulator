@@ -82,7 +82,10 @@ add_executable(
         GameUI/ui_settingmenu.c
         GameUI/ui_defeatmenu.h
         GameUI/ui_defeatmenu.c
-
+        GameUI/ui_instruction.h
+        GameUI/ui_instruction.c
+        GameUI/ui_weaponselectionmenu.h
+        GameUI/ui_weaponselectionmenu.c
 
 )
 target_link_libraries(FPS_Simulator m)

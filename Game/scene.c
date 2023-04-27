@@ -12,17 +12,13 @@
 #include "../util/util.h"
 #define _USE_MATH_DEFINES
 
-void Scene_Init(struct Scene *scene){
+void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
     srand((int)time(NULL));
     ArrayList_Init(&scene->list_Object, sizeof(struct Object*));
     ArrayList_Init(&scene->list_Enemy, sizeof(struct Enemy*));
     ArrayList_Init(&scene->list_EnemySpawnPoint,sizeof(struct Vector3*));
-    Player_Init(&scene->player);
+    Player_Init(&scene->player, weaponname);
     Player_SetPosition(&scene->player, -17.5, 0, -17.5);
-//    Vector3_Set(&scene->player.transform.position, 0, 5, 0);
-//    struct Vector3 ang;
-//    Vector3_Set(&ang, M_PI / 2, 0, 0);
-//    Player_Rotate(&scene->player, &ang);
 
     //Map_new_Wall origin coordinate (0,0,0)
 
@@ -275,10 +271,11 @@ void Scene_Update(struct Scene *scene, double delta_time){
     }
 
 
-    Player_Update(&scene->player, delta_time);
+    Player_Control(&scene->player, delta_time);
     if (scene->player.FIREFLAG){
         Scene_PlayerShoot(scene);
     }
+    Player_Update(&scene->player, delta_time);
     Player_Move(&scene->player, &scene->player.moveDirection);
     if(CollideBox_IsCollide(&scene->player.collideBox, ((struct Object**)scene->list_Object.data)[1]->collideBoxes)){
         scene->player.WINFLAG=1;
@@ -312,8 +309,8 @@ void print_bar(int bar_length, double ratio, int start_row, int start_col){
     for (int i = 0; i < bar_length + 2; i++) printf("-");
     move_cursor_to(start_row + 1, start_col);
     printf("|");
-    for (int i = 0; i < bar_length * ratio; i++) printf("█");
-    for (int i = 0; i < bar_length - bar_length * ratio; i++) printf(" ");
+    for (int i = 0; i < (int)(bar_length * ratio); i++) printf("█");
+    for (int i = 0; i < bar_length - (int)(bar_length * ratio); i++) printf(" ");
     printf("|");
     move_cursor_to(start_row + 2, start_col);
     for (int i = 0; i < bar_length + 2; i++) printf("-");
@@ -341,16 +338,15 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     }
 
     //Print if it is loading the bullet now
-    printf("\033[16;60HX");
     printf("\033[36;100H");
-    printf("\n\n");
+    printf("\n");
     if (scene->player.In_ReloadCD==1){
-        for (int i = 0; i < 100; i++) printf(" ");
+        for (int i = 0; i < 87; i++) printf(" ");
         printf("Reloading\n");
     }
     else{
         printf("\r");
-        for (int i = 0; i < 120; i++) printf(" ");
+        for (int i = 0; i < 100; i++) printf(" ");
         printf("\n");
     }
 
@@ -367,39 +363,46 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     printf("Player HP : %.2lf / %.0lf ", scene->player.health, scene->player.maxHealth);
 
     //Display bullet number
-    print_bar(bar_length, scene->player.weapon.bullet_number / scene->player.weapon.magazine_size,
+    print_bar(bar_length, scene->player.weapon.bullet_number * 1.0 / scene->player.weapon.magazine_size,
               row + 4, col + 16 + bar_length);
-    move_cursor_to(row + 7, col + 16 + 16 + bar_length);
+    move_cursor_to(row + 7, col + 16 + 13 + bar_length);
     printf("%s : %d / %d ",scene->player.weapon.namestring, scene->player.weapon.bullet_number,
            scene->player.weapon.magazine_size);
 
     //Display Enemy health
     struct Line ray;
     Transform_UpdateGlobal(&scene->player.canvas.camera_transform);
+    
     struct Vector3 direction;
-    Vector3_Set(&direction, 0, 0, 1);
-    Matrix3x3_TransformEuler(&scene->player.canvas.camera_transform.globalRotation, &direction);
+    Vector3_Copy(&scene->player.facing, &direction);
+    //Matrix3x3_TransformEuler(&scene->player.canvas.camera_transform.globalRotation, &direction);
     Line_Set(&ray, &scene->player.canvas.camera_transform.globalPosition, &direction);
+
     struct Enemy *enemy;
     enum Tag tag;
     Scene_EnemyCollided(scene, &ray, &enemy, &tag);
     if (enemy != NULL){
         print_bar(bar_length, enemy->health / enemy->maxHealth,
-                  row + 10, col + 5);
-        move_cursor_to(row + 13, col + 5 + 11);
+                  row + 10, col + 5 + 30);
+        move_cursor_to(row + 13, col + 5 + 11 + 30);
         printf("Enemy HP : %.2lf / %.0lf ", enemy->health, enemy->maxHealth);
     }
     else{
-        move_cursor_to(row + 10, col + 5);
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < bar_length + 5; j++) printf(" ");
+        move_cursor_to(row + 10, col + 5 + 30);
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < bar_length + 40; j++) printf(" ");
             puts("");
         }
     }
 
     //Draw the STAR in the center of canvas
-    Canvas_AddCover(&scene->player.canvas, scene->player.canvas.height / 2 - 1,
-                    scene->player.canvas.width / 2 - 1, STAR);
+    Canvas_AddCover(&scene->player.canvas, scene->player.canvas.height / 2 ,
+                    scene->player.canvas.width / 2 , STAR);
+#if DEBUG
+    printf("%lf %lf %lf\n",scene->player.facing.x,scene->player.facing.y,scene->player.facing.z);
+    printf("%lf %lf %lf\n",scene->player.canvas.camera_transform.rotation.x,scene->player.canvas.camera_transform.rotation.y,scene->player.canvas.camera_transform.rotation.z);
+    printf("%lf %lf %lf\n",scene->player.canvas.camera_transform.globalPosition.x,scene->player.canvas.camera_transform.globalPosition.y,scene->player.canvas.camera_transform.globalPosition.z);
+#endif
     Canvas_flush(canvas);
 }   
 
@@ -475,10 +478,7 @@ double Scene_MinDistanceWall(struct Scene *scene, struct Line *ray){
 void Scene_PlayerShoot(struct Scene *scene){
     struct Line ray;
     Transform_UpdateGlobal(&scene->player.canvas.camera_transform);
-    struct Vector3 direction;
-    Vector3_Set(&direction, 0, 0, 1);
-    Matrix3x3_TransformEuler(&scene->player.canvas.camera_transform.globalRotation, &direction);
-    Line_Set(&ray, &scene->player.canvas.camera_transform.globalPosition, &direction);
+    Line_Set(&ray, &scene->player.canvas.camera_transform.globalPosition, &scene->player.facing);
     struct Enemy *enemy;
     enum Tag tag;
     Scene_EnemyCollided(scene, &ray, &enemy, &tag);
