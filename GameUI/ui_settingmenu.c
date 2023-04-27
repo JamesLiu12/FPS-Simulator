@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "ui_startmenu.h"
+#include "ui_instruction.h"
 void UI_SettingMenu_Init(struct UI_SettingMenu *settingui){
     settingui->pointer=0;
     strcpy(settingui->menu[0],"Frame Rate  ");
@@ -25,11 +25,13 @@ void UI_SettingMenu_Init(struct UI_SettingMenu *settingui){
     settingui->framerate=60;
     settingui->difficulty=1;
     settingui->sensitivity=100;
+    settingui->weaponnumber=0;
     Write_Setting(settingui);
 	} 
     fscanf(fp,"%d",&settingui->framerate);
     fscanf(fp,"%d",&settingui->difficulty);
     fscanf(fp,"%d",&settingui->sensitivity);
+    fscanf(fp,"%d",&settingui->weaponnumber);
     fclose(fp);
 }
 void Write_Setting(struct UI_SettingMenu *settingui){
@@ -38,6 +40,7 @@ void Write_Setting(struct UI_SettingMenu *settingui){
     fprintf(fp,"%d\n",settingui->framerate);
     fprintf(fp,"%d\n",settingui->difficulty);
     fprintf(fp,"%d",settingui->sensitivity);
+    fprintf(fp,"%d",settingui->weaponnumber);
     fclose(fp);
 }
 void SettingMenu_Show(struct UI_SettingMenu *settingui){

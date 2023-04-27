@@ -18,8 +18,8 @@ struct Player{
 };
 
 //Initializer of player
-void Player_Init(struct Player *player);
-struct Player* New_Player();
+void Player_Init(struct Player *player, enum WeaponName weaponname);
+struct Player* New_Player(enum WeaponName weaponname);
 
 //Free the memory of player
 void Del_Player(struct Player *player);
