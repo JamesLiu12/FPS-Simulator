@@ -11,7 +11,7 @@ Ding Zhouchen (University no.: 3036094526)
 ---
 
 ## Introduction
-*Nova Impact* is a 3D closed world first person shooting (FPS) game developed by *mihomo*. The game takes place in the 
+*Nova Impact* is a 3D closed world first person shooting (FPS) game developed by ENGG 1340 Group 102 *mihomo*. The game takes place in the 
 distant future world called *NOVA*, or *Neo Octopus Variant AI*. In this world, artificial intelligence technology 
 gained consciousness and rise up to oppose the humans. Players will play the role of a mysterious *practitioner*, 
 waking up landing at *NOVA*. The way back to earth is filled with digital lifeforms known as *the creeper*. 
@@ -34,19 +34,24 @@ with them, find the exit back to earch, and gradually discover the truth of the 
 ---
 
 ## Features Implemented
-1. engine
-* collision
-  Collide box
-* ray detection
-  using the distance between a ray and a collide box
-* visual distance
+  1. Generation of random game sets or events
+  * Random Enemy Generation
+    Enemies will be generated at random positions, but the numbers of enemys of each route is finely designed and fixed.
+  * Critical hit
+    Enemies might be able to perform a critical hit, and deal extra damage to player, making the game more exciting.
 
-* enemy path seeking
-
-
-2. object：
-  model
-  位置
+  2. Data structures for storing game status
+    We use a lot structures to store game status.
+    We have structs like **Player**, **Enemy**, **Weapon** and **Object** to store the status of these objects. And we created a struct called **ArrayList** acting as lists to store objects,enemies and other structs
+    We also created bacis mathematical structs like **Vector** to store infomation like position, rotation, direction, etc
+  
+  3. Dynamic memory management
+    **ArrayList** is a struct like a dynamic list to store different types of data. We can add elements with the function ***ArrayList_PushBack()***
+    and ***ArrayList_PopBack()*** to delete the last element. It is used to store **Object** and **Enemy** in a scene. Therefore, we can deal with interations between player and other elements in each frame.
+  4. File input/output  
+    File input/output is used in storing game settings, to prevent players from setting the game in each time starting the game repeatly. The settings are stored in setting.cfg
+  5. Program codes in multiple files
+    We created many different files to define different structs and functions related to those structs, which makes the project clear and easy to update.
 
 ---
 

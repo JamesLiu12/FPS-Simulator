@@ -1,6 +1,5 @@
 #ifndef FPS_SIMULATOR_PLAYER_H
 #define FPS_SIMULATOR_PLAYER_H
-#include "../op_engine/op_engine.h"
 #include "weapon.h"
 
 struct Player{
@@ -18,8 +17,8 @@ struct Player{
 };
 
 //Initializer of player
-void Player_Init(struct Player *player);
-struct Player* New_Player();
+void Player_Init(struct Player *player, enum WeaponName weaponname);
+struct Player* New_Player(enum WeaponName weaponname);
 
 //Free the memory of player
 void Del_Player(struct Player *player);
