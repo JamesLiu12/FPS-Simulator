@@ -71,5 +71,5 @@ void Del_Runner(struct Runner *runner){
     free(runner);
 }
 void Runner_SetPlayerRotationSpeed(struct Player *player, double sensitivity){
-    player->rotationSpeed= 5 * sensitivity / 100;
+    player->rotationSpeed= 4 * sensitivity / 100;
 }

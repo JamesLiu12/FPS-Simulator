@@ -1,6 +1,5 @@
 #ifndef FPS_SIMULATOR_PLAYER_H
 #define FPS_SIMULATOR_PLAYER_H
-#include "../op_engine/op_engine.h"
 #include "weapon.h"
 
 struct Player{

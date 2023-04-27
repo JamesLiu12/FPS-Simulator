@@ -271,10 +271,11 @@ void Scene_Update(struct Scene *scene, double delta_time){
     }
 
 
-    Player_Update(&scene->player, delta_time);
+    Player_Control(&scene->player, delta_time);
     if (scene->player.FIREFLAG){
         Scene_PlayerShoot(scene);
     }
+    Player_Update(&scene->player, delta_time);
     Player_Move(&scene->player, &scene->player.moveDirection);
     if(CollideBox_IsCollide(&scene->player.collideBox, ((struct Object**)scene->list_Object.data)[1]->collideBoxes)){
         scene->player.WINFLAG=1;
@@ -389,13 +390,13 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     else{
         move_cursor_to(row + 10, col + 5 + 30);
         for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < bar_length + 20; j++) printf(" ");
+            for (int j = 0; j < bar_length + 40; j++) printf(" ");
             puts("");
         }
     }
 
     //Draw the STAR in the center of canvas
-    Canvas_AddCover(&scene->player.canvas, scene->player.canvas.height / 2 - 1,
+    Canvas_AddCover(&scene->player.canvas, scene->player.canvas.height / 2 ,
                     scene->player.canvas.width / 2 , STAR);
 #if DEBUG
     printf("%lf %lf %lf\n",scene->player.facing.x,scene->player.facing.y,scene->player.facing.z);

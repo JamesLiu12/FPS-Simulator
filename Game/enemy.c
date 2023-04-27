@@ -9,7 +9,7 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
     Vector3_Set(&enemy->head.transform.position, 0, 0, 0);
 
     struct CollideBox *collideBoxes_EnemyHead = (struct CollideBox *)malloc(sizeof(struct CollideBox));
-    CollideBox_Init(collideBoxes_EnemyHead, &enemy->transform, 0.7, 0.7, 0.7);
+    CollideBox_Init(collideBoxes_EnemyHead, &enemy->transform, 0.6, 0.6, 0.6);
     Vector3_Set(&collideBoxes_EnemyHead->transform.position, 0, 1.75, 0);
 
     Object_SetCollideBoxes(&enemy->head, collideBoxes_EnemyHead, 1);
@@ -20,7 +20,7 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
     Vector3_Set(&enemy->body.transform.position, 0, 0, 0);
 
     struct CollideBox *collideBoxes_EnemyBody = (struct CollideBox *)malloc(sizeof(struct CollideBox));
-    CollideBox_Init(collideBoxes_EnemyBody, &enemy->transform, 0.3, 1, 0.3);
+    CollideBox_Init(collideBoxes_EnemyBody, &enemy->transform, 0.7, 1, 0.7);
     Vector3_Set(&collideBoxes_EnemyBody->transform.position, 0, 0.9, 0);
 
     Object_SetCollideBoxes(&enemy->body, collideBoxes_EnemyBody, 1);
@@ -45,7 +45,7 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
 	enemy->Critical_Rate = 15;//the possibility of a critical hit, %
     enemy->Critical_Damage = 0.5;// the critical damage is 150%
     enemy->findPathCD = 1;
-    enemy->attackDistance = 1.3;
+    enemy->attackDistance = 1.5;
     enemy->senseDistance = 20;
     enemy->canSeeTarget = FALSE;
     enemy->DEADFLAG=0;

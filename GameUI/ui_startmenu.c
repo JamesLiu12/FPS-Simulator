@@ -290,13 +290,20 @@ void Victory(){
     system("clear");
     for(int i=0;i<100;i++)kbhit();
     printeye();
-    strcpy(a,"You: What ...\n\npress to continue");
+    strcpy(a,"You: What the ...\n\npress to continue");
     printdialog(a);
     while(1){if(kbhit())break;}
 
     system("clear");
     printeye();
-    strcpy(a,"*mystery voice*: Well done\n\npress to continue");
+    strcpy(a,"*mystery voice*: Well done. Continue your work.\n\npress to continue");
+    printdialog(a);
+    while(1){if(kbhit())break;}
+
+    system("clear");
+    for(int i=0;i<100;i++)kbhit();
+    printeye();
+    strcpy(a,"You: \"Continue?\"\n\npress to continue");
     printdialog(a);
     while(1){if(kbhit())break;}
 

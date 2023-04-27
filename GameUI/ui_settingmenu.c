@@ -39,8 +39,8 @@ void Write_Setting(struct UI_SettingMenu *settingui){
     fp=fopen("setting.cfg","w+");
     fprintf(fp,"%d\n",settingui->framerate);
     fprintf(fp,"%d\n",settingui->difficulty);
-    fprintf(fp,"%d",settingui->sensitivity);
-    fprintf(fp,"%d",settingui->weaponnumber);
+    fprintf(fp,"%d\n",settingui->sensitivity);
+    fprintf(fp,"%d\n",settingui->weaponnumber);
     fclose(fp);
 }
 void SettingMenu_Show(struct UI_SettingMenu *settingui){

@@ -6,7 +6,7 @@ void Player_Init(struct Player *player, enum WeaponName weaponname){
     player->maxHealth = 100;
     player->health = player->maxHealth;
     player->moveSpeed = 10;
-    player->rotationSpeed = 10;
+    player->rotationSpeed = 4;
     player->In_FireCD = 0;
     player->FIREFLAG = 0;
     player->fireCDcounter = 0;
@@ -82,6 +82,8 @@ void Player_Update(struct Player *player, double delta_time){
 }
 
 void Player_Control(struct Player *player, double delta_time){
+    if(kbhit()){
+
     if(keydown(W)) Player_RotateUp(player, delta_time);
     if(keydown(S)) Player_RotateDown(player, delta_time);
     if(keydown(A)) Player_RotateLeft(player, delta_time);
@@ -96,7 +98,7 @@ void Player_Control(struct Player *player, double delta_time){
     //if(keydown(K)) Player_ChangeHealth(player, 5);
 
     if(keydown(F)) Player_Shoot(player);
-    if(keydown(R)) Player_Reload(player);
+    if(keydown(R)) Player_Reload(player);}
 }
 void Player_Shoot(struct Player *player){
     if(!player->FIREFLAG){
