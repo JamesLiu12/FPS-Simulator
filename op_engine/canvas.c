@@ -109,6 +109,7 @@ void print_pixel(enum Tag tag, double distance){
     else if (tag == ENEMY_LEG) printf("▌▌");
     else if (tag == ENEMY_BODY) printf("██");
     else if (tag == END) printf("??");
+    else if (tag == STAR) printf("\033[31m██\033[0m");
 }//░▒▓█
 //█▌▐░▒▌▐▒
 
