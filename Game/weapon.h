@@ -4,7 +4,7 @@
 #include "../op_engine/op_engine.h"
 
 enum WeaponName{
-    AK47, P1999
+    AK47, P1999, Razor_ELEC, X_114514, Energized_Graviton_Cannon, 
 };
 
 struct Weapon{
