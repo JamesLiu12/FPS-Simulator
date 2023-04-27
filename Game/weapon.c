@@ -77,8 +77,8 @@ struct Weapon* New_Weapon(enum WeaponName weaponName){
 }
 
 // 
-// input
-// output
+// input: 
+// output: 
 void Weapon_CoverCanvas(struct Weapon *weapon, struct Canvas *canvas){
     if (weapon->name == AK47){
         
