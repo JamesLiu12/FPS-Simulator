@@ -3,10 +3,12 @@
 
 #include "../op_engine/op_engine.h"
 
+// a list of names of weapons available
 enum WeaponName{
-    AK47, P1999, Razor_ELEC, X_114514, Energized_Graviton_Cannon, 
+    AK47, P1999, Razor_ELEC, X_114514, MOSS, 
 };
 
+// defines the parameters available for each weapon
 struct Weapon{
     double fireCDtime, damage, reloadCDtime;
     double head_rate,body_rate,leg_rate;

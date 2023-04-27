@@ -52,7 +52,7 @@ void Weapon_Init(struct Weapon* weapon, enum WeaponName weaponName){
         weapon->leg_rate=0.8;
         strcpy(weapon->namestring," X_114514 ");
     }
-    if (weaponName == Energized_Graviton_Cannon){
+    if (weaponName == MOSS){
         weapon->damage = 25;
         weapon->fireCDtime = 0.1;
         weapon->reloadCDtime=2;
@@ -61,7 +61,7 @@ void Weapon_Init(struct Weapon* weapon, enum WeaponName weaponName){
         weapon->head_rate=1.2;
         weapon->body_rate=1.0;
         weapon->leg_rate=0.8;
-        strcpy(weapon->namestring,"   EGC    ");
+        strcpy(weapon->namestring,"   MOSS   ");
     }
 }
 
