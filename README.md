@@ -28,9 +28,8 @@ with them, find the exit back to earch, and gradually discover the truth of the 
 
 ## Game Objects
 ### Wall & Floor
-* The different characters are used to show the wall in different distance. Light block for close wall, dark block for far wall, `[]` for much far wall, `.` for the most distant wall.  
-[Click here to view wall](./images/Wall1.png)  
-[Click here to view another wall](./images/wall2.png)  
+* The different characters are used to show the wall in different distance. `██` for close wall, `▓▓` for far wall, `▒▒` for much far wall.  
+[Click here to view wall](./images/Wall1.jpg)  
 You may also notice that the floor is showed by another lighter color in these images.
 
 ### Enemy
@@ -46,7 +45,7 @@ You may also notice that the floor is showed by another lighter color in these i
 
 ### The value bars
 * Player HP, bullet number, and the HP of the enemy you pointed to are shown under the screen.  
-[Click here to view the value bars](./images/Value%20bar.png)  
+[Click here to view the value bars](./images/Value%20bar.jpg)  
 
 ---
 
@@ -55,6 +54,7 @@ You may also notice that the floor is showed by another lighter color in these i
 * **Move**: $\uparrow$ move forward, $\downarrow$ move back, $\leftarrow$ move left, $\rightarrow$ move right
 * **Load the firearm**: players can load firearms by pressing **_R_**
 * **Shooting**: players can shoot by pressing **_F_** (fire!).
+* **Pause**: Press **_ESC_** to pause the game, resume it at any time by pressing **_ESC_** again, or press **_ETNER_** to quit
 
 ## Game Menu Controls
 * **_W_** cursor move up, **_S_** cursor move down
@@ -92,7 +92,7 @@ The name of this engine is **OP engine**, as it is made by a ~~Genshin Impact pl
 With this game engine, it allows you to render any forms shapes of model. All you need to do is to take your own `.obj`  
 files made by any other 3D computer graphics software, and use the `obj_converter` to transform your `.obj` files to the 
 C files that the game engined required. All the meshes in this game are made by **Blender**.  
-Besides the rendering system, this game engine also supports game object nested. All the game objects has a  
+Besides the rendering system, this game engine also supports game object nested. All the game objects has a 
 **transform** attribute, which could clearly show the hierarchy of the objects.  
 **OP Engine** also supports OBB (Oriented Bounding Box). It allows you to set a cuboid colliding box in any size, any  
 direction, and with some basic colliding detection functions provided.
