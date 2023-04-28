@@ -49,14 +49,14 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
     //Wall_005
     CollideBox_Init(&collideBoxes_Wall[5], &Map_Wall->transform, 30, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[5].transform.position, -0.8, 1.25, 0.5);
-    Vector3_Set(&collideBoxes_Wall[5].transform.rotation,0,M_PI/4,0);
+    Vector3_Set(&collideBoxes_Wall[5].transform.rotation,0,-M_PI/4,0);
     //Wall_006
     CollideBox_Init(&collideBoxes_Wall[6], &Map_Wall->transform, 40, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[6].transform.position, 30, 1.25, 15);
     //Wall_007__ERROR FIX
     CollideBox_Init(&collideBoxes_Wall[7], &Map_Wall->transform, 13, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[7].transform.position, 0.5, 1.25, -10);
-    Vector3_Set(&collideBoxes_Wall[7].transform.rotation,0,-M_PI/4,0);
+    Vector3_Set(&collideBoxes_Wall[7].transform.rotation,0,M_PI/4,0);
     //Wall_008
     CollideBox_Init(&collideBoxes_Wall[8], &Map_Wall->transform, 15, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[8].transform.position, 25, 1.25, -2.5);
@@ -64,7 +64,7 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
     //Wall_009
     CollideBox_Init(&collideBoxes_Wall[9], &Map_Wall->transform, 15, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[9].transform.position, -3.5, 1.25, -3.5);
-    Vector3_Set(&collideBoxes_Wall[9].transform.rotation,0,M_PI/4,0);
+    Vector3_Set(&collideBoxes_Wall[9].transform.rotation,0,-M_PI/4,0);
     //Wall_010
     CollideBox_Init(&collideBoxes_Wall[10], &Map_Wall->transform, 9, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[10].transform.position, 10, 1.25, 10.55);
@@ -75,7 +75,7 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
     //Wall_012
     CollideBox_Init(&collideBoxes_Wall[12], &Map_Wall->transform, 7, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[12].transform.position, 0, 1.25, 8);
-    Vector3_Set(&collideBoxes_Wall[12].transform.rotation,0,-M_PI/3,0);
+    Vector3_Set(&collideBoxes_Wall[12].transform.rotation,0,M_PI/3,0);
     //Wall_013
     CollideBox_Init(&collideBoxes_Wall[13], &Map_Wall->transform, 16, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[13].transform.position, -2, 1.25, -15);
