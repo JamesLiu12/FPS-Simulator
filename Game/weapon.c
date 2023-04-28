@@ -9,9 +9,9 @@
 void Weapon_Init(struct Weapon* weapon, enum WeaponName weaponName){
 
     if (weaponName == AK47){
-        weapon->damage = 20;
+        weapon->damage = 21;
         weapon->fireCDtime = 0.1;
-        weapon->reloadCDtime=2;
+        weapon->reloadCDtime=1.6;
         weapon->magazine_size=30;
         weapon->bullet_number=weapon->magazine_size;
         weapon->head_rate=1.2;
@@ -20,7 +20,7 @@ void Weapon_Init(struct Weapon* weapon, enum WeaponName weaponName){
         strcpy(weapon->namestring,"   AK47   ");
     }
     if (weaponName == P1999){
-        weapon->damage = 10;
+        weapon->damage = 34;
         weapon->fireCDtime = 0.6;
         weapon->reloadCDtime=0.9;
         weapon->magazine_size=8;
@@ -31,36 +31,36 @@ void Weapon_Init(struct Weapon* weapon, enum WeaponName weaponName){
         strcpy(weapon->namestring,"  P1999   ");
     }
     if (weaponName == Razor_ELEC){
-        weapon->damage = 40;
-        weapon->fireCDtime = 0.5;
+        weapon->damage = 60;
+        weapon->fireCDtime = 0.8;
         weapon->reloadCDtime=2;
-        weapon->magazine_size=30;
+        weapon->magazine_size=5;
         weapon->bullet_number=weapon->magazine_size;
-        weapon->head_rate=1.5;
-        weapon->body_rate=1.2;
-        weapon->leg_rate=0.9;
+        weapon->head_rate=1.3;
+        weapon->body_rate=1;
+        weapon->leg_rate=1;
         strcpy(weapon->namestring,"Razor_ELEC");
     }
     if (weaponName == X_114514){
-        weapon->damage = 30;
-        weapon->fireCDtime = 0.1;
-        weapon->reloadCDtime=2;
-        weapon->magazine_size=30;
+        weapon->damage = 26;
+        weapon->fireCDtime = 0.2;
+        weapon->reloadCDtime=1;
+        weapon->magazine_size=16;
         weapon->bullet_number=weapon->magazine_size;
-        weapon->head_rate=1.2;
+        weapon->head_rate=1.3;
         weapon->body_rate=1.0;
         weapon->leg_rate=0.8;
         strcpy(weapon->namestring," X_114514 ");
     }
     if (weaponName == MOSS){
-        weapon->damage = 25;
+        weapon->damage = 70;
         weapon->fireCDtime = 0.1;
-        weapon->reloadCDtime=2;
+        weapon->reloadCDtime=1;
         weapon->magazine_size=1;
         weapon->bullet_number=weapon->magazine_size;
-        weapon->head_rate=1.2;
-        weapon->body_rate=1.0;
-        weapon->leg_rate=0.8;
+        weapon->head_rate=1;
+        weapon->body_rate=1.5;
+        weapon->leg_rate=1;
         strcpy(weapon->namestring,"   MOSS   ");
     }
 }
