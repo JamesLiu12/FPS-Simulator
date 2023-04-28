@@ -95,11 +95,12 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
             end=Runner_Run(&runner);
             screenclean();
             //Del_Runner(&runner);
-            if(end){
+            if(end == 1){
                 Victory();
                 goto STARTMENUORIGIN;
             }
             else{
+                
                 struct UI_DefeatMenu defeatui;
                 UI_DefeatMenu_Init(&defeatui);
                 int endchoice;
