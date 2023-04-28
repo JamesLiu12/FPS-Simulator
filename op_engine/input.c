@@ -60,6 +60,11 @@ int kbhit(){
     /* Consume data */
     if (ret > 0) {
         read(0, get, 3);
+        char _tmp;
+        while (poll(pfds, 1, 0) > 0){
+            read(STDIN_FILENO, &_tmp, 1);
+            puts(" ");
+        }
         return strlen(get) > 0;
     }
     return 0;
