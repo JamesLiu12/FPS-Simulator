@@ -13,7 +13,7 @@ struct Player{
     struct Weapon weapon;
     int In_FireCD,FIREFLAG;
     int In_ReloadCD,RELOADFLAG;
-    int DEADFLAG,WINFLAG;
+    int DEADFLAG,WINFLAG,QUITFLAG;
 };
 
 //Initializer of player
@@ -44,6 +44,8 @@ void Player_RotateLeft(struct Player *player, double delta_time);
 void Player_RotateRight(struct Player *player, double delta_time);
 
 void Player_Control(struct Player *player, double delta_time);
+
+void Player_Pause(struct Player *player);
 
 void Player_Shoot(struct Player *player);
 void Player_Reload(struct Player *player);

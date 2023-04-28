@@ -1,6 +1,8 @@
 #include "player.h"
 #include "../op_engine/op_engine.h"
-
+#include "../GameUI/ui_instruction.h"
+#include <stdio.h>
+#include <stdlib.h>
 void Player_Init(struct Player *player, enum WeaponName weaponname){
     Canvas_Init(&player->canvas, 33, 65);
     player->maxHealth = 100;
@@ -12,6 +14,7 @@ void Player_Init(struct Player *player, enum WeaponName weaponname){
     player->fireCDcounter = 0;
     player->DEADFLAG = 0;
     player->WINFLAG = 0;
+    player->QUITFLAG = 0;
     Vector3_Set(&player->facing,0,0,1);
 
     Transform_Init(&player->transform, NULL);
@@ -82,7 +85,7 @@ void Player_Update(struct Player *player, double delta_time){
 }
 
 void Player_Control(struct Player *player, double delta_time){
-
+    if(kbhit()){
     if(keydown(W)) Player_RotateUp(player, delta_time);
     if(keydown(S)) Player_RotateDown(player, delta_time);
     if(keydown(A)) Player_RotateLeft(player, delta_time);
@@ -98,6 +101,8 @@ void Player_Control(struct Player *player, double delta_time){
 
     if(keydown(F)) Player_Shoot(player);
     if(keydown(R)) Player_Reload(player);
+    if(keydown(ESC)) Player_Pause(player);
+    }
 }
 void Player_Shoot(struct Player *player){
     if(!player->FIREFLAG){
@@ -117,6 +122,25 @@ void Player_Reload(struct Player *player){
         player->RELOADFLAG = 1;
         player->In_ReloadCD = 1;
         player->reloadCDcounter = player->weapon.reloadCDtime;
+        }
+    }
+}
+void Player_Pause(struct Player *player){
+    screenclean();
+    printf(R"(                      ______       __    __   __  .___________. ______   
+                     /  __  \     |  |  |  | |  | |           ||      \  
+                    |  |  |  |    |  |  |  | |  | `---|  |----``----)  | 
+                    |  |  |  |    |  |  |  | |  |     |  |         /  /  
+                    |  `--'  '--. |  `--'  | |  |     |  |        |__|   
+                     \_____\_____\ \______/  |__|     |__|         __    
+                                                                  (__)  )");
+    printf("\nPress ESC to return to the game\n");
+    printf("Press ENTER to quit the game\n");
+
+    while(1){
+        if(kbhit()){
+            if(keydown(ESC))break;
+            if(keydown(ENTER)){player->QUITFLAG=1;break;}
         }
     }
 }
