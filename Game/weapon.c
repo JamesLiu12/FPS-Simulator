@@ -2,7 +2,7 @@
 #include "string.h"
 #include "../op_engine/canvas.h"
 
-// assigns weapon data such as damage, fire cd time and so on to an weapon struct 
+// assigns weapon data such as damage, fire cd time and so on to a weapon struct
 // according to the name of the weapon
 // input: a pointer to a weapon struct and an enumeration of WeaponName
 // output: none
@@ -76,11 +76,6 @@ struct Weapon* New_Weapon(enum WeaponName weaponName){
     return weapon;
 }
 
-// 
-// input: 
-// output: 
-void Weapon_CoverCanvas(struct Weapon *weapon, struct Canvas *canvas){
-    if (weapon->name == AK47){
-        
-    }
-}
+//
+// input:
+// output:

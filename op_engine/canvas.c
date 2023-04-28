@@ -189,29 +189,6 @@ void vram_write(struct Canvas *canvas, int vram_index, double distance, enum Tag
     }
     canvas->vram_depth[vram_index] = distance;
     canvas->vram_tag[vram_index] = tag;
-//    canvas->vram_red[vram_index] = canvas->color.red;
-//    canvas->vram_green[vram_index] = canvas->color.green;
-//    canvas->vram_blue[vram_index] = canvas->color.blue;
-}
-
-void Canvas_DrawPoint(struct Canvas *canvas, struct Vector3 *point, enum Tag tag){
-    struct Vector3 projected_p;
-
-    Canvas_ProjectFromCameraToScreen(canvas, point, &projected_p);
-
-    int row, column;
-    row = (int)round(projected_p.y);
-    column = (int)round(projected_p.x);
-
-    if (row < 0 ||
-        row >= canvas->height ||
-        column < 0 ||
-        column >= canvas->width) {
-        return;
-    }
-    int vram_index = row * canvas->width + column;
-    double distance2 = Vector3_MagnitudeSq(point);
-    vram_write(canvas, vram_index, distance2, tag);
 }
 
 /*

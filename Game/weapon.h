@@ -20,8 +20,11 @@ struct Weapon{
 
 //Initializer of weapon (corresponding to player)
 void Weapon_Init(struct Weapon* weapon, enum WeaponName weaponName);
+
+//Newer of Weapon
 struct Weapon* New_Weapon(enum WeaponName weaponName);
-void Weapon_CoverCanvas(struct Weapon *weapon, struct Canvas *canvas);
+
+
 
 
 #endif //FPS_SIMULATOR_WEAPON_H

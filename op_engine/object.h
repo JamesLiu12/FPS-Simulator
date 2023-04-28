@@ -9,6 +9,7 @@
 #include "collide_box.h"
 #include "../util/array_list.h"
 
+//The game object
 struct Object{
     //Mesh of object, equals to NULL if no mesh
     struct Mesh *mesh;
