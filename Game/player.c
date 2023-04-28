@@ -9,7 +9,7 @@ void Player_Init(struct Player *player, enum WeaponName weaponname){
     player->health = player->maxHealth;
     player->moveSpeed = 15;
     player->rotationSpeed = 4;
-    player->In_FireCD = 0;
+    player->inFireCD = 0;
     player->FIREFLAG = 0;
     player->fireCDcounter = 0;
     player->DEADFLAG = 0;
@@ -23,7 +23,7 @@ void Player_Init(struct Player *player, enum WeaponName weaponname){
 
     CollideBox_Init(&player->collideBox, &player->transform, 1, 2.1, 1);
     Vector3_Set(&player->collideBox.transform.position, 0, 1.06, 0);
-    Vector3_Set(&player->moveDirection, 0, 0 ,0);
+    Vector3_Set(&player->move, 0, 0 , 0);
     Weapon_Init(&player->weapon, weaponname);
 }
 
@@ -64,23 +64,23 @@ void Player_Start(struct Player *player){
 }
 
 void Player_Update(struct Player *player, double delta_time){
-    if(player->In_FireCD){
+    if(player->inFireCD){
         player->FIREFLAG = 0 ;
         //TODO
         player->fireCDcounter -= delta_time;
-        if(player->fireCDcounter <= 0) player->In_FireCD = 0;
+        if(player->fireCDcounter <= 0) player->inFireCD = 0;
     }
 
     if(player->weapon.bullet_number == 0) Player_Reload(player);
-    if(player->In_ReloadCD){
+    if(player->inReloadCD){
         player->RELOADFLAG = 0;
         player->reloadCDcounter -= delta_time;
         if(player->reloadCDcounter <= 0){
-            player->In_ReloadCD = 0;
+            player->inReloadCD = 0;
         player->weapon.bullet_number = player->weapon.magazine_size;
         }
     }
-    Vector3_Set(&player->moveDirection,0,0,0);
+    Vector3_Set(&player->move, 0, 0, 0);
     Player_Control(player, delta_time);
 }
 
@@ -106,10 +106,10 @@ void Player_Control(struct Player *player, double delta_time){
 }
 void Player_Shoot(struct Player *player){
     if(!player->FIREFLAG){
-        if(!player->In_FireCD && !player->In_ReloadCD){
+        if(!player->inFireCD && !player->inReloadCD){
             if(player->weapon.bullet_number>0){
             player->FIREFLAG = 1;
-            player->In_FireCD = 1;
+            player->inFireCD = 1;
             player->fireCDcounter = player->weapon.fireCDtime;
             player->weapon.bullet_number -= 1;
             }
@@ -118,9 +118,9 @@ void Player_Shoot(struct Player *player){
 }
 void Player_Reload(struct Player *player){
     if(!player->RELOADFLAG){
-        if(!player->In_ReloadCD){
+        if(!player->inReloadCD){
         player->RELOADFLAG = 1;
-        player->In_ReloadCD = 1;
+        player->inReloadCD = 1;
         player->reloadCDcounter = player->weapon.reloadCDtime;
         }
     }
@@ -150,34 +150,34 @@ void Player_MoveForward(struct Player *player, double delta_time){
     Vector3_Normalize(&movement);
     Vector3_Scale(&movement, player->moveSpeed * delta_time);
     //Player_Move(player,&movement);
-    Vector3_Copy(&movement, &player->moveDirection);
+    Vector3_Copy(&movement, &player->move);
 }
 void Player_MoveBackward(struct Player *player, double delta_time){
     struct Vector3 movement;
     Vector3_Set(&movement, -player->facing.x, 0, -player->facing.z);
     Vector3_Normalize(&movement);
     Vector3_Scale(&movement, player->moveSpeed * delta_time);
-    Vector3_Copy(&movement, &player->moveDirection);
+    Vector3_Copy(&movement, &player->move);
     //Player_Move(player, &movement);
-    Vector3_Copy(&movement, &player->moveDirection);
+    Vector3_Copy(&movement, &player->move);
 }
 void Player_MoveLeft(struct Player *player, double delta_time){
     struct Vector3 movement;
     Vector3_Set(&movement,-player->facing.z,0,player->facing.x);
     Vector3_Normalize(&movement);
     Vector3_Scale(&movement,player->moveSpeed * delta_time);
-    Vector3_Copy(&movement,&player->moveDirection);
+    Vector3_Copy(&movement,&player->move);
     //Player_Move(player,&movement);
-    Vector3_Copy(&movement, &player->moveDirection);
+    Vector3_Copy(&movement, &player->move);
 }
 void Player_MoveRight(struct Player *player, double delta_time){
     struct Vector3 movement;
     Vector3_Set(&movement, player->facing.z, 0, -player->facing.x);
     Vector3_Normalize(&movement);
     Vector3_Scale(&movement, player->moveSpeed * delta_time);
-    Vector3_Copy(&movement, &player->moveDirection);
+    Vector3_Copy(&movement, &player->move);
     //Player_Move(player,&movement);
-    Vector3_Copy(&movement, &player->moveDirection);
+    Vector3_Copy(&movement, &player->move);
 }
 
 void Player_RotateUp(struct Player *player, double delta_time){

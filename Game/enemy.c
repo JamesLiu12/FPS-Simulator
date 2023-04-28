@@ -40,20 +40,15 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
 	enemy->health = enemy->maxHealth;
 	enemy->damage = 3;
     enemy->attackCDtime=1;
-    enemy->attackcounter=0;
+    enemy->attackCounter=0;
     enemy->inattackCD=0;
-	enemy->Critical_Rate = 15;//the possibility of a critical hit, %
-    enemy->Critical_Damage = 0.5;// the critical damage is 150%
-    enemy->findPathCD = 1;
+	enemy->criticalRate = 15;//the possibility of a critical hit, %
+    enemy->criticalDamage = 0.5;// the critical damage is 150%
     enemy->attackDistance = 1.5;
     enemy->senseDistance = 20;
     enemy->canSeeTarget = FALSE;
     enemy->DEADFLAG=0;
     Vector3_Set(&enemy->moveDirection, 0, 0, 0);
-}
-
-void Enemy_Start(struct Enemy *enemy){
-	//TODO enemy start
 }
 
 void Enemy_Update(struct Enemy *enemy, double delta_time){
@@ -65,11 +60,11 @@ void Enemy_Update(struct Enemy *enemy, double delta_time){
         posDiff.y = 0;
         if (Vector3_Magnitude(&move) > Vector3_Magnitude(&posDiff)){
             Vector3_Set(&enemy->moveDirection, posDiff.x, 0, posDiff.z);
-            //Vector3_Normalize(&enemy->moveDirection);
+            //Vector3_Normalize(&enemy->move);
             }
         else{
             Vector3_Set(&enemy->moveDirection, move.x, 0, move.z);
-            //Vector3_Normalize(&enemy->moveDirection);
+            //Vector3_Normalize(&enemy->move);
             }
     }
     else {
@@ -77,15 +72,15 @@ void Enemy_Update(struct Enemy *enemy, double delta_time){
     }
     if (enemy->inattackCD){
         enemy->ATTACKFLAG=0;
-        enemy->attackcounter-=delta_time;
-        if(enemy->attackcounter<=0)enemy->inattackCD=0;
+        enemy->attackCounter-=delta_time;
+        if(enemy->attackCounter <= 0)enemy->inattackCD=0;
     }
 }
 void Enemy_Attack(struct Enemy *enemy){
     if(!enemy->inattackCD && enemy->canSeeTarget){
         enemy->ATTACKFLAG=1;
         enemy->inattackCD=1;
-        enemy->attackcounter=enemy->attackCDtime;
+        enemy->attackCounter=enemy->attackCDtime;
     }
 }
 struct Enemy* New_Enemy(struct EnemyMeshes *meshes){

@@ -258,7 +258,7 @@ void Scene_Update(struct Scene *scene, double delta_time){
         enemy->destination = playerPosition;
         if (Enemy_IsTargetInAttackRange(enemy, &playerPosition)){
             Enemy_Attack(enemy);
-            if(enemy->ATTACKFLAG)Player_ChangeHealth(&scene->player,-enemy->damage*(1+enemy->Critical_Damage*(rand()%100>enemy->Critical_Rate)));
+            if(enemy->ATTACKFLAG)Player_ChangeHealth(&scene->player,-enemy->damage*(1+ enemy->criticalDamage * (rand() % 100 > enemy->criticalRate)));
         }
         Enemy_Update(enemy, delta_time);
         Enemy_Move(enemy,&enemy->moveDirection);
@@ -274,13 +274,13 @@ void Scene_Update(struct Scene *scene, double delta_time){
         Scene_PlayerShoot(scene);
     }
     Player_Update(&scene->player, delta_time);
-    Player_Move(&scene->player, &scene->player.moveDirection);
+    Player_Move(&scene->player, &scene->player.move);
     if(CollideBox_IsCollide(&scene->player.collideBox, ((struct Object**)scene->list_Object.data)[1]->collideBoxes)){
         scene->player.WINFLAG=1;
     }
     if(Scene_Collided_Object(scene,&scene->player.collideBox)){
-        Vector3_Scale(&scene->player.moveDirection, -1);
-        Player_Move(&scene->player, &scene->player.moveDirection);
+        Vector3_Scale(&scene->player.move, -1);
+        Player_Move(&scene->player, &scene->player.move);
     }
     
 
@@ -338,7 +338,7 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     //Print if it is loading the bullet now
     printf("\033[36;100H");
     printf("\n");
-    if (scene->player.In_ReloadCD==1){
+    if (scene->player.inReloadCD == 1){
         for (int i = 0; i < 87; i++) printf(" ");
         printf("Reloading\n");
     }
@@ -454,7 +454,7 @@ void Scene_EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **r
 double Scene_DamageCalculation(struct Scene *scene, struct Enemy *enemy)//enemy's damage to player
 {
     double roller = rand() % 100;
-    double rate = roller * enemy->Critical_Rate;//this value should be 0-5000
+    double rate = roller * enemy->criticalRate;//this value should be 0-5000
     if (roller >= 2345/*critical damage*/){ return pow(enemy->damage/scene->player.defence,2); }
     else { return enemy->damage/scene->player.defence; }
 }
