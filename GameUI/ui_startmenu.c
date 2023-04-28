@@ -24,6 +24,7 @@ void UI_StartMenu_Init(struct UI_StartMenu *startui){
     UI_WeaponMenu_Init(&startui->weaponui);
 }
 void Show_StartMenu(struct UI_StartMenu *startui){
+    screenclean();
     /*printf("\033[3;47;35mTexting\033[0m\t\t");
     printf("\033[2;47;35mTexting\033[0m\t\t");
     printf("\033[1;47;35mTexting\033[0m\t\t");*/
@@ -65,10 +66,11 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
     int end;
     struct Runner runner;
     STARTMENUORIGIN:
+    screenclean();
     for(int i=0;i<20;i++)kbhit();
     operation=0;
     while(operation!=3){
-        system("clear");
+        screenclean();
         Show_StartMenu(startui);
         operation=Fetch_Operation();
         if(operation==1){
@@ -91,16 +93,13 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
         case 0:
             Runner_Init(&runner,&startui->settingui);
             end=Runner_Run(&runner);
-            system("clear");
+            screenclean();
             //Del_Runner(&runner);
             if(end){
-                //TODO
                 Victory();
                 goto STARTMENUORIGIN;
             }
             else{
-                //TODO
-                //Defeat();
                 struct UI_DefeatMenu defeatui;
                 UI_DefeatMenu_Init(&defeatui);
                 int endchoice;
@@ -117,11 +116,10 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
                 }
 
             }
-            //TODO
-            //Del_Runner(&runner);
             break;
         case 1:
             startui->settingui.weaponnumber = Launch_UI_WeaponMenu(&startui->weaponui);
+            screenclean();
             goto STARTMENUORIGIN;
             break;
         case 2:
@@ -179,6 +177,7 @@ int minimum(int a,int b){
     return a<b?a:b;
 }
 void printeye(){
+    screenclean();
     printf(R"(------_________________________                                                 _________________________------
       |                     --|                                                |--                     |      
       |                     --|                                                |--                     |      
@@ -217,7 +216,7 @@ void Victory(){
     char a[200];
     int linecounter,totalcounter;
         strcpy(a,"You: This is the end. Right?\n\n(press E to open the door)");
-        system("clear");
+        screenclean();
         printchar(30,'-');
         printchar(25,'_');
         printf(" ");
@@ -247,7 +246,7 @@ void Victory(){
         }
 
     for(int i=0;i<25;i++){
-        system("clear");
+        screenclean();
         printchar(30-i,'-');
         printchar(25,'_');
         printchar(2*i+1,' ');
@@ -287,27 +286,27 @@ void Victory(){
         usleep(150000);
     }
     sleep(1);
-    system("clear");
+    screenclean();
     for(int i=0;i<100;i++)kbhit();
     printeye();
     strcpy(a,"You: What the ...\n\npress to continue");
     printdialog(a);
     while(1){if(kbhit())break;}
 
-    system("clear");
+    screenclean();
     printeye();
     strcpy(a,"*mystery voice*: Well done. Continue your work.\n\npress to continue");
     printdialog(a);
     while(1){if(kbhit())break;}
 
-    system("clear");
+    screenclean();
     for(int i=0;i<100;i++)kbhit();
     printeye();
     strcpy(a,"You: \"Continue?\"\n\npress to continue");
     printdialog(a);
     while(1){if(kbhit())break;}
 
-    system("clear");
+    screenclean();
     printeye();
     strcpy(a,"*mystery voice*: See you at the entrance\n\npress to continue");
     printdialog(a);
@@ -316,7 +315,7 @@ void Victory(){
     strcpy(a,"Your vision gradually fades");
 
     for(int i=0;i<20;i++){
-    system("clear");
+    screenclean();
     printeye();
     printdialog(a);
     printf("\033[1;1H");
@@ -333,7 +332,7 @@ void Victory(){
     strcpy(a,"                        Victory");
 
     for(int i=20;i<27;i++){
-    system("clear");
+    screenclean();
     printeye();
     printdialog(a);
     printf("\033[1;1H");
@@ -350,7 +349,7 @@ void Victory(){
     strcpy(a,"                        Victory  ?");
 
     for(int i=27;i<40;i++){
-    system("clear");
+    screenclean();
     printeye();
     printdialog(a);
     printf("\033[1;1H");
@@ -366,5 +365,6 @@ void Victory(){
     //usleep(200000);
 
     usleep(1000000);
+    screenclean();
     printf("\033[1;1H");
 }

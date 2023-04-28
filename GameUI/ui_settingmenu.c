@@ -44,6 +44,7 @@ void Write_Setting(struct UI_SettingMenu *settingui){
     fclose(fp);
 }
 void SettingMenu_Show(struct UI_SettingMenu *settingui){
+    screenclean();
     printf(R"(    ___         __  _ _____ _      _       __   ____      _____ _       _ __       
    /   |  _____/ /_(_) ___/(_)____(_)___ _/ /  /  _/___  / ___/(_)___  (_) /___  __
   / /| | / ___/ __/ / /__ / / ___/ / __ `/ /   / // __ \/ /__ / / __ \/ / __/ / / /
@@ -103,11 +104,7 @@ void Launch_SettingMenu(struct UI_SettingMenu *settingui){
     settingui->pointer=0;
     while(operation!=3){
         if(RETURNFLAG==1)break;
-#ifdef __linux__
-        system("clear");
-#elif _WIN32
-        system("cls");
-#endif
+        screenclean();
         SettingMenu_Show(settingui);
         operation=Fetch_Operation();
         switch (operation)
@@ -169,5 +166,6 @@ void Launch_SettingMenu(struct UI_SettingMenu *settingui){
         operation=0;
         Write_Setting(settingui);
     }
+    screenclean();
     return;
 }

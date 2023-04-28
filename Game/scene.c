@@ -270,7 +270,9 @@ void Scene_Update(struct Scene *scene, double delta_time){
 
     }
 
-
+    if(kbhit()){
+        Player_Control(&scene->player, delta_time);
+    }
     if (scene->player.FIREFLAG){
         Scene_PlayerShoot(scene);
     }
