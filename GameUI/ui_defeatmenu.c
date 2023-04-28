@@ -14,6 +14,7 @@ void UI_DefeatMenu_Init(struct UI_DefeatMenu *defeatui){
 
 }
 void Show_DefeatMenu(struct UI_DefeatMenu *defeatui){
+    screenclean();
     printf(R"(██████╗ ██╗███████╗ ██████╗ ██████╗ ███╗   ██╗███╗   ██╗███████╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗
 ██╔══██╗██║██╔════╝██╔════╝██╔═══██╗████╗  ██║████╗  ██║██╔════╝██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║
 ██║--██║██║███████╗██║-_-- ██║--_██║██╔██╗-██║██╔██╗_██║█████╗__██║__--____██║ __██║██║___██║██╔██╗ ██║
@@ -50,7 +51,7 @@ int Launch_DefeatMenu(struct UI_DefeatMenu *defeatui){
     int operation;
     operation=0;
     while(operation!=3){
-        system("clear");
+        screenclean();
         Show_DefeatMenu(defeatui);
         operation=Fetch_Operation(); 
         if(operation==1){

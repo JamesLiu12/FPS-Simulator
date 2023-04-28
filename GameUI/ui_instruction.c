@@ -1,5 +1,6 @@
 #include "ui_instruction.h"
 #include "../op_engine/input.h"
+#include <stdlib.h>
 int Fetch_Operation(){
     //return 1 is rolling down
     //return 2 is rolling up
@@ -13,9 +14,17 @@ int Fetch_Operation(){
         if(keydown(UP)||keydown(W))return 2;
         if(keydown(ENTER))return 3;
         if(keydown(RIGHT)||keydown(D))return 4;
-        if(keydown(LEFT)||keydown(S))return 5;
+        if(keydown(LEFT)||keydown(A))return 5;
         if(keydown(ESC))return 6;
     }
     }
     return 0;
+}
+void screenclean(){
+#ifdef __linux
+    system("clear");
+#endif
+#ifdef _WIN32
+    system("cls");
+#endif
 }
