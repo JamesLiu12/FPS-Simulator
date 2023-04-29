@@ -175,8 +175,11 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
     Scene_Add_EnemySpawnPoint(scene, 7.3,  0, 0.6);
     Scene_Add_EnemySpawnPoint(scene, 7.3,  0, -7.2);
     Scene_Add_EnemySpawnPoint(scene, 7.3,  0, 5.3);
-    
+
     Scene_Add_EnemySpawnPoint(scene, 0  ,  0, -7.3);
+
+    Scene_Add_EnemySpawnPoint(scene, -3,   0, 0.7);
+    Scene_Add_EnemySpawnPoint(scene, -3,   0, 7);
 
     Scene_Add_EnemySpawnPoint(scene, 10,   0, -7.2);
     Scene_Add_EnemySpawnPoint(scene, 10,   0, -17);
