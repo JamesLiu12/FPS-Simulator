@@ -5,7 +5,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include "ui_defeatmenu.h"
-#include "ui_startmenu.h"
+#include "ui_instruction.h"
 void UI_DefeatMenu_Init(struct UI_DefeatMenu *defeatui){
     defeatui->pointer=0;
     strcpy(defeatui->menu[0], "  New Game  ");

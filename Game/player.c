@@ -1,12 +1,12 @@
 #include "player.h"
 #include "../op_engine/op_engine.h"
 
-void Player_Init(struct Player *player){
+void Player_Init(struct Player *player, enum WeaponName weaponname){
     Canvas_Init(&player->canvas, 33, 65);
     player->maxHealth = 100;
     player->health = player->maxHealth;
     player->moveSpeed = 10;
-    player->rotationSpeed = 10;
+    player->rotationSpeed = 4;
     player->In_FireCD = 0;
     player->FIREFLAG = 0;
     player->fireCDcounter = 0;
@@ -21,12 +21,12 @@ void Player_Init(struct Player *player){
     CollideBox_Init(&player->collideBox, &player->transform, 1, 2.1, 1);
     Vector3_Set(&player->collideBox.transform.position, 0, 1.06, 0);
     Vector3_Set(&player->moveDirection, 0, 0 ,0);
-    Weapon_Init(&player->weapon, AK47);
+    Weapon_Init(&player->weapon, weaponname);
 }
 
-struct Player* New_Player() {
+struct Player* New_Player(enum WeaponName weaponname) {
     struct Player* player = (struct Player*)malloc(sizeof(struct Player));
-    Player_Init(player);
+    Player_Init(player,weaponname);
     return player;
 }
 
@@ -48,10 +48,10 @@ void Player_Rotate(struct Player *player, struct Vector3* angle){
     struct Vector3 BaseFacing;
     Vector3_Set(&BaseFacing, 0, 0, 1);
     struct Matrix3x3 RotationMatrix;
-    Matrix3x3_FromEulerAngle(&RotationMatrix,&player->canvas.camera_transform.rotation,EULER_ANGLE_REVERSED);
-    Matrix3x3_TransformMatrix(&RotationMatrix, &BaseFacing);
-    Vector3_Normalize(&BaseFacing);
-    Vector3_Copy(&BaseFacing,&player->facing);
+    Matrix3x3_FromEulerAngle(&RotationMatrix,angle,EULER_ANGLE_REVERSED);
+    Matrix3x3_TransformMatrix(&RotationMatrix, &player->facing);
+    Vector3_Normalize(&player->facing);
+    //Vector3_Copy(&BaseFacing,&player->facing);
 
 }
 
@@ -82,6 +82,8 @@ void Player_Update(struct Player *player, double delta_time){
 }
 
 void Player_Control(struct Player *player, double delta_time){
+    if(kbhit()){
+
     if(keydown(W)) Player_RotateUp(player, delta_time);
     if(keydown(S)) Player_RotateDown(player, delta_time);
     if(keydown(A)) Player_RotateLeft(player, delta_time);
@@ -96,7 +98,7 @@ void Player_Control(struct Player *player, double delta_time){
     //if(keydown(K)) Player_ChangeHealth(player, 5);
 
     if(keydown(F)) Player_Shoot(player);
-    if(keydown(R)) Player_Reload(player);
+    if(keydown(R)) Player_Reload(player);}
 }
 void Player_Shoot(struct Player *player){
     if(!player->FIREFLAG){
@@ -159,14 +161,14 @@ void Player_RotateUp(struct Player *player, double delta_time){
     struct Vector3 rotation;
     Vector3_Set(&rotation, player->facing.z, 0, -player->facing.x);
     Vector3_Normalize(&rotation);
-    Vector3_Scale(&rotation, player->rotationSpeed * delta_time);
+    Vector3_Scale(&rotation, player->rotationSpeed * delta_time * 0.5);
     Player_Rotate(player, &rotation);
 }
 void Player_RotateDown(struct Player *player, double delta_time){
     struct Vector3 rotation;
     Vector3_Set(&rotation, -player->facing.z, 0, player->facing.x);
     Vector3_Normalize(&rotation);
-    Vector3_Scale(&rotation, player->rotationSpeed * delta_time);
+    Vector3_Scale(&rotation, player->rotationSpeed * delta_time * 0.5);
     Player_Rotate(player, &rotation);
 }
 void Player_RotateLeft(struct Player *player, double delta_time){
