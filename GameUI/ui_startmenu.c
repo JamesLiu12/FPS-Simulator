@@ -120,11 +120,14 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
             break;
         case 1:
             startui->settingui.weaponnumber = Launch_UI_WeaponMenu(&startui->weaponui);
+            Write_Setting(&startui->settingui);
             screenclean();
             goto STARTMENUORIGIN;
             break;
         case 2:
             Launch_SettingMenu(&startui->settingui);
+            Write_Setting(&startui->settingui);
+            screenclean();
             goto STARTMENUORIGIN;
             //TODO
             break;
