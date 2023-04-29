@@ -258,7 +258,10 @@ void Scene_Update(struct Scene *scene, double delta_time){
         enemy->destination = playerPosition;
         if (Enemy_IsTargetInAttackRange(enemy, &playerPosition)){
             Enemy_Attack(enemy);
-            if(enemy->ATTACKFLAG)Player_ChangeHealth(&scene->player,-enemy->damage*(1+ enemy->criticalDamage * (rand() % 100 > enemy->criticalRate)));
+            if(enemy->ATTACKFLAG){
+                Player_ChangeHealth(&scene->player,-enemy->damage*(1+ enemy->criticalDamage * (rand() % 100 > enemy->criticalRate)));
+                Player_SetDamageFlag(&scene->player);
+            }
         }
         Enemy_Update(enemy, delta_time);
         Enemy_Move(enemy,&enemy->moveDirection);

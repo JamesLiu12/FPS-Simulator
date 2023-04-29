@@ -12,6 +12,12 @@ void Player_Init(struct Player *player, enum WeaponName weaponname){
     player->inFireCD = 0;
     player->FIREFLAG = 0;
     player->fireCDcounter = 0;
+    player->RELOADFLAG = 0;
+    player->reloadCDcounter = 0;
+    player->healingCDcounter = 0;
+    player->healingCDtime = 5;
+    player->heal_per_sec = 10;
+    player->DAMAGEFLAG = 0;
     player->DEADFLAG = 0;
     player->WINFLAG = 0;
     player->QUITFLAG = 0;
@@ -64,6 +70,16 @@ void Player_Start(struct Player *player){
 }
 
 void Player_Update(struct Player *player, double delta_time){
+    if(player->DAMAGEFLAG){
+        player->healingCDcounter = player-> healingCDtime;
+    }
+    player->DAMAGEFLAG = 0;
+    if(player->healingCDcounter > 0){
+        player->healingCDcounter -= delta_time;
+    }
+    else{
+        Player_ChangeHealth(player, player->heal_per_sec * delta_time);
+    }
     if(player->inFireCD){
         player->FIREFLAG = 0 ;
         //TODO
@@ -83,7 +99,9 @@ void Player_Update(struct Player *player, double delta_time){
     Vector3_Set(&player->move, 0, 0, 0);
     Player_Control(player, delta_time);
 }
-
+void Player_SetDamageFlag(struct Player *player){
+    player->DAMAGEFLAG = 1;
+}
 void Player_Control(struct Player *player, double delta_time){
     if(kbhit()){
     if(keydown(W)) Player_RotateUp(player, delta_time);

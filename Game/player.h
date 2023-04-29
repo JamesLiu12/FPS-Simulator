@@ -38,8 +38,9 @@ struct Player{
      * QUITFLAG: if the player has quit the game
      */
     double fireCDcounter,reloadCDcounter;
+    double healingCDcounter, healingCDtime, heal_per_sec;
     struct Weapon weapon;
-    int inFireCD, FIREFLAG, inReloadCD, RELOADFLAG, DEADFLAG, WINFLAG,QUITFLAG;
+    int inFireCD, FIREFLAG, inReloadCD, RELOADFLAG, DEADFLAG, WINFLAG,QUITFLAG, DAMAGEFLAG;
 };
 
 //Initializer of player
@@ -86,7 +87,7 @@ void Player_Reload(struct Player *player);
 
 //Change HP of player
 void Player_ChangeHealth(struct Player *player,double deltaHealth);
-
+void Player_SetDamageFlag(struct Player *player);
 //Set the position of player
 void Player_SetPosition(struct Player *player, double x, double y, double z);
 #endif //FPS_SIMULATOR_PLAYER_H
