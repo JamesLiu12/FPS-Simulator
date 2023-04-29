@@ -17,10 +17,10 @@ subsystem:
 	for dir in $(SUBDIRS); do $(MAKE) -C $$dir; done
 
 $(OBJ_DIR)/main.o : main.c
-	@$(CC) -c -Wall -Wextra $^ -o $@
+	@$(CC) -c $^ -o $@
 
 $(BIN_DIR)/$(TARGET) : $(OBJS)
-	@$(CC) -c -Wall -Wextra $^ -o $@ -lm
+	@$(CC) $^ -o $@ -lm
 	@echo "Successfully build \"$(BIN_DIR)/$(TARGET)\"!"
 
 all: CHECK_DIR subsystem $(BIN_DIR)/$(TARGET)
