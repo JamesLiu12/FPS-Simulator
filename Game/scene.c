@@ -165,6 +165,7 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
 
     ArrayList_PushBack(&scene->list_Object, &Map_Floor);
 
+    // usage: Scene_Add_EnemySpawnPoint(scene, x, y, z);
     // enemy spawn points are grouped in similar x coordinate or z coordinate
     Scene_Add_EnemySpawnPoint(scene, -11,  0, -17);
     Scene_Add_EnemySpawnPoint(scene, -11,  0, 14);
@@ -184,6 +185,7 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
     Scene_Add_EnemySpawnPoint(scene, 10,   0, -7.2);
     Scene_Add_EnemySpawnPoint(scene, 10,   0, -17);
 
+    Scene_Add_EnemySpawnPoint(scene, -5.4, 0, 16.7);
     Scene_Add_EnemySpawnPoint(scene, 14.5, 0, 16.7);
     Scene_Add_EnemySpawnPoint(scene, 20,   0, 16.7);
     Scene_Add_EnemySpawnPoint(scene, 26.1, 0, 16.7);
@@ -202,9 +204,13 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
     Scene_Add_EnemySpawnPoint(scene, 41.1, 0, -4.6);
     Scene_Add_EnemySpawnPoint(scene, 34.5, 0, -10.1);
 
+    Scene_Add_EnemySpawnPoint(scene, 15 ,  0, 8);
+    Scene_Add_EnemySpawnPoint(scene, 20 ,  0, 8);
+    Scene_Add_EnemySpawnPoint(scene, 25 ,  0, 8);
+    Scene_Add_EnemySpawnPoint(scene, 30 ,  0, 8);
+    Scene_Add_EnemySpawnPoint(scene, 35 ,  0, 8);
 
-    
-    //Scene_Add_EnemySpawnPoint(scene, );
+
     //Initialize the meshes of enemy
     EnemyMeshes_Init(&scene->enemyMeshes,
                      ModelEnemy_Head_New(), ModelEnemy_Body_New(), ModelEnemy_Leg_New());
