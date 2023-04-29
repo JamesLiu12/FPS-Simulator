@@ -1,4 +1,5 @@
 CC = gcc
+CFLAGS = -Wall -Wformat-security -Wformat-overflow
 SRC = $(wildcard *.c op_engine/*.c Game/*.c Game/models/*.c GameUI/*.c util/*.c)
 SUBDIRS = op_engine Game Game/models GameUI util
 BIN_DIR = bin
@@ -6,7 +7,7 @@ OBJ_DIR = obj
 OBJS = $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC))
 TARGET = FPS_Simulator
 
-export CC SRC OBJS SUBDIRS BIN_DIR OBJ_DIR TARGET
+export CC SRC OBJS SUBDIRS BIN_DIR OBJ_DIR TARGET OBJS CFLAGS
 
 CHECK_DIR:
 	@mkdir -p $(BIN_DIR)
@@ -17,10 +18,10 @@ subsystem:
 	for dir in $(SUBDIRS); do $(MAKE) -C $$dir; done
 
 $(OBJ_DIR)/main.o : main.c
-	@$(CC) -c $^ -o $@
+	@$(CC) $(CFLAGS) -c $^ -o $@
 
 $(BIN_DIR)/$(TARGET) : $(OBJS)
-	@$(CC) $^ -o $@ -lm
+	@$(CC) $(CFLAGS) $^ -o $@ -lm
 	@echo "Successfully build \"$(BIN_DIR)/$(TARGET)\"!"
 
 all: CHECK_DIR subsystem $(BIN_DIR)/$(TARGET)
