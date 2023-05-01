@@ -83,3 +83,17 @@ To only compile the game, please run `make all`, then the executable file `./bin
 
 Although the game is adapted for both Linux and Windows, we still recommend you to play it on ***Linux***. Due to some 
 unknown cache refreshing mechanism issues, the flushing rate on Windows terminal is far slower than that on Linux terminal.
+
+## Hidden End
+The truth about this space is hidden somewhere, and what you see is not necessarily true. But you can get some hints from tips in the main menu.
+
+
+
+
+
+
+### How to achieve the true ending **Spoiler alert**
+
+The following content will show how to achieve the true ending. If you want to try yourself, we recommend you not to read the following content.
+
+The wall behind starting point is breakable. Shooting it to break it. Then you will see the gate through which the player was sent to the starting point. Enter it to see what will happen.
