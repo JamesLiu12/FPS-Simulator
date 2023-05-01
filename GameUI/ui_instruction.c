@@ -1,6 +1,7 @@
 #include "ui_instruction.h"
 #include "../op_engine/input.h"
 #include <stdlib.h>
+#include <stdio.h>
 int Fetch_Operation(){
     //return 1 is rolling down
     //return 2 is rolling up
@@ -21,10 +22,17 @@ int Fetch_Operation(){
     return 0;
 }
 void screenclean(){
-#ifdef __linux
-    system("clear");
-#endif
-#ifdef _WIN32
-    system("cls");
-#endif
+    printf("\033[1;1H");
+    for(int i=0;i<60;i++){
+        for(int j=0;j<150;j++)printf(" ");
+        printf("\n");
+    }
+    printf("\033[1;1H");
+// #ifdef __linux
+//     system("clear");
+// #endif
+// #ifdef _WIN32
+//     system("cls");
+// #endif
+
 }

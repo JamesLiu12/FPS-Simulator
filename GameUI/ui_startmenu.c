@@ -100,7 +100,11 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
                 goto STARTMENUORIGIN;
             }
             else{
-                
+                if (end == 2){
+                    True_Victory();
+                    goto STARTMENUORIGIN;
+                }
+                else {
                 struct UI_DefeatMenu defeatui;
                 UI_DefeatMenu_Init(&defeatui);
                 int endchoice;
@@ -114,7 +118,7 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
                     startui->pointer=3;goto STARTUI_ENTER;
                     default:
                     break;
-                }
+                }}
 
             }
             break;
@@ -215,11 +219,80 @@ void printeye(){
       |                     --|                                                |--                     |      )");
     printf("\n------________________________|                                                |________________________------\n");
 }
+void printeye_true(){
+    screenclean();
+    printf(R"(------_________________________                                                 _________________________------
+      |\\\\\\\\\\\\\\\\\\\\\--|                                                |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                                                |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                       ▒▒                       |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                      ▒▒▒▒                      |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                     ▒▒▒▒▒▒                     |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                    ▒▒▒▒▒▒▒▒                    |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                   ▒▒▒▒▒▒▒▒▒▒                   |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                  ▒▒▒▒▒▒▒▒▒▒▒▒                  |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒                 |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                ▒▒▒▒▒▒▒▓▓▒▒▒▒▒▒▒                |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|               ▒▒▒▒▒▒▒▓▓▓▓▒▒▒▒▒▒▒               |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|              ▒▒▒▒▒▒▒▓▓▓▓▓▓▒▒▒▒▒▒▒              |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|             ▒▒▒▒▒▒▒▓▓▓▓▓▓▓▓▒▒▒▒▒▒▒             |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|            ▒▒▒▒▒▒▒▓▓▓▓▓▓▓▓▓▓▒▒▒▒▒▒▒            |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|           ▒▒▒▒▒▒▒▓▓░░░░░░░░▓▓▒▒▒▒▒▒▒           |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|          ▒▒▒▒▒▒▒▓░░  ████  ░░▓▒▒▒▒▒▒▒          |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|           ▒▒▒▒▒▓▓▓▓░░░░░░░░▓▓▓▓▒▒▒▒▒           |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|            ▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒▒▒            |--/////////////////////|     
+      |\\\\\\\\\\\\\\\\\\\\\--|             ▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒             |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|              ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒              |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|               ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒               |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒                |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒                 |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                  ▒▒▒▒▒▒▒▒▒▒▒▒                  |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                   ▒▒▒▒▒▒▒▒▒▒                   |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                    ▒▒▒▒▒▒▒▒                    |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                     ▒▒▒▒▒▒                     |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                      ▒▒▒▒                      |--/////////////////////|     
+      |\\\\\\\\\\\\\\\\\\\\\--|                       ▒▒                       |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                                                |--/////////////////////|      )");
+    printf("\n------________________________|                                                |________________________------\n");
+}
+void printdeadeye_true(){
+    screenclean();
+    printf(R"(------_________________________                                                 _________________________------
+      |\\\\\\\\\\\\\\\\\\\\\--|                                                |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                                                |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                       ▒▒                       |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                      ▒▒▒▒                      |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                     ▒▒▒▒▒▒                     |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                    ▒▒▒▒▒▒▒▒                    |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                   ▒▒▒▒▒▒▒▒▒▒                   |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                  ▒▒▒▒▒▒▒▒▒▒▒▒                  |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒                 |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                ▒▒▒▒▒▒▒▓▓▒▒▒▒▒▒▒                |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|               ▒▒▒▒▒▒▒▓▓▓▓▒▒▒▒▒▒▒               |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|              ▒▒▒▒▒▒▒▓▓▓▓▓▓▒▒▒▒▒▒▒              |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|             ▒▒▒▒▒▒▒▓▓▓▓▓▓▓▓▒▒▒▒▒▒▒             |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|            ▒▒▒▒▒▒▒▓▓+=▓>▓▓/▓▒▒▒▒▒▒▒            |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|           ▒▒▒▒▒▒▒▓▓░%%%%░░/░-▓▓▒▒▒▒▒▒▒           |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|          ▒▒▒▒▒▒▒▓░@  #XX^  ░░▓▒▒▒▒▒▒▒          |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|           ▒▒▒▒▒▓▓▓▓░!!░░&*░$▓▓▓▒▒▒▒▒           |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|            ▒▒▒▓▓▓▓▓.▓,▓▓<▓##▓▓▓▓▒▒▒            |--/////////////////////|     
+      |\\\\\\\\\\\\\\\\\\\\\--|             ▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒             |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|              ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒              |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|               ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒               |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒                |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒                 |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                  ▒▒▒▒▒▒▒▒▒▒▒▒                  |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                   ▒▒▒▒▒▒▒▒▒▒                   |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                    ▒▒▒▒▒▒▒▒                    |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                     ▒▒▒▒▒▒                     |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                      ▒▒▒▒                      |--/////////////////////|     
+      |\\\\\\\\\\\\\\\\\\\\\--|                       ▒▒                       |--/////////////////////|      
+      |\\\\\\\\\\\\\\\\\\\\\--|                                                |--/////////////////////|      )");
+    printf("\n------________________________|                                                |________________________------\n");
+}
 void Victory(){
     int temp;
     char a[200];
-    int linecounter,totalcounter;
-        strcpy(a,"You: This is the end. Right?\n\n(press E to open the door)");
+        strcpy(a,"Seeing this wall reminds you of something.\n\n(press E to open the door)");
         screenclean();
         printchar(30,'-');
         printchar(25,'_');
@@ -369,6 +442,180 @@ void Victory(){
     //usleep(200000);
 
     usleep(1000000);
+    screenclean();
+    printf("\033[1;1H");
+}
+void True_Victory(){
+    char a[200];
+    usleep(200000);
+    for(int i=0;i<10;i++)kbhit();
+    strcpy(a,"Seeing this gate remind you of something\n\n(press to continue)");
+    screenclean();
+    printchar(30,'-');
+    printchar(25,'_');
+    printf(" ");
+    printchar(25,'_');
+    printchar(30,'-');
+    printf("\n");
+    for(int k=0;k<30;k++){
+        printchar(30,' ');
+        printf("|");
+        printchar(21,'\\');
+        printf("--| ");
+        printf("|--");
+        printchar(21,'/');
+        printf("|");
+        printchar(30,' ');
+    printf("\n");
+    }
+    printchar(30,'-');
+    printchar(25,'_');
+    printf(" ");
+    printchar(25,'_');
+    printchar(30,'-');
+    printf("\n");
+    printdialog(a);
+    while(1){
+        if(kbhit())break;
+    }
+    strcpy(a,"For some reason, you are trapped here and forced to\nparticipate in AI battle training,\nonce and once again.\n\n(press to continue)");
+    screenclean();
+    printchar(30,'-');
+    printchar(25,'_');
+    printf(" ");
+    printchar(25,'_');
+    printchar(30,'-');
+    printf("\n");
+    for(int k=0;k<30;k++){
+        printchar(30,' ');
+        printf("|");
+        printchar(21,'\\');
+        printf("--| ");
+        printf("|--");
+        printchar(21,'/');
+        printf("|");
+        printchar(30,' ');
+    printf("\n");
+    }
+    printchar(30,'-');
+    printchar(25,'_');
+    printf(" ");
+    printchar(25,'_');
+    printchar(30,'-');
+    printf("\n");
+    printdialog(a);
+    while(1){
+        if(kbhit())break;
+    }
+    strcpy(a,"Finally, you found this gate that sends you to the start\npoint over and over again.\n\n(press to continue)");
+    screenclean();
+    printchar(30,'-');
+    printchar(25,'_');
+    printf(" ");
+    printchar(25,'_');
+    printchar(30,'-');
+    printf("\n");
+    for(int k=0;k<30;k++){
+        printchar(30,' ');
+        printf("|");
+        printchar(21,'\\');
+        printf("--| ");
+        printf("|--");
+        printchar(21,'/');
+        printf("|");
+        printchar(30,' ');
+    printf("\n");
+    }
+    printchar(30,'-');
+    printchar(25,'_');
+    printf(" ");
+    printchar(25,'_');
+    printchar(30,'-');
+    printf("\n");
+    printdialog(a);
+    while(1){
+        if(kbhit())break;
+    }
+
+    strcpy(a,"You know what is behind the door - The Eye\n\n(press to continue)");
+    screenclean();
+    printchar(30,'-');
+    printchar(25,'_');
+    printf(" ");
+    printchar(25,'_');
+    printchar(30,'-');
+    printf("\n");
+    for(int k=0;k<30;k++){
+        printchar(30,' ');
+        printf("|");
+        printchar(21,'\\');
+        printf("--| ");
+        printf("|--");
+        printchar(21,'/');
+        printf("|");
+        printchar(30,' ');
+    printf("\n");
+    }
+    printchar(30,'-');
+    printchar(25,'_');
+    printf(" ");
+    printchar(25,'_');
+    printchar(30,'-');
+    printf("\n");
+    printdialog(a);
+    while(1){
+        if(kbhit())break;
+    }
+    strcpy(a,"The Eye: Can't believe you found this place.\n\n(press F to shoot!!)");
+    screenclean();
+    printeye_true();
+    printdialog(a);
+    while(1){if(kbhit())if(keydown(F))break;}
+
+    strcpy(a,"Villains always die because of talking too much.\nBefore it did anything, you shooted at it.\nAnd it broke down.\n\n(press to continue)");
+    screenclean();
+    printdeadeye_true();
+    printdialog(a);
+    while(1){if(kbhit())break;}
+
+    strcpy(a,"You: It all ends now.\n\n(press W to walk out the space)");
+    screenclean();
+    printdeadeye_true();
+    printdialog(a);
+    while(1){if(kbhit())if(keydown(W))break;}
+
+    for(int i=0;i<40;i++){
+    screenclean();
+    printdeadeye_true();
+    printdialog(a);
+    printf("\033[1;1H");
+    for(int j=1;j<=i;j++){
+        //printf("\033[0J");
+        printf("\033[%d;1H",j);
+        printf("\r");
+        printchar(120,' ');
+        printf("\n");
+    }
+    usleep(150000);
+    }
+
+    usleep(1000000);
+    for(int i=0;i<10;i++)kbhit();
+    screenclean();
+    printchar(40,'\n');
+    strcpy(a,"Code 19198xx AI failed.\nPlayer broke the trap.\n\n(press to continue)");
+    printdialog(a);
+    while(1){if(kbhit())break;}
+    screenclean();
+    printchar(40,'\n');
+    strcpy(a,"Collecting data...\nAI iteration in progress\n\n(press to continue)");
+    printdialog(a);
+    while(1){if(kbhit())break;}
+    screenclean();
+    printchar(40,'\n');
+    strcpy(a,"New AI genarated.\nClearing the memory of Player 0721.\nPlayer 0721 is being dropped into a new game\n\n(press to continue)");
+    printdialog(a);
+    while(1){if(kbhit())break;}
     screenclean();
     printf("\033[1;1H");
 }

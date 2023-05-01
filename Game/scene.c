@@ -19,7 +19,7 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
     ArrayList_Init(&scene->list_EnemySpawnPoint,sizeof(struct Vector3*));
     Player_Init(&scene->player, weaponname);
     Player_SetPosition(&scene->player, -17.5, 0, -17.5);
-
+    scene->FAKE_WALL_shootcounter = 0;
     //Map_new_Wall origin coordinate (0,0,0)
 
     //Map_new_Walls
@@ -32,8 +32,8 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
     CollideBox_Init(&collideBoxes_Wall[0], &Map_Wall->transform, 80, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[0].transform.position, 20, 1.25, 20);
     //Wall_001
-    CollideBox_Init(&collideBoxes_Wall[1], &Map_Wall->transform, 80, 2.5, 0.2);
-    Vector3_Set(&collideBoxes_Wall[1].transform.position, 20, 1.25, -20);
+    CollideBox_Init(&collideBoxes_Wall[1], &Map_Wall->transform, 60, 2.5, 0.2);
+    Vector3_Set(&collideBoxes_Wall[1].transform.position, 30, 1.25, -20);
     //Wall_002
     CollideBox_Init(&collideBoxes_Wall[2], &Map_Wall->transform, 40, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[2].transform.position, -20, 1.25, 0);
@@ -153,6 +153,32 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
 
     ArrayList_PushBack(&scene->list_Object, &Map_EndGate);
 
+    struct Mesh *mesh_TrueEndGate = TrueWall_New();
+    struct Object *Map_TrueEndGate = Object_New(mesh_TrueEndGate, NULL, TRUE_END);
+
+    struct CollideBox *collideBoxes_TrueEndGate = (struct CollideBox *) malloc(sizeof(struct CollideBox));
+
+    CollideBox_Init(&collideBoxes_TrueEndGate[0], &Map_TrueEndGate->transform, 5, 2, 0.4);
+    Vector3_Set(&collideBoxes_TrueEndGate[0].transform.position, 0, 1.5, 0);
+
+    Object_SetCollideBoxes(Map_TrueEndGate, collideBoxes_TrueEndGate, 1);
+    Vector3_Set(&Map_TrueEndGate->transform.position, -17.5, 0, -22);
+
+    ArrayList_PushBack(&scene->list_Object, &Map_TrueEndGate);
+
+    struct Mesh *mesh_FakeWall = TrueWall_New();
+    struct Object *Map_FakeWall = Object_New(mesh_FakeWall, NULL, FAKE_WALL);
+
+    struct CollideBox *collideBoxes_FakeWall = (struct CollideBox *) malloc(sizeof(struct CollideBox));
+
+    CollideBox_Init(&collideBoxes_FakeWall[0], &Map_FakeWall->transform, 5, 2, 0.4);
+    Vector3_Set(&collideBoxes_FakeWall[0].transform.position, 0, 1.5, 0);
+
+    Object_SetCollideBoxes(Map_FakeWall, collideBoxes_FakeWall, 1);
+    Vector3_Set(&Map_FakeWall->transform.position, -17.5, 0, -19);
+
+    ArrayList_PushBack(&scene->list_Object, &Map_FakeWall);
+
     //    Map_Floor origin coordinate (0,0,0)
     struct Mesh *mesh_Floor = ModelMap_new_OnlyFloor_New();
     struct Object *Map_Floor = Object_New(mesh_Floor, NULL, FLOOR);
@@ -229,8 +255,6 @@ void Del_Scene(struct Scene *scene){
 }
 
 void Scene_Update(struct Scene *scene, double delta_time){
-    struct Vector3 TryToMove;
-    int BlockFlag;
     Transform_UpdateGlobal(&scene->player.transform);
     Transform_UpdateGlobal(&scene->player.collideBox.transform);
     
@@ -278,9 +302,9 @@ void Scene_Update(struct Scene *scene, double delta_time){
     }
     Player_Update(&scene->player, delta_time);
     Player_Move(&scene->player, &scene->player.move);
-    if(CollideBox_IsCollide(&scene->player.collideBox, ((struct Object**)scene->list_Object.data)[1]->collideBoxes)){
-        scene->player.WINFLAG=1;
-    }
+
+    Scene_Player_WinningCheck(scene);
+    if(scene->FAKE_WALL_shootcounter == 3) Scene_Delete_FakeWall(scene);
     if(Scene_Collided_Object(scene,&scene->player.collideBox)){
         Vector3_Scale(&scene->player.move, -1);
         Player_Move(&scene->player, &scene->player.move);
@@ -404,6 +428,7 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     printf("%lf %lf %lf\n",scene->player.canvas.camera_transform.rotation.x,scene->player.canvas.camera_transform.rotation.y,scene->player.canvas.camera_transform.rotation.z);
     printf("%lf %lf %lf\n",scene->player.canvas.camera_transform.globalPosition.x,scene->player.canvas.camera_transform.globalPosition.y,scene->player.canvas.camera_transform.globalPosition.z);
 #endif
+    
     Canvas_flush(canvas);
 }   
 
@@ -483,7 +508,10 @@ void Scene_PlayerShoot(struct Scene *scene){
     struct Enemy *enemy;
     enum Tag tag;
     Scene_EnemyCollided(scene, &ray, &enemy, &tag);
-    if (enemy == NULL) return;
+    if (enemy == NULL) { if (tag == FAKE_WALL){
+        scene->FAKE_WALL_shootcounter++;
+    }
+    }
     Enemy_GetDamage(enemy, &tag, &scene->player.weapon);
 
 }
@@ -491,7 +519,9 @@ void Scene_PlayerShoot(struct Scene *scene){
 void Clear_Enemy(struct Scene *scene){
     for(int i = 0; i < scene->list_Enemy.size; i++){
         struct Enemy *enemy = ((struct Enemy **)scene->list_Enemy.data)[i];
-        if(enemy->DEADFLAG == 1){if(ArrayList_DeleteElement(&scene->list_Enemy,scene->list_Enemy.data + i*scene->list_Enemy.element_size))Del_Enemy(enemy);}
+        if(enemy->DEADFLAG == 1){
+            if(ArrayList_DeleteElement(&scene->list_Enemy,scene->list_Enemy.data + i*scene->list_Enemy.element_size))
+            Del_Enemy(enemy);}
     }
 }
 int Scene_Collided_Enemy(struct Scene *scene, struct CollideBox *collidebox){
@@ -507,7 +537,7 @@ int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox){
             for(int j = 0; j < object->collideBoxCount ;j++){
                 if(CollideBox_IsCollide(collidebox,&object->collideBoxes[j])){
 #if DEBUG
-                    //printf("%d %d OBJECT\n", i, j);
+                    printf("%d %d OBJECT\n", i, j);
 #endif
                     return 1;
                 }
@@ -518,4 +548,33 @@ int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox){
 void Scene_Add_EnemySpawnPoint(struct Scene *scene,double x, double y,double z){
     struct Vector3 *vector=Vector3_New(x,y,z);
     ArrayList_PushBack(&scene->list_EnemySpawnPoint,&vector);
+}
+void Scene_Player_WinningCheck(struct Scene *scene){
+    for(int i = 0; i < scene->list_Object.size ; i++){
+            struct Object *object = ((struct Object**)scene->list_Object.data)[i];
+            for(int j = 0; j < object->collideBoxCount ;j++){
+                if(CollideBox_IsCollide(&scene->player.collideBox,&object->collideBoxes[j])){
+                    if(object->tag == END){
+                        scene->player.WINFLAG=1;
+                    }
+                    if(object->tag == TRUE_END){
+                        scene->player.TRUEWINFLAG=1;
+                    }
+#if DEBUG
+                    printf("%d %d OBJECT\n", i, j);
+#endif
+                    return;
+                }
+            }
+        }
+    return;
+}
+void Scene_Delete_FakeWall(struct Scene *scene){
+    for(int i = 0; i < scene->list_Object.size; i++){
+        struct Object *object = ((struct Object **)scene->list_Object.data)[i];
+        if(object->tag == FAKE_WALL){
+            if(ArrayList_DeleteElement(&scene->list_Object,scene->list_Object.data + i*scene->list_Object.element_size))
+            Del_Object(object);
+            break;}
+    }
 }
