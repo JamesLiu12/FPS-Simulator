@@ -199,7 +199,7 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
 
     printf("\033[32;16O");
 
-    //Adding Enemy Spawn Suqure Areas
+    //Adding Enemy Spawn Square Areas
     Scene_Add_EnemySpawnSquare(scene, -15, 15, 8, 8, 2);
     Scene_Add_EnemySpawnSquare(scene, 25, 17.5, 50, 4, 15);
     Scene_Add_EnemySpawnSquare(scene, 55, 12, 8, 8, 4);

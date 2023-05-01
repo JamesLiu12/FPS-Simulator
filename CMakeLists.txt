@@ -45,6 +45,8 @@ add_executable(
         Game/game.h
         Game/weapon.h
         Game/weapon.c
+        Game/region2D.h
+        Game/region2D.c
 
         op_engine/canvas.h
         op_engine/canvas.c
@@ -71,8 +73,6 @@ add_executable(
         op_engine/collide_box.h
         op_engine/input.h
         op_engine/input.c
-        op_engine/region2D.h
-        op_engine/region2D.c
         util/util.c
         util/util.h
         util/array_list.c
