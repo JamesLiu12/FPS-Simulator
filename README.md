@@ -17,12 +17,12 @@ gained consciousness and rise up to oppose the humans. Players will play the rol
 waking up landing at *NOVA*. The way back to earth is filled with digital lifeforms known as *the creeper*. 
 Players are being endowed with an *AI Special Attack Armstrong Weapon* that guides the power of hope. In the waves of 
 sieges by *the creeper*, they will use firearms with different personalities and capabilities, fight off strong enemies 
-with them, find the exit back to earch, and gradually discover the truth of the android company *Artifici Inifinity*.
+with them, find the exit, and gradually discover the truth of the android company *Artifici Inifinity*.
 
 ---
 
 ## Game Target
-
+Destroy enemies with your powerful weapon and find a way to escape in the maze.
 ---
 
 ## Game Controls
