@@ -266,8 +266,6 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
     printf("\033[32;16O");
 
     //Sample Enemy generate test 
-    // every enemy spawn region has 
-    int pointnumber;
     for(int i=0; i < scene->list_EnemySpawnRegion.size; i++){
 
         // initializing
