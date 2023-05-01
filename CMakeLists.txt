@@ -71,6 +71,8 @@ add_executable(
         op_engine/collide_box.h
         op_engine/input.h
         op_engine/input.c
+        op_engine/region2D.h
+        op_engine/region2D.c
         util/util.c
         util/util.h
         util/array_list.c

@@ -10,6 +10,7 @@ all: ../$(OBJ_DIR)/op_engine/canvas.o \
 ../$(OBJ_DIR)/op_engine/transform.o \
 ../$(OBJ_DIR)/op_engine/triangle.o \
 ../$(OBJ_DIR)/op_engine/vector.o \
+../$(OBJ_DIR)/op_engine/region2D.o \
 
 ../$(OBJ_DIR)/op_engine/canvas.o : canvas.c
 	@$(CC) $(CFLAGS) -c $^ -o $@
@@ -45,4 +46,7 @@ all: ../$(OBJ_DIR)/op_engine/canvas.o \
 	@$(CC) $(CFLAGS) -c $^ -o $@
 
 ../$(OBJ_DIR)/op_engine/vector.o : vector.c
+	@$(CC) $(CFLAGS) -c $^ -o $@
+
+../$(OBJ_DIR)/op_engine/region2D.o : region2D.c
 	@$(CC) $(CFLAGS) -c $^ -o $@

@@ -172,11 +172,13 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
             screenclean();
             //Del_Runner(&runner);
             if(end == 1){
+                screenclean();
                 Victory();
                 goto STARTMENUORIGIN;
             }
             else{
                 if (end == 2){
+                    screenclean();
                     True_Victory();
                     goto STARTMENUORIGIN;
                 }
@@ -525,6 +527,7 @@ void Victory(){
     printf("\033[1;1H");
 }
 void True_Victory(){
+    
     char a[200];
     usleep(200000);
     for(int i=0;i<10;i++)kbhit();
