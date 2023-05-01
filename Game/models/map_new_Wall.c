@@ -1,4 +1,4 @@
-#include "map_new_Wall.h"
+#include "../mesh.h"
 
 void ModelMap_new_Wall_Init(struct Mesh *map_new_wall) {
 	Vector3_Set(&map_new_wall->vertices[0], -20.0, 0.0, 19.9);
@@ -9,10 +9,10 @@ void ModelMap_new_Wall_Init(struct Mesh *map_new_wall) {
 	Vector3_Set(&map_new_wall->vertices[5], 60.0, 2.5, 19.9);
 	Vector3_Set(&map_new_wall->vertices[6], 60.0, 0.0, 20.1);
 	Vector3_Set(&map_new_wall->vertices[7], 60.0, 2.5, 20.1);
-	Vector3_Set(&map_new_wall->vertices[8], -20.0, 0.0, -20.1);
-	Vector3_Set(&map_new_wall->vertices[9], -20.0, 2.5, -20.1);
-	Vector3_Set(&map_new_wall->vertices[10], -20.0, 0.0, -19.9);
-	Vector3_Set(&map_new_wall->vertices[11], -20.0, 2.5, -19.9);
+	Vector3_Set(&map_new_wall->vertices[8], -15.0, 0.0, -20.1);
+	Vector3_Set(&map_new_wall->vertices[9], -15.0, 2.5, -20.1);
+	Vector3_Set(&map_new_wall->vertices[10], -15.0, 0.0, -19.9);
+	Vector3_Set(&map_new_wall->vertices[11], -15.0, 2.5, -19.9);
 	Vector3_Set(&map_new_wall->vertices[12], 60.0, 0.0, -20.1);
 	Vector3_Set(&map_new_wall->vertices[13], 60.0, 2.5, -20.1);
 	Vector3_Set(&map_new_wall->vertices[14], 60.0, 0.0, -19.9);
