@@ -1,8 +1,8 @@
 #include "ui_weaponselectionmenu.h"
 #include <stdio.h>
 #include <string.h>
-void UI_WeaponMenu_Init(struct UI_WeaponMenu *weaponui){
-    weaponui->pointer=0;
+void UI_WeaponMenu_Init(struct UI_WeaponMenu *weaponui, int pointer){
+    weaponui->pointer=pointer;
     //weapon name should be 10 charaters
     strcpy(weaponui->Weapon_Name[0],"   AK47   ");
     strcpy(weaponui->Weapon_Name[1],"  P1999   ");

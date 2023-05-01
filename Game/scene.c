@@ -13,12 +13,12 @@
 #include "../util/util.h"
 #define _USE_MATH_DEFINES
 
-void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
+void Scene_Init(struct Scene *scene, enum WeaponName weaponname, int difficulty){
     srand((int)time(NULL));
     ArrayList_Init(&scene->list_Object, sizeof(struct Object*));
     ArrayList_Init(&scene->list_Enemy, sizeof(struct Enemy*));
     ArrayList_Init(&scene->list_EnemySpawnArea,sizeof(struct Region2D*));
-    Player_Init(&scene->player, weaponname);
+    Player_Init(&scene->player, weaponname, difficulty);
     Player_SetPosition(&scene->player, -17.5, 0, -17.5);
     scene->FAKE_WALL_shootcounter = 0;
     //Map_new_Wall origin coordinate (0,0,0)
@@ -215,7 +215,7 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
         maxZ = region->z + region->width/2;
         minZ = region->z - region->width/2;
         for(int j = 0; j < region->number ; j++){
-            struct Enemy *enemy = New_Enemy(&scene->enemyMeshes);
+            struct Enemy *enemy = New_Enemy(&scene->enemyMeshes, difficulty);
 
             Vector3_Set(&enemy->transform.position, minX + 1.0 * rand() / RAND_MAX * ( maxX - minX ), 0, minZ + 1.0 * rand() / RAND_MAX * ( maxZ - minZ ));
             
@@ -270,7 +270,7 @@ void Scene_Update(struct Scene *scene, double delta_time){
         Line_Set(&ray, &enemyPosition, &positionDiff);
 
         double distanceBetween = Vector3_Distance3D(&enemyPosition, &playerPosition);
-        enemy->canSeeTarget = (Scene_MinDistanceWall(scene, &ray) > distanceBetween) && (distanceBetween < enemy->senseDistance);
+        enemy->canSeeTarget = (Scene_MinDistanceWall(scene, &ray) > distanceBetween) && (distanceBetween < enemy->senseDistance || enemy->health != enemy->maxHealth);
         enemy->moveDirection = positionDiff;
         Vector3_Normalize(&enemy->moveDirection);
         enemy->destination = playerPosition;
@@ -422,7 +422,6 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     printf("%lf %lf %lf\n",scene->player.canvas.camera_transform.rotation.x,scene->player.canvas.camera_transform.rotation.y,scene->player.canvas.camera_transform.rotation.z);
     printf("%lf %lf %lf\n",scene->player.canvas.camera_transform.globalPosition.x,scene->player.canvas.camera_transform.globalPosition.y,scene->player.canvas.camera_transform.globalPosition.z);
 #endif
-    
     Canvas_flush(canvas);
 }   
 

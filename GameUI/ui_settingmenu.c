@@ -130,7 +130,7 @@ void Launch_SettingMenu(struct UI_SettingMenu *settingui){
                 break;
             case 1:
                 settingui->difficulty++;
-                if(settingui->difficulty>2)settingui->difficulty=0;
+                if(settingui->difficulty>2)settingui->difficulty=2;
                 break;
             case 2:
                 if(settingui->sensitivity<=145)settingui->sensitivity+=5;

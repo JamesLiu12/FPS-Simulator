@@ -36,8 +36,8 @@ void Weapon_Init(struct Weapon* weapon, enum WeaponName weaponName){
         weapon->reloadCDtime=2;
         weapon->magazine_size=5;
         weapon->bullet_number=weapon->magazine_size;
-        weapon->head_rate=1.3;
-        weapon->body_rate=1;
+        weapon->head_rate=1;
+        weapon->body_rate=1.7;
         weapon->leg_rate=1;
         strcpy(weapon->namestring,"Razor_ELEC");
     }
