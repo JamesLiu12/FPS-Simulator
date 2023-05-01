@@ -17,12 +17,12 @@ gained consciousness and rise up to oppose the humans. Players will play the rol
 waking up landing at *NOVA*. The way back to earth is filled with digital lifeforms known as *the creeper*. 
 Players are being endowed with an *AI Special Attack Armstrong Weapon* that guides the power of hope. In the waves of 
 sieges by *the creeper*, they will use firearms with different personalities and capabilities, fight off strong enemies 
-with them, find the exit back to earch, and gradually discover the truth of the android company *Artifici Inifinity*.
+with them, find the exit, and gradually discover the truth of the android company *Artifici Inifinity*.
 
 ---
 
 ## Game Target
-<!-- TODO -->
+Destroy enemies with your powerful weapon and find a way to escape in the maze.
 
 ---
 
@@ -46,6 +46,7 @@ You may also notice that the floor is showed by another lighter color in these i
 ### The value bars
 * Player HP, bullet number, and the HP of the enemy you pointed to are shown under the screen.  
 [Click here to view the value bars](./images/Value%20bar.jpg)  
+
 
 ---
 
@@ -113,3 +114,17 @@ To only compile the game, please run `make all`, then the executable file `./bin
 
 Although the game is adapted for both Linux and Windows, we still recommend you to play it on ***Linux***. Due to some 
 unknown cache refreshing mechanism issues, the flushing rate on Windows terminal is far slower than that on Linux terminal.
+
+## Hidden End
+The truth about this space is hidden somewhere, and what you see is not necessarily true. But you can get some hints from tips in the main menu.
+
+
+
+
+
+
+### How to achieve the true ending **Spoiler alert**
+
+The following content will show how to achieve the true ending. If you want to try yourself, we recommend you not to read the following content.
+
+The wall behind starting point is breakable. Shooting it to break it. Then you will see the gate through which the player was sent to the starting point. Enter it to see what will happen.
