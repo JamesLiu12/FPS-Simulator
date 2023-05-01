@@ -203,8 +203,8 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
     Scene_Add_EnemySpawnArea(scene, -15, 15, 8, 8, 2);
     Scene_Add_EnemySpawnArea(scene, 25, 17.5, 50, 4, 15);
     Scene_Add_EnemySpawnArea(scene, 55, 12, 8, 8, 4);
-    Scene_Add_EnemySpawnArea(scene, 55, -10, 8, 8, 4);
     Scene_Add_EnemySpawnArea(scene, 55, -10, 8, 8, 3);
+    Scene_Add_EnemySpawnArea(scene, -10, -10, 8, 8, 5);
     //Enemy generator 
     int maxX, minX, maxZ, minZ;
     for(int i=0; i < scene->list_EnemySpawnArea.size; i++){
