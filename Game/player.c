@@ -1,17 +1,27 @@
 #include "player.h"
 #include "../op_engine/op_engine.h"
-
-void Player_Init(struct Player *player){
+#include "../GameUI/ui_instruction.h"
+#include <stdio.h>
+#include <stdlib.h>
+void Player_Init(struct Player *player, enum WeaponName weaponname){
     Canvas_Init(&player->canvas, 33, 65);
     player->maxHealth = 100;
     player->health = player->maxHealth;
-    player->moveSpeed = 10;
-    player->rotationSpeed = 10;
-    player->In_FireCD = 0;
+    player->moveSpeed = 15;
+    player->rotationSpeed = 4;
+    player->inFireCD = 0;
     player->FIREFLAG = 0;
     player->fireCDcounter = 0;
+    player->RELOADFLAG = 0;
+    player->reloadCDcounter = 0;
+    player->healingCDcounter = 0;
+    player->healingCDtime = 5;
+    player->heal_per_sec = 10;
+    player->DAMAGEFLAG = 0;
     player->DEADFLAG = 0;
     player->WINFLAG = 0;
+    player->TRUEWINFLAG = 0;
+    player->QUITFLAG = 0;
     Vector3_Set(&player->facing,0,0,1);
 
     Transform_Init(&player->transform, NULL);
@@ -20,13 +30,13 @@ void Player_Init(struct Player *player){
 
     CollideBox_Init(&player->collideBox, &player->transform, 1, 2.1, 1);
     Vector3_Set(&player->collideBox.transform.position, 0, 1.06, 0);
-    Vector3_Set(&player->moveDirection, 0, 0 ,0);
-    Weapon_Init(&player->weapon, AK47);
+    Vector3_Set(&player->move, 0, 0 , 0);
+    Weapon_Init(&player->weapon, weaponname);
 }
 
-struct Player* New_Player() {
+struct Player* New_Player(enum WeaponName weaponname) {
     struct Player* player = (struct Player*)malloc(sizeof(struct Player));
-    Player_Init(player);
+    Player_Init(player,weaponname);
     return player;
 }
 
@@ -48,10 +58,10 @@ void Player_Rotate(struct Player *player, struct Vector3* angle){
     struct Vector3 BaseFacing;
     Vector3_Set(&BaseFacing, 0, 0, 1);
     struct Matrix3x3 RotationMatrix;
-    Matrix3x3_FromEulerAngle(&RotationMatrix,&player->canvas.camera_transform.rotation,EULER_ANGLE_REVERSED);
-    Matrix3x3_TransformMatrix(&RotationMatrix, &BaseFacing);
-    Vector3_Normalize(&BaseFacing);
-    Vector3_Copy(&BaseFacing,&player->facing);
+    Matrix3x3_FromEulerAngle(&RotationMatrix,angle,EULER_ANGLE_REVERSED);
+    Matrix3x3_TransformMatrix(&RotationMatrix, &player->facing);
+    Vector3_Normalize(&player->facing);
+    //Vector3_Copy(&BaseFacing,&player->facing);
 
 }
 
@@ -61,27 +71,40 @@ void Player_Start(struct Player *player){
 }
 
 void Player_Update(struct Player *player, double delta_time){
-    if(player->In_FireCD){
+    if(player->DAMAGEFLAG){
+        player->healingCDcounter = player-> healingCDtime;
+    }
+    player->DAMAGEFLAG = 0;
+    if(player->healingCDcounter > 0){
+        player->healingCDcounter -= delta_time;
+    }
+    else{
+        Player_ChangeHealth(player, player->heal_per_sec * delta_time);
+    }
+    if(player->inFireCD){
         player->FIREFLAG = 0 ;
         //TODO
         player->fireCDcounter -= delta_time;
-        if(player->fireCDcounter <= 0) player->In_FireCD = 0;
+        if(player->fireCDcounter <= 0) player->inFireCD = 0;
     }
 
     if(player->weapon.bullet_number == 0) Player_Reload(player);
-    if(player->In_ReloadCD){
+    if(player->inReloadCD){
         player->RELOADFLAG = 0;
         player->reloadCDcounter -= delta_time;
         if(player->reloadCDcounter <= 0){
-            player->In_ReloadCD = 0;
+            player->inReloadCD = 0;
         player->weapon.bullet_number = player->weapon.magazine_size;
         }
     }
-    Vector3_Set(&player->moveDirection,0,0,0);
+    Vector3_Set(&player->move, 0, 0, 0);
     Player_Control(player, delta_time);
 }
-
+void Player_SetDamageFlag(struct Player *player){
+    player->DAMAGEFLAG = 1;
+}
 void Player_Control(struct Player *player, double delta_time){
+    if(kbhit()){
     if(keydown(W)) Player_RotateUp(player, delta_time);
     if(keydown(S)) Player_RotateDown(player, delta_time);
     if(keydown(A)) Player_RotateLeft(player, delta_time);
@@ -97,13 +120,15 @@ void Player_Control(struct Player *player, double delta_time){
 
     if(keydown(F)) Player_Shoot(player);
     if(keydown(R)) Player_Reload(player);
+    if(keydown(ESC)) Player_Pause(player);
+    }
 }
 void Player_Shoot(struct Player *player){
     if(!player->FIREFLAG){
-        if(!player->In_FireCD && !player->In_ReloadCD){
+        if(!player->inFireCD && !player->inReloadCD){
             if(player->weapon.bullet_number>0){
             player->FIREFLAG = 1;
-            player->In_FireCD = 1;
+            player->inFireCD = 1;
             player->fireCDcounter = player->weapon.fireCDtime;
             player->weapon.bullet_number -= 1;
             }
@@ -112,10 +137,29 @@ void Player_Shoot(struct Player *player){
 }
 void Player_Reload(struct Player *player){
     if(!player->RELOADFLAG){
-        if(!player->In_ReloadCD){
+        if(!player->inReloadCD){
         player->RELOADFLAG = 1;
-        player->In_ReloadCD = 1;
+        player->inReloadCD = 1;
         player->reloadCDcounter = player->weapon.reloadCDtime;
+        }
+    }
+}
+void Player_Pause(struct Player *player){
+    screenclean();
+    printf(R"(                      ______       __    __   __  .___________. ______   
+                     /  __  \     |  |  |  | |  | |           ||      \  
+                    |  |  |  |    |  |  |  | |  | `---|  |----``----)  | 
+                    |  |  |  |    |  |  |  | |  |     |  |         /  /  
+                    |  `--'  '--. |  `--'  | |  |     |  |        |__|   
+                     \_____\_____\ \______/  |__|     |__|         __    
+                                                                  (__)  )");
+    printf("\nPress ESC to return to the game\n");
+    printf("Press ENTER to quit the game\n");
+
+    while(1){
+        if(kbhit()){
+            if(keydown(ESC))break;
+            if(keydown(ENTER)){player->QUITFLAG=1;break;}
         }
     }
 }
@@ -125,48 +169,48 @@ void Player_MoveForward(struct Player *player, double delta_time){
     Vector3_Normalize(&movement);
     Vector3_Scale(&movement, player->moveSpeed * delta_time);
     //Player_Move(player,&movement);
-    Vector3_Copy(&movement, &player->moveDirection);
+    Vector3_Copy(&movement, &player->move);
 }
 void Player_MoveBackward(struct Player *player, double delta_time){
     struct Vector3 movement;
     Vector3_Set(&movement, -player->facing.x, 0, -player->facing.z);
     Vector3_Normalize(&movement);
     Vector3_Scale(&movement, player->moveSpeed * delta_time);
-    Vector3_Copy(&movement, &player->moveDirection);
+    Vector3_Copy(&movement, &player->move);
     //Player_Move(player, &movement);
-    Vector3_Copy(&movement, &player->moveDirection);
+    Vector3_Copy(&movement, &player->move);
 }
 void Player_MoveLeft(struct Player *player, double delta_time){
     struct Vector3 movement;
     Vector3_Set(&movement,-player->facing.z,0,player->facing.x);
     Vector3_Normalize(&movement);
     Vector3_Scale(&movement,player->moveSpeed * delta_time);
-    Vector3_Copy(&movement,&player->moveDirection);
+    Vector3_Copy(&movement,&player->move);
     //Player_Move(player,&movement);
-    Vector3_Copy(&movement, &player->moveDirection);
+    Vector3_Copy(&movement, &player->move);
 }
 void Player_MoveRight(struct Player *player, double delta_time){
     struct Vector3 movement;
     Vector3_Set(&movement, player->facing.z, 0, -player->facing.x);
     Vector3_Normalize(&movement);
     Vector3_Scale(&movement, player->moveSpeed * delta_time);
-    Vector3_Copy(&movement, &player->moveDirection);
+    Vector3_Copy(&movement, &player->move);
     //Player_Move(player,&movement);
-    Vector3_Copy(&movement, &player->moveDirection);
+    Vector3_Copy(&movement, &player->move);
 }
 
 void Player_RotateUp(struct Player *player, double delta_time){
     struct Vector3 rotation;
     Vector3_Set(&rotation, player->facing.z, 0, -player->facing.x);
     Vector3_Normalize(&rotation);
-    Vector3_Scale(&rotation, player->rotationSpeed * delta_time);
+    Vector3_Scale(&rotation, player->rotationSpeed * delta_time * 0.5);
     Player_Rotate(player, &rotation);
 }
 void Player_RotateDown(struct Player *player, double delta_time){
     struct Vector3 rotation;
     Vector3_Set(&rotation, -player->facing.z, 0, player->facing.x);
     Vector3_Normalize(&rotation);
-    Vector3_Scale(&rotation, player->rotationSpeed * delta_time);
+    Vector3_Scale(&rotation, player->rotationSpeed * delta_time * 0.5);
     Player_Rotate(player, &rotation);
 }
 void Player_RotateLeft(struct Player *player, double delta_time){

@@ -31,6 +31,8 @@ add_executable(
         Game/models/models.h
         Game/models/map_new_EndGate.h
         Game/models/map_new_EndGate.c
+        Game/models/true_wall.c
+        Game/models/true_wall.h
 
         Game/scene.h
         Game/scene.c
@@ -82,7 +84,10 @@ add_executable(
         GameUI/ui_settingmenu.c
         GameUI/ui_defeatmenu.h
         GameUI/ui_defeatmenu.c
-
+        GameUI/ui_instruction.h
+        GameUI/ui_instruction.c
+        GameUI/ui_weaponselectionmenu.h
+        GameUI/ui_weaponselectionmenu.c
 
 )
 target_link_libraries(FPS_Simulator m)

@@ -15,10 +15,11 @@ struct Scene{
     //The meshes used to create an enemy
     struct EnemyMeshes enemyMeshes;
     struct ArrayList list_EnemySpawnPoint;
+    int FAKE_WALL_shootcounter;
 };
 
 //The initializer of scene
-void Scene_Init(struct Scene *scene);
+void Scene_Init(struct Scene *scene, enum WeaponName weaponname);
 
 //The deleter of scene
 void Del_Scene(struct Scene *scene);
@@ -41,4 +42,6 @@ void Clear_Enemy(struct Scene *scene);
 int Scene_Collided_Enemy(struct Scene *scene, struct CollideBox *collidebox);
 int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox);
 void Scene_Add_EnemySpawnPoint(struct Scene *scene,double x, double y,double z);
+void Scene_Player_WinningCheck(struct Scene *scene);
+void Scene_Delete_FakeWall(struct Scene *scene);
 #endif //FPS_SIMULATOR_SCENE_H

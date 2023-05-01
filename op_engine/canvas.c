@@ -98,18 +98,29 @@ void print_pixel(enum Tag tag, double distance){
 //    else if (tag == WALL) printf("\x1b[38;2;%d;%d;%dm██", brightness, brightness, brightness);
 //    else if (tag == FLOOR) printf("\x1b[38;2;%d;%d;%dm░░", brightness, brightness, brightness);
     else if (tag == WALL) {
-        if (25 < distance && distance < 40) printf("[]");
-        else if (15 < distance && distance < 25)printf("▓▓");
-        else if (0 < distance && distance< 15) printf("██");
-        else printf("..");
+        if (25 <= distance && distance < 40) printf("▒▒");
+        else if (15 <= distance && distance < 25)printf("▓▓");
+        else if (0 <= distance && distance< 15) printf("██");
+        else printf("▒▒");
+    }
+    else if (tag == TRUE_END){
+        printf("!!");
+    }
+    else if (tag == FAKE_WALL){
+        if (25 <= distance && distance < 40) printf("▒▒");
+        else if (15 <= distance && distance < 16)printf("▓▒");
+        else if (16 <= distance && distance < 25)printf("▓▓");
+        else if (0 <= distance && distance< 15) printf("██");
+        else printf("▒▒");
     }
     else if (tag == FLOOR) printf("░░");
-    else if (tag == ENEMY_HEAD) printf("▓▓");
-    else if (tag == ENEMY_LEG) printf("▓▓");
-    else if (tag == ENEMY_BODY) printf("▒▒");
+    else if (tag == ENEMY_HEAD) printf("▐▐");
+    else if (tag == ENEMY_LEG) printf("▌▌");
+    else if (tag == ENEMY_BODY) printf("██");
     else if (tag == END) printf("??");
     else if (tag == STAR) printf("\033[31m██\033[0m");
 }//░▒▓█
+//█▌▐░▒▌▐▒
 
 void Canvas_flush(struct Canvas* canvas){
     move_cursor_top_left();
@@ -188,29 +199,6 @@ void vram_write(struct Canvas *canvas, int vram_index, double distance, enum Tag
     }
     canvas->vram_depth[vram_index] = distance;
     canvas->vram_tag[vram_index] = tag;
-//    canvas->vram_red[vram_index] = canvas->color.red;
-//    canvas->vram_green[vram_index] = canvas->color.green;
-//    canvas->vram_blue[vram_index] = canvas->color.blue;
-}
-
-void Canvas_DrawPoint(struct Canvas *canvas, struct Vector3 *point, enum Tag tag){
-    struct Vector3 projected_p;
-
-    Canvas_ProjectFromCameraToScreen(canvas, point, &projected_p);
-
-    int row, column;
-    row = (int)round(projected_p.y);
-    column = (int)round(projected_p.x);
-
-    if (row < 0 ||
-        row >= canvas->height ||
-        column < 0 ||
-        column >= canvas->width) {
-        return;
-    }
-    int vram_index = row * canvas->width + column;
-    double distance2 = Vector3_MagnitudeSq(point);
-    vram_write(canvas, vram_index, distance2, tag);
 }
 
 /*

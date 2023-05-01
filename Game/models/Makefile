@@ -3,7 +3,8 @@ all: ../../$(OBJ_DIR)/Game/models/enemy_body.o \
 ../../$(OBJ_DIR)/Game/models/enemy_leg.o \
 ../../$(OBJ_DIR)/Game/models/map_new_EndGate.o \
 ../../$(OBJ_DIR)/Game/models/map_new_OnlyFloor.o \
-../../$(OBJ_DIR)/Game/models/map_new_Wall.o
+../../$(OBJ_DIR)/Game/models/map_new_Wall.o \
+../../$(OBJ_DIR)/Game/models/true_wall.o
 
 ../../$(OBJ_DIR)/Game/models/enemy_body.o : enemy_body.c
 	@$(CC) -c $^ -o $@
@@ -21,4 +22,7 @@ all: ../../$(OBJ_DIR)/Game/models/enemy_body.o \
 	@$(CC) -c $^ -o $@
 
 ../../$(OBJ_DIR)/Game/models/map_new_Wall.o : map_new_Wall.c
+	@$(CC) -c $^ -o $@
+
+../../$(OBJ_DIR)/Game/models/true_wall.o : true_wall.c
 	@$(CC) -c $^ -o $@

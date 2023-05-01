@@ -12,27 +12,34 @@ struct ScreenProjection {
     double x_displacement, y_displacement;
 };
 
-//struct Color {
-//    unsigned char red, green, blue;
-//};
-
 //Canvas for displaying
 struct Canvas {
+    //The height and width of screen
     unsigned short height, width;
 
-//    unsigned char *vram_red, *vram_green, *vram_blue;
+    /*
+     * vram_depth: the ram for storing depth of pixels
+     * vram_tag: the ram for storing the tag of pixels
+     */
     double *vram_depth;
     enum Tag *vram_tag;
 
+    //The transform of camera
     struct Transform camera_transform;
 
+    //The four side planes of the view
     struct Plane view_planes[4];
+
+    //The 4 rays that form the side view_planes
     struct Line view_rays[4];
 
-//    struct Color color;
-
+    //The angle of the view
     double field_of_view;
+
+    //The screen projection information of canvas
     struct ScreenProjection screen_projection;
+
+    //The maximum render distance for an object
     double render_distance;
 };
 
@@ -61,16 +68,19 @@ void terminal_clear();
 // Move the cursor to the top-left corner
 void move_cursor_top_left();
 
-void Canvas_DrawPoint(struct Canvas *canvas, struct Vector3 *point, enum Tag tag);
 void Canvas_DrawTriangle(struct Canvas *canvas, struct Triangle* triangle, enum Tag tag);
 
-// Move the position of canvas by adding displacement
 
+// Move the position of canvas by adding displacement
 void Canvas_CameraMove(struct Canvas *canvas, struct Vector3 *displacement);
+
+//Rotate the canvas by an Euler angle
 void Canvas_CameraRotate(struct Canvas *canvas, struct Vector3 *rotation);
 
+//Update the projection data in Canvas
 void Canvas_CalculateScreenProjection(struct Canvas* canvas);
 
+//Add a cover pixel to canvas
 void Canvas_AddCover(struct Canvas *canvas, int row, int column, enum Tag tag);
 
 #define OP_CANVAS

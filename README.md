@@ -23,13 +23,44 @@ with them, find the exit, and gradually discover the truth of the android compan
 
 ## Game Target
 Destroy enemies with your powerful weapon and find a way to escape in the maze.
+
+---
+
+## Game Objects
+### Wall & Floor
+* The different characters are used to show the wall in different distance. `██` for close wall, `▓▓` for far wall, `▒▒` for much far wall.  
+[Click here to view wall](./images/Wall1.jpg)  
+You may also notice that the floor is showed by another lighter color in these images.
+
+### Enemy
+* Enemy is the monster that will attack you. Don't let then get close to you!!! It looks quite similar to the creeper in Minecraft.  
+[Click here to view Enemy](./images/Enemy1.jpg)  
+
+### Crosshair
+* The red point in the center of the screen is the crosshair. Unfortunately, it does not support customization now.
+
+### The End Door?
+* You should find the door that looks like this to beat the game.  
+[Click here to view the End Door](./images/End%20door.png)  
+
+### The value bars
+* Player HP, bullet number, and the HP of the enemy you pointed to are shown under the screen.  
+[Click here to view the value bars](./images/Value%20bar.jpg)  
+
+
 ---
 
 ## Game Controls
-1. **Rotate view**: **_W_** rotate up, **_S_** rotate down, **_A_** rotate left, **_D_** rotate right.
-2. **Move**: $\uparrow$ move forward, $\downarrow$ move back, $\leftarrow$ left, $\rightarrow$ right
-3. **Load the firearm**: players can load firearms by pressing **_R_**
-4. **Shooting**: players can shoot by pressing **_F_** (fire!).
+* **Rotate view**: **_W_** rotate up, **_S_** rotate down, **_A_** rotate left, **_D_** rotate right.
+* **Move**: $\uparrow$ move forward, $\downarrow$ move back, $\leftarrow$ move left, $\rightarrow$ move right
+* **Load the firearm**: players can load firearms by pressing **_R_**
+* **Shooting**: players can shoot by pressing **_F_** (fire!).
+* **Pause**: Press **_ESC_** to pause the game, resume it at any time by pressing **_ESC_** again, or press **_ETNER_** to quit
+
+## Game Menu Controls
+* **_W_** cursor move up, **_S_** cursor move down
+* **_ENTER_** select
+* **_A_** decrease / **_D_** increase the value of the selected setting (frame rate / difficulty / sensitivity)
 
 ---
 
@@ -60,9 +91,9 @@ In order to make this game, we have made an entire **_3-Dimensional Game Engine_
 libraries.  
 The name of this engine is **OP engine**, as it is made by a ~~Genshin Impact player~~.  
 With this game engine, it allows you to render any forms shapes of model. All you need to do is to take your own `.obj`  
-files made by any other 3D computer graphics software, and use the `obj_converter` to transform your `.obj` files to the  
+files made by any other 3D computer graphics software, and use the `obj_converter` to transform your `.obj` files to the 
 C files that the game engined required. All the meshes in this game are made by **Blender**.  
-Besides the rendering system, this game engine also supports game object nested. All the game objects has a  
+Besides the rendering system, this game engine also supports game object nested. All the game objects has a 
 **transform** attribute, which could clearly show the hierarchy of the objects.  
 **OP Engine** also supports OBB (Oriented Bounding Box). It allows you to set a cuboid colliding box in any size, any  
 direction, and with some basic colliding detection functions provided.
