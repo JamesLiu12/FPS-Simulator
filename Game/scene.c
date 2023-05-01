@@ -32,8 +32,8 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
     CollideBox_Init(&collideBoxes_Wall[0], &Map_Wall->transform, 80, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[0].transform.position, 20, 1.25, 20);
     //Wall_001
-    CollideBox_Init(&collideBoxes_Wall[1], &Map_Wall->transform, 75, 2.5, 0.2);
-    Vector3_Set(&collideBoxes_Wall[1].transform.position, 22.5, 1.25, -20);
+    CollideBox_Init(&collideBoxes_Wall[1], &Map_Wall->transform, 80, 2.5, 0.2);
+    Vector3_Set(&collideBoxes_Wall[1].transform.position, 20, 1.25, -20);
     //Wall_002
     CollideBox_Init(&collideBoxes_Wall[2], &Map_Wall->transform, 40, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[2].transform.position, -20, 1.25, 0);
