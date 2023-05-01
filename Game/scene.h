@@ -6,7 +6,6 @@
 #include "../Game/models/models.h"
 #include "player.h"
 #include "enemy.h"
-
 struct Scene{
     struct ArrayList list_Object;
     struct ArrayList list_Enemy;
@@ -14,7 +13,7 @@ struct Scene{
 
     //The meshes used to create an enemy
     struct EnemyMeshes enemyMeshes;
-    struct ArrayList list_EnemySpawnPoint;
+    struct ArrayList list_EnemySpawnArea;
     int FAKE_WALL_shootcounter;
 };
 
@@ -32,8 +31,6 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas);
 //get which enemy and parts are collided by the ray
 void Scene_EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **result_enemy, enum Tag *result_tag);
 
-double Scene_DamageCalculation(struct Scene *scene, struct Enemy *enemy);
-
 double Scene_MinDistanceWall(struct Scene *scene, struct Line *ray);
 //Find whether an enemy is shooted and deal damage to it
 void Scene_PlayerShoot(struct Scene *scene);
@@ -41,7 +38,7 @@ void Scene_PlayerShoot(struct Scene *scene);
 void Clear_Enemy(struct Scene *scene);
 int Scene_Collided_Enemy(struct Scene *scene, struct CollideBox *collidebox);
 int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox);
-void Scene_Add_EnemySpawnPoint(struct Scene *scene,double x, double y,double z);
+void Scene_Add_EnemySpawnSquare(struct Scene *scene, double x, double z, double len, double wid, int num);
 void Scene_Player_WinningCheck(struct Scene *scene);
 void Scene_Delete_FakeWall(struct Scene *scene);
 #endif //FPS_SIMULATOR_SCENE_H

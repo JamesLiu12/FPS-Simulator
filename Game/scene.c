@@ -3,6 +3,7 @@
 #include "../Game/models/models.h"
 #include "../util/array_list.h"
 #include "../util/util.h"
+#include "region2D.h"
 #include "runner.h"
 #include <math.h>
 #include <stdio.h>
@@ -16,7 +17,7 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
     srand((int)time(NULL));
     ArrayList_Init(&scene->list_Object, sizeof(struct Object*));
     ArrayList_Init(&scene->list_Enemy, sizeof(struct Enemy*));
-    ArrayList_Init(&scene->list_EnemySpawnPoint,sizeof(struct Vector3*));
+    ArrayList_Init(&scene->list_EnemySpawnArea,sizeof(struct Region2D*));
     Player_Init(&scene->player, weaponname);
     Player_SetPosition(&scene->player, -17.5, 0, -17.5);
     scene->FAKE_WALL_shootcounter = 0;
@@ -191,44 +192,37 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
 
     ArrayList_PushBack(&scene->list_Object, &Map_Floor);
 
-    Scene_Add_EnemySpawnPoint(scene, -11, 0, -17);
-    Scene_Add_EnemySpawnPoint(scene, 0.7, 0, 0.6);
-    Scene_Add_EnemySpawnPoint(scene, 7.3, 0, 0.6);
-    Scene_Add_EnemySpawnPoint(scene, 7.3, 0, -7.2);
-    Scene_Add_EnemySpawnPoint(scene, 14.5, 0, 16.7);
-    Scene_Add_EnemySpawnPoint(scene, 26.1, 0, 16.7);
-    Scene_Add_EnemySpawnPoint(scene, 38, 0, 16.7);
-    Scene_Add_EnemySpawnPoint(scene, 49, 0, 16.7);
-    Scene_Add_EnemySpawnPoint(scene, 17.5, 0, -7.2);
-    Scene_Add_EnemySpawnPoint(scene, 24.3, 0, -7.1);
-    Scene_Add_EnemySpawnPoint(scene, 26.1, 0, -16.2);
-    Scene_Add_EnemySpawnPoint(scene, 38.2, 0, 16.3);
-    Scene_Add_EnemySpawnPoint(scene, 41.1, 0, 2.77);
-    Scene_Add_EnemySpawnPoint(scene, 41.1, 0, -4.6);
-    Scene_Add_EnemySpawnPoint(scene, 10, 0, -7.2);
-    Scene_Add_EnemySpawnPoint(scene, 19, 0, -7.2);
-    Scene_Add_EnemySpawnPoint(scene, 20, 0, 16.7);
-
     
-    //Scene_Add_EnemySpawnPoint(scene, );
     //Initialize the meshes of enemy
     EnemyMeshes_Init(&scene->enemyMeshes,
                      ModelEnemy_Head_New(), ModelEnemy_Body_New(), ModelEnemy_Leg_New());
 
     printf("\033[32;16O");
 
-    //Sample Enemy generate test 
-    int pointnumber;
-    for(int i=0; i < 60; i++){
-        pointnumber = rand()%(scene->list_EnemySpawnPoint.size);
-        struct Enemy *enemy = New_Enemy(&scene->enemyMeshes);
-        ArrayList_PushBack(&scene->list_Enemy, &enemy);
-        //Vector3_Set(&enemy->transform.position,-17+i/2.0,0,-17+i/2.0);
-        Vector3_Copy(((struct Vector3**)scene->list_EnemySpawnPoint.data)[pointnumber],&enemy->transform.position);
-        struct Vector3 *randomvector=Vector3_New((rand()%100)/100.0-0.5,0,(rand()%100)/100.0-0.5);
-        Vector3_Add(&enemy->transform.position,randomvector);
+    //Adding Enemy Spawn Square Areas
+    Scene_Add_EnemySpawnSquare(scene, -15, 15, 8, 8, 2);
+    Scene_Add_EnemySpawnSquare(scene, 25, 17.5, 50, 4, 15);
+    Scene_Add_EnemySpawnSquare(scene, 55, 12, 8, 8, 4);
+    Scene_Add_EnemySpawnSquare(scene, 55, -10, 8, 8, 3);
+    Scene_Add_EnemySpawnSquare(scene, -10, -10, 8, 8, 5);
+
+    //Enemy generator 
+    int maxX, minX, maxZ, minZ;
+    for(int i=0; i < scene->list_EnemySpawnArea.size; i++){
+        struct Region2D *region = ((struct Region2D**)scene->list_EnemySpawnArea.data)[i];
+        maxX = region->x + region->length/2;
+        minX = region->x - region->length/2;
+        maxZ = region->z + region->width/2;
+        minZ = region->z - region->width/2;
+        for(int j = 0; j < region->number ; j++){
+            struct Enemy *enemy = New_Enemy(&scene->enemyMeshes);
+
+            Vector3_Set(&enemy->transform.position, minX + 1.0 * rand() / RAND_MAX * ( maxX - minX ), 0, minZ + 1.0 * rand() / RAND_MAX * ( maxZ - minZ ));
+            
+            ArrayList_PushBack(&scene->list_Enemy, &enemy);
+        }
     }
-    //Sample end
+    //Enemy generator  end
 }
 
 
@@ -244,13 +238,13 @@ void Del_Scene(struct Scene *scene){
         Del_Enemy(enemy);
         free(enemy);
     }
-    for (int i = 0; i < scene->list_EnemySpawnPoint.size; i++){
-        struct Vector3 *vector = ((struct Vector3**)scene->list_EnemySpawnPoint.data)[i];
-        free(vector);
+    for (int i = 0; i < scene->list_EnemySpawnArea.size; i++){
+        struct Region2D *region = ((struct Region2D**)scene->list_EnemySpawnArea.data)[i];
+        free(region);
     }
     Del_ArrayList(&scene->list_Object);
     Del_ArrayList(&scene->list_Enemy);
-    Del_ArrayList(&scene->list_EnemySpawnPoint);
+    Del_ArrayList(&scene->list_EnemySpawnArea);
     Del_Player(&scene->player);
 }
 
@@ -479,14 +473,6 @@ void Scene_EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **r
     }
 }
 
-double Scene_DamageCalculation(struct Scene *scene, struct Enemy *enemy)//enemy's damage to player
-{
-    double roller = rand() % 100;
-    double rate = roller * enemy->criticalRate;//this value should be 0-5000
-    if (roller >= 2345/*critical damage*/){ return pow(enemy->damage/scene->player.defence,2); }
-    else { return enemy->damage/scene->player.defence; }
-}
-
 double Scene_MinDistanceWall(struct Scene *scene, struct Line *ray){
     double minDistance = INFINITY;
     for (int j = 0; j < scene->list_Object.size; j++){
@@ -545,9 +531,9 @@ int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox){
         }
     return 0;
 }
-void Scene_Add_EnemySpawnPoint(struct Scene *scene,double x, double y,double z){
-    struct Vector3 *vector=Vector3_New(x,y,z);
-    ArrayList_PushBack(&scene->list_EnemySpawnPoint,&vector);
+void Scene_Add_EnemySpawnSquare(struct Scene *scene, double x, double z, double len, double wid, int num){
+    struct Region2D *region2d = Region2D_New(x, z, len, wid, num);
+    ArrayList_PushBack(&scene->list_EnemySpawnArea,&region2d);
 }
 void Scene_Player_WinningCheck(struct Scene *scene){
     for(int i = 0; i < scene->list_Object.size ; i++){

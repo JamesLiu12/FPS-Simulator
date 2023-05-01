@@ -45,6 +45,8 @@ add_executable(
         Game/game.h
         Game/weapon.h
         Game/weapon.c
+        Game/region2D.h
+        Game/region2D.c
 
         op_engine/canvas.h
         op_engine/canvas.c
