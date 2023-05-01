@@ -17,9 +17,14 @@ struct Scene{
     struct ArrayList list_EnemySpawnRegion;
 };
 
-struct Rectangle {
+struct EnemySpawnRegion {
+    // an enemy spawn region is a rectangle and can be defined by two vertecies.
+
+    // vertex1 is the point closest to the origin
     struct Vector3* vertex1;
+    // vertex2 is the point farthest to the origin
     struct Vector3* vertex2;
+    int EnemyNum;
 };
 
 
@@ -47,6 +52,6 @@ void Clear_Enemy(struct Scene *scene);
 int Scene_Collided_Enemy(struct Scene *scene, struct CollideBox *collidebox);
 int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox);
 // void Scene_Add_EnemySpawnRegion(struct Scene *scene,double x, double y,double z);
-void Scene_Add_EnemySpawnRegion(struct Scene *scene, struct Rectangle *rectangle);
-
+void Scene_Add_EnemySpawnRegion(struct Scene *scene, struct EnemySpawnRegion *region);
+struct EnemySpawnRegion* EnemySpawnRegion_Init(double x1, double y1, double z1, double x2, double y2, double z2, int enemy_num);
 #endif //FPS_SIMULATOR_SCENE_H

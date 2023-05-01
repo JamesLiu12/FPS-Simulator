@@ -195,50 +195,64 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
 
     ArrayList_PushBack(&scene->list_Object, &Map_Floor);
 
-    // usage: Scene_Add_EnemySpawnPoint(scene, x, y, z);
-    // enemy spawn points are grouped in similar x coordinate or z coordinate
-    // Scene_Add_EnemySpawnPoint(scene, -11,  0, -17);
-    // Scene_Add_EnemySpawnPoint(scene, -11,  0, 14);
 
-    // Scene_Add_EnemySpawnPoint(scene, 0.7,  0, 0.6);
-    // Scene_Add_EnemySpawnPoint(scene, 14 ,  0, 0.6);
+    // initializing enemy spawn regions
 
-    // Scene_Add_EnemySpawnPoint(scene, 7.3,  0, 0.6);
-    // Scene_Add_EnemySpawnPoint(scene, 7.3,  0, -7.2);
-    // Scene_Add_EnemySpawnPoint(scene, 7.3,  0, 5.3);
+    // region 1
+    struct EnemySpawnRegion *region1 = EnemySpawnRegion_Init(-10, 0, -10,   -20, 0, -20,   2);
+    Scene_Add_EnemySpawnRegion(scene, region1);
+    
+    // region 2
+    struct EnemySpawnRegion *region2 = EnemySpawnRegion_Init(0, 0, -15,   -10, 0, -20,   5);
+    Scene_Add_EnemySpawnRegion(scene, region2);
+    
+    // region 3
+    struct EnemySpawnRegion *region3 = EnemySpawnRegion_Init(0, 0, 15,   10, 0, 20,   3);
+    Scene_Add_EnemySpawnRegion(scene, region3);
+    
+    // region 4
+    struct EnemySpawnRegion *region4 = EnemySpawnRegion_Init(5, 0, 5,   10, 0, 10,   4);
+    Scene_Add_EnemySpawnRegion(scene, region4);
+    
+    // region 5
+    struct EnemySpawnRegion *region5 = EnemySpawnRegion_Init(10, 0, 0,   15, 0, 10,   5);
+    Scene_Add_EnemySpawnRegion(scene, region5);
+    
+    // region 6
+    struct EnemySpawnRegion *region6 = EnemySpawnRegion_Init(20, 0, 15,   50, 0, 20,   8);
+    Scene_Add_EnemySpawnRegion(scene, region6);
+    
+    // region 7
+    struct EnemySpawnRegion *region7 = EnemySpawnRegion_Init(20, 0, 10,   30, 0, 15,   4);
+    Scene_Add_EnemySpawnRegion(scene, region7);
+    
+    // region 8
+    struct EnemySpawnRegion *region8 = EnemySpawnRegion_Init(20, 0, 0,   25, 0, 10,   4);
+    Scene_Add_EnemySpawnRegion(scene, region8);
+    
+    // region 9
+    struct EnemySpawnRegion *region9 = EnemySpawnRegion_Init(20, 0, -15,   40, 0, -20,   5);
+    Scene_Add_EnemySpawnRegion(scene, region9);
 
-    // Scene_Add_EnemySpawnPoint(scene, 0  ,  0, -7.3);
+    // region 10
+    struct EnemySpawnRegion *region10 = EnemySpawnRegion_Init(30, 0, 5,   40, 0, 10,   3);
+    Scene_Add_EnemySpawnRegion(scene, region10);
 
-    // Scene_Add_EnemySpawnPoint(scene, -3,   0, 0.7);
-    // Scene_Add_EnemySpawnPoint(scene, -3,   0, 7);
+    // region 11
+    struct EnemySpawnRegion *region11 = EnemySpawnRegion_Init(30, 0, 0,   35, 0, 5,   8);
+    Scene_Add_EnemySpawnRegion(scene, region11);
 
-    // Scene_Add_EnemySpawnPoint(scene, 10,   0, -7.2);
-    // Scene_Add_EnemySpawnPoint(scene, 10,   0, -17);
+    // region 12
+    struct EnemySpawnRegion *region12 = EnemySpawnRegion_Init(30, 0, -10,   40, 0, -15,   4);
+    Scene_Add_EnemySpawnRegion(scene, region12);
 
-    // Scene_Add_EnemySpawnPoint(scene, -5.4, 0, 16.7);
-    // Scene_Add_EnemySpawnPoint(scene, 14.5, 0, 16.7);
-    // Scene_Add_EnemySpawnPoint(scene, 20,   0, 16.7);
-    // Scene_Add_EnemySpawnPoint(scene, 26.1, 0, 16.7);
-    // Scene_Add_EnemySpawnPoint(scene, 38,   0, 16.7);
-    // Scene_Add_EnemySpawnPoint(scene, 49,   0, 16.7);
+    // region 13
+    struct EnemySpawnRegion *region13 = EnemySpawnRegion_Init(50, 0, 10,   60, 0, 15,   5);
+    Scene_Add_EnemySpawnRegion(scene, region13);
 
-    // Scene_Add_EnemySpawnPoint(scene, 17.5, 0, -7.2);
-    // Scene_Add_EnemySpawnPoint(scene, 19,   0, -7.2);
-    // Scene_Add_EnemySpawnPoint(scene, 24.3, 0, -7.1);
-    // Scene_Add_EnemySpawnPoint(scene, 38  , 0, -7.1);
-    // Scene_Add_EnemySpawnPoint(scene, 49  , 0, -7.2);
-
-
-    // Scene_Add_EnemySpawnPoint(scene, 26.1, 0, -16.2);
-    // Scene_Add_EnemySpawnPoint(scene, 41.1, 0, 2.77);
-    // Scene_Add_EnemySpawnPoint(scene, 41.1, 0, -4.6);
-    // Scene_Add_EnemySpawnPoint(scene, 34.5, 0, -10.1);
-
-    // Scene_Add_EnemySpawnPoint(scene, 15 ,  0, 8);
-    // Scene_Add_EnemySpawnPoint(scene, 20 ,  0, 8);
-    // Scene_Add_EnemySpawnPoint(scene, 25 ,  0, 8);
-    // Scene_Add_EnemySpawnPoint(scene, 30 ,  0, 8);
-    // Scene_Add_EnemySpawnPoint(scene, 35 ,  0, 8);
+    // region 14
+    struct EnemySpawnRegion *region14 = EnemySpawnRegion_Init(50, 0, 0,   60, 0, -10,   3);
+    Scene_Add_EnemySpawnRegion(scene, region14);
 
 
     //Initialize the meshes of enemy
@@ -248,13 +262,19 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
     printf("\033[32;16O");
 
     //Sample Enemy generate test 
+    // every enemy spawn region has 
     int pointnumber;
     for(int i=0; i < 60; i++){
-        pointnumber = rand()%(scene->list_EnemySpawnPoint.size);
+
+        // initializing
+        pointnumber = rand()%(scene->list_EnemySpawnRegion.size);
         struct Enemy *enemy = New_Enemy(&scene->enemyMeshes);
         ArrayList_PushBack(&scene->list_Enemy, &enemy);
         //Vector3_Set(&enemy->transform.position,-17+i/2.0,0,-17+i/2.0);
-        Vector3_Copy(((struct Vector3**)scene->list_EnemySpawnPoint.data)[pointnumber],&enemy->transform.position);
+
+
+
+        Vector3_Copy(((struct Vector3**)scene->list_EnemySpawnRegion.data)[pointnumber],&enemy->transform.position);
         struct Vector3 *randomvector=Vector3_New((rand()%100)/100.0-0.5,0,(rand()%100)/100.0-0.5);
         Vector3_Add(&enemy->transform.position,randomvector);
     }
@@ -275,8 +295,8 @@ void Del_Scene(struct Scene *scene){
         free(enemy);
     }
     for (int i = 0; i < scene->list_EnemySpawnRegion.size; i++){
-        struct Vector3 *vector = ((struct Vector3**)scene->list_EnemySpawnRegion.data)[i];
-        free(vector);
+        struct EnemySpawnPoint *region = ((struct EnemySpawnPoint**)scene->list_EnemySpawnRegion.data)[i];
+        free(region);
     }
     Del_ArrayList(&scene->list_Object);
     Del_ArrayList(&scene->list_Enemy);
@@ -575,7 +595,17 @@ int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox){
 //     ArrayList_PushBack(&scene->list_EnemySpawnPoint,&vector);
 // }
 
-void Scene_Add_EnemySpawnRegion(struct Scene *scene, struct Rectangle *rectangle){
-    // struct Vector3 *vector=Vector3_New(x,y,z);
-    ArrayList_PushBack(&scene->list_EnemySpawnRegion, &rectangle);
+struct EnemySpawnRegion* EnemySpawnRegion_Init(double x1, double y1, double z1, double x2, double y2, double z2, int enemy_num){
+    struct EnemySpawnRegion* region = malloc(sizeof(struct EnemySpawnRegion));
+    region->vertex1 = Vector3_New(x1, y1, z1);
+    region->vertex2 = Vector3_New(x2, y2, z2);
+    region->EnemyNum = enemy_num;
+    return region;
+}
+
+// adds an enemy spawn region to the scene
+// input: a scene pointer and a region pointer
+// output: void
+void Scene_Add_EnemySpawnRegion(struct Scene *scene, struct EnemySpawnRegion *region){
+    ArrayList_PushBack(&scene->list_EnemySpawnRegion, &region);
 }
