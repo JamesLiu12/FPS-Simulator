@@ -38,7 +38,7 @@ void Scene_PlayerShoot(struct Scene *scene);
 void Clear_Enemy(struct Scene *scene);
 int Scene_Collided_Enemy(struct Scene *scene, struct CollideBox *collidebox);
 int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox);
-void Scene_Add_EnemySpawnArea(struct Scene *scene, double x, double z, double len, double wid, int num);
+void Scene_Add_EnemySpawnSquare(struct Scene *scene, double x, double z, double len, double wid, int num);
 void Scene_Player_WinningCheck(struct Scene *scene);
 void Scene_Delete_FakeWall(struct Scene *scene);
 #endif //FPS_SIMULATOR_SCENE_H

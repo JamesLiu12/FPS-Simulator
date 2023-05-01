@@ -3,7 +3,7 @@
 #include "../Game/models/models.h"
 #include "../util/array_list.h"
 #include "../util/util.h"
-#include "../op_engine/region2D.h"
+#include "region2D.h"
 #include "runner.h"
 #include <math.h>
 #include <stdio.h>
@@ -199,12 +199,13 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
 
     printf("\033[32;16O");
 
-    //Adding Enemy Spawn Areas
-    Scene_Add_EnemySpawnArea(scene, -15, 15, 8, 8, 2);
-    Scene_Add_EnemySpawnArea(scene, 25, 17.5, 50, 4, 15);
-    Scene_Add_EnemySpawnArea(scene, 55, 12, 8, 8, 4);
-    Scene_Add_EnemySpawnArea(scene, 55, -10, 8, 8, 3);
-    Scene_Add_EnemySpawnArea(scene, -10, -10, 8, 8, 5);
+    //Adding Enemy Spawn Suqure Areas
+    Scene_Add_EnemySpawnSquare(scene, -15, 15, 8, 8, 2);
+    Scene_Add_EnemySpawnSquare(scene, 25, 17.5, 50, 4, 15);
+    Scene_Add_EnemySpawnSquare(scene, 55, 12, 8, 8, 4);
+    Scene_Add_EnemySpawnSquare(scene, 55, -10, 8, 8, 3);
+    Scene_Add_EnemySpawnSquare(scene, -10, -10, 8, 8, 5);
+
     //Enemy generator 
     int maxX, minX, maxZ, minZ;
     for(int i=0; i < scene->list_EnemySpawnArea.size; i++){
@@ -530,7 +531,7 @@ int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox){
         }
     return 0;
 }
-void Scene_Add_EnemySpawnArea(struct Scene *scene, double x, double z, double len, double wid, int num){
+void Scene_Add_EnemySpawnSquare(struct Scene *scene, double x, double z, double len, double wid, int num){
     struct Region2D *region2d = Region2D_New(x, z, len, wid, num);
     ArrayList_PushBack(&scene->list_EnemySpawnArea,&region2d);
 }
