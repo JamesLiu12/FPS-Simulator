@@ -22,18 +22,17 @@ int Fetch_Operation(){
     return 0;
 }
 void screenclean(){
-    // printf("\033[1;1H");
-    // for(int i=0;i<60;i++){
-    //     printf("\r");
-    //     for(int j=0;j<150;j++)printf(" ");
-    //     printf("\n");
-    // }
-    // printf("\033[1;1H");
-#ifdef __linux
-    system("clear");
-#endif
-#ifdef _WIN32
-    system("cls");
-#endif
+    printf("\033[1;1H");
+    for(int i=0;i<60;i++){
+        for(int j=0;j<150;j++)printf(" ");
+        printf("\n");
+    }
+    printf("\033[1;1H");
+// #ifdef __linux
+//     system("clear");
+// #endif
+// #ifdef _WIN32
+//     system("cls");
+// #endif
 
 }
