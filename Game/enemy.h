@@ -53,10 +53,10 @@ struct EnemyMeshes{
 };
 
 //Initializer of Enemy
-void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes);
+void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes, int difficulty);
 
 //Newer of Enemy
-struct Enemy* New_Enemy(struct EnemyMeshes *meshes);
+struct Enemy* New_Enemy(struct EnemyMeshes *meshes, int difficulty);
 
 //Deleter of Enemy
 void Del_Enemy(struct Enemy *enemy);

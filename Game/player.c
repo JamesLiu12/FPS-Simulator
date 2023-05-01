@@ -3,7 +3,7 @@
 #include "../GameUI/ui_instruction.h"
 #include <stdio.h>
 #include <stdlib.h>
-void Player_Init(struct Player *player, enum WeaponName weaponname){
+void Player_Init(struct Player *player, enum WeaponName weaponname, int difficulty){
     Canvas_Init(&player->canvas, 33, 65);
     player->maxHealth = 100;
     player->health = player->maxHealth;
@@ -15,13 +15,30 @@ void Player_Init(struct Player *player, enum WeaponName weaponname){
     player->RELOADFLAG = 0;
     player->reloadCDcounter = 0;
     player->healingCDcounter = 0;
-    player->healingCDtime = 5;
-    player->heal_per_sec = 10;
     player->DAMAGEFLAG = 0;
     player->DEADFLAG = 0;
     player->WINFLAG = 0;
     player->TRUEWINFLAG = 0;
     player->QUITFLAG = 0;
+    switch (difficulty)
+    {
+    case 0:
+        player->healingCDtime = 7;
+        player->heal_per_sec = 4;
+        break;
+    case 1:
+        player->healingCDtime = 9;
+        player->heal_per_sec = 1;
+        break;
+    case 2:
+        player->healingCDtime = 1000;
+        player->heal_per_sec = 0;
+        break;
+    default:
+        player->healingCDtime = 5;
+        player->heal_per_sec = 10;
+        break;
+    }
     Vector3_Set(&player->facing,0,0,1);
 
     Transform_Init(&player->transform, NULL);
@@ -34,9 +51,9 @@ void Player_Init(struct Player *player, enum WeaponName weaponname){
     Weapon_Init(&player->weapon, weaponname);
 }
 
-struct Player* New_Player(enum WeaponName weaponname) {
+struct Player* New_Player(enum WeaponName weaponname, int difficulty) {
     struct Player* player = (struct Player*)malloc(sizeof(struct Player));
-    Player_Init(player,weaponname);
+    Player_Init(player, weaponname, difficulty);
     return player;
 }
 

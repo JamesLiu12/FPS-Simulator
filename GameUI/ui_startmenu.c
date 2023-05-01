@@ -23,7 +23,7 @@ void UI_StartMenu_Init(struct UI_StartMenu *startui){
     strcpy(startui->menu[3],"  Exit  ");
     strcpy(startui->tips_string,"Use arrow keys to roll up and down. Enter to comfirm selection.");
     UI_SettingMenu_Init(&startui->settingui);
-    UI_WeaponMenu_Init(&startui->weaponui);
+    UI_WeaponMenu_Init(&startui->weaponui, startui->settingui.weaponnumber);
 
 }
 void Show_StartMenu(struct UI_StartMenu *startui){

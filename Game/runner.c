@@ -24,7 +24,7 @@ int Runner_Run(struct Runner *runner){
     int end=1;
     struct Scene scene;
     double delta_time;
-    Scene_Init(&scene, runner->weaponlist[runner->weaponnumber]);
+    Scene_Init(&scene, runner->weaponlist[runner->weaponnumber],runner->difficulty);
     Runner_SetPlayerRotationSpeed(&scene.player, runner->sensitivity);
     while(1){
         delta_time= ProgramRunTime() - runner->previousFrameTime;

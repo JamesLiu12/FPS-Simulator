@@ -18,7 +18,7 @@ struct Scene{
 };
 
 //The initializer of scene
-void Scene_Init(struct Scene *scene, enum WeaponName weaponname);
+void Scene_Init(struct Scene *scene, enum WeaponName weaponname, int difficulty);
 
 //The deleter of scene
 void Del_Scene(struct Scene *scene);
