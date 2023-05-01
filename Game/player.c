@@ -20,6 +20,7 @@ void Player_Init(struct Player *player, enum WeaponName weaponname){
     player->DAMAGEFLAG = 0;
     player->DEADFLAG = 0;
     player->WINFLAG = 0;
+    player->TRUEWINFLAG = 0;
     player->QUITFLAG = 0;
     Vector3_Set(&player->facing,0,0,1);
 

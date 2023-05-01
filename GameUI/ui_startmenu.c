@@ -100,7 +100,10 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
                 goto STARTMENUORIGIN;
             }
             else{
-                
+                if (end == 2){
+                    True_Victory();
+                }
+                else {
                 struct UI_DefeatMenu defeatui;
                 UI_DefeatMenu_Init(&defeatui);
                 int endchoice;
@@ -114,7 +117,7 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
                     startui->pointer=3;goto STARTUI_ENTER;
                     default:
                     break;
-                }
+                }}
 
             }
             break;
@@ -215,11 +218,45 @@ void printeye(){
       |                     --|                                                |--                     |      )");
     printf("\n------________________________|                                                |________________________------\n");
 }
+void printeye_true(){
+    screenclean();
+    printf(R"(------_________________________                                                 _________________________------
+      |\\\\\\\\\\\\\\\\\\\\\--|                                                |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|                                                |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|                       ▒▒                       |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|                      ▒▒▒▒                      |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|                     ▒▒▒▒▒▒                     |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|                    ▒▒▒▒▒▒▒▒                    |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|                   ▒▒▒▒▒▒▒▒▒▒                   |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|                  ▒▒▒▒▒▒▒▒▒▒▒▒                  |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|                 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒                 |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|                ▒▒▒▒▒▒▒▓▓▒▒▒▒▒▒▒                |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|               ▒▒▒▒▒▒▒▓▓▓▓▒▒▒▒▒▒▒               |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|              ▒▒▒▒▒▒▒▓▓▓▓▓▓▒▒▒▒▒▒▒              |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|             ▒▒▒▒▒▒▒▓▓▓▓▓▓▓▓▒▒▒▒▒▒▒             |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|            ▒▒▒▒▒▒▒▓▓▓▓▓▓▓▓▓▓▒▒▒▒▒▒▒            |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|           ▒▒▒▒▒▒▒▓▓░░░░░░░░▓▓▒▒▒▒▒▒▒           |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|          ▒▒▒▒▒▒▒▓░░  ████  ░░▓▒▒▒▒▒▒▒          |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|           ▒▒▒▒▒▓▓▓▓░░░░░░░░▓▓▓▓▒▒▒▒▒           |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|            ▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒▒▒            |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|             ▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒             |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|              ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒              |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|               ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒               |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|                ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒                |--                     |      
+      |\\\\\\\\\\\\\\\\\\\\\--|                 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒                 |--                     |      
+      |                     --|                  ▒▒▒▒▒▒▒▒▒▒▒▒                  |--                     |      
+      |                     --|                   ▒▒▒▒▒▒▒▒▒▒                   |--                     |      
+      |                     --|                    ▒▒▒▒▒▒▒▒                    |--                     |      
+      |                     --|                     ▒▒▒▒▒▒                     |--                     |      
+      |                     --|                      ▒▒▒▒                      |--                     |      
+      |                     --|                       ▒▒                       |--                     |      
+      |                     --|                                                |--                     |      )");
+    printf("\n------________________________|                                                |________________________------\n");
+}
 void Victory(){
     int temp;
     char a[200];
-    int linecounter,totalcounter;
-        strcpy(a,"You: This is the end. Right?\n\n(press E to open the door)");
+        strcpy(a,"Seeing this wall reminds you of something.\n\n(press E to open the door)");
         screenclean();
         printchar(30,'-');
         printchar(25,'_');
@@ -367,6 +404,44 @@ void Victory(){
     usleep(150000);
     }
     //usleep(200000);
+
+    usleep(1000000);
+    screenclean();
+    printf("\033[1;1H");
+}
+void True_Victory(){
+    char a[200];
+    strcpy(a,"Seeing this gate remind you of something\n\n(press to continue)");
+    screenclean();
+    printchar(30,'-');
+    printchar(25,'_');
+    printf(" ");
+    printchar(25,'_');
+    printchar(30,'-');
+    printf("\n");
+    for(int k=0;k<30;k++){
+        printchar(30,' ');
+        printf("|");
+        printchar(21,'\\');
+        printf("--| ");
+        printf("|--");
+        printchar(21,'/');
+        printf("|");
+        printchar(30,' ');
+    printf("\n");
+    }
+    printchar(30,'-');
+    printchar(25,'_');
+    printf(" ");
+    printchar(25,'_');
+    printchar(30,'-');
+    printf("\n");
+    printdialog(a);
+    while(1){
+        if(kbhit())if(keydown(E))break;
+    }
+
+    
 
     usleep(1000000);
     screenclean();

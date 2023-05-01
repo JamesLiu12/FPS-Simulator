@@ -31,6 +31,8 @@ add_executable(
         Game/models/models.h
         Game/models/map_new_EndGate.h
         Game/models/map_new_EndGate.c
+        Game/models/true_wall.c
+        Game/models/true_wall.h
 
         Game/scene.h
         Game/scene.c

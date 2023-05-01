@@ -44,6 +44,11 @@ int Runner_Run(struct Runner *runner){
             end=1;
             break;
         }
+        if(scene.player.TRUEWINFLAG){
+            screenclean();
+            end=2;
+            break;
+        }
         usleep(1000000 / runner->frame_rate);
     }
     printf("\x1b[38;2;%d;%d;%dm", 0xee, 0xee, 0xee);

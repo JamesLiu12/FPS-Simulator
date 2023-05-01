@@ -98,9 +98,19 @@ void print_pixel(enum Tag tag, double distance){
 //    else if (tag == WALL) printf("\x1b[38;2;%d;%d;%dm██", brightness, brightness, brightness);
 //    else if (tag == FLOOR) printf("\x1b[38;2;%d;%d;%dm░░", brightness, brightness, brightness);
     else if (tag == WALL) {
-        if (25 < distance && distance < 40) printf("▒▒");
-        else if (15 < distance && distance < 25)printf("▓▓");
-        else if (0 < distance && distance< 15) printf("██");
+        if (25 <= distance && distance < 40) printf("▒▒");
+        else if (15 <= distance && distance < 25)printf("▓▓");
+        else if (0 <= distance && distance< 15) printf("██");
+        else printf("▒▒");
+    }
+    else if (tag == TRUE_END){
+        printf("!!");
+    }
+    else if (tag == FAKE_WALL){
+        if (25 <= distance && distance < 40) printf("▒▒");
+        else if (15 <= distance && distance < 16)printf("▓▒");
+        else if (16 <= distance && distance < 25)printf("▓▓");
+        else if (0 <= distance && distance< 15) printf("██");
         else printf("▒▒");
     }
     else if (tag == FLOOR) printf("░░");

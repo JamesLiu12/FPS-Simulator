@@ -40,7 +40,7 @@ struct Player{
     double fireCDcounter,reloadCDcounter;
     double healingCDcounter, healingCDtime, heal_per_sec;
     struct Weapon weapon;
-    int inFireCD, FIREFLAG, inReloadCD, RELOADFLAG, DEADFLAG, WINFLAG,QUITFLAG, DAMAGEFLAG;
+    int inFireCD, FIREFLAG, inReloadCD, RELOADFLAG, DEADFLAG, WINFLAG,TRUEWINFLAG, QUITFLAG, DAMAGEFLAG;
 };
 
 //Initializer of player

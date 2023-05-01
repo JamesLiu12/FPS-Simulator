@@ -14,5 +14,6 @@ void Launch_StartMenu(struct UI_StartMenu *startui);
 void printchar(int n, char a);
 void printdialog(char a[]);
 void Victory();
+void True_Victory();
 #define Game_UI_StartMenu
 #endif
