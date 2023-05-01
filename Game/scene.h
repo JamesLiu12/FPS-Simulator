@@ -14,8 +14,14 @@ struct Scene{
 
     //The meshes used to create an enemy
     struct EnemyMeshes enemyMeshes;
-    struct ArrayList list_EnemySpawnPoint;
+    struct ArrayList list_EnemySpawnRegion;
 };
+
+struct Rectangle {
+    struct Vector3* vertex1;
+    struct Vector3* vertex2;
+};
+
 
 //The initializer of scene
 void Scene_Init(struct Scene *scene, enum WeaponName weaponname);
@@ -40,5 +46,7 @@ void Scene_PlayerShoot(struct Scene *scene);
 void Clear_Enemy(struct Scene *scene);
 int Scene_Collided_Enemy(struct Scene *scene, struct CollideBox *collidebox);
 int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox);
-void Scene_Add_EnemySpawnPoint(struct Scene *scene,double x, double y,double z);
+// void Scene_Add_EnemySpawnRegion(struct Scene *scene,double x, double y,double z);
+void Scene_Add_EnemySpawnRegion(struct Scene *scene, struct Rectangle *rectangle);
+
 #endif //FPS_SIMULATOR_SCENE_H

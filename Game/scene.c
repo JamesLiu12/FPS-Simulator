@@ -16,7 +16,7 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
     srand((int)time(NULL));
     ArrayList_Init(&scene->list_Object, sizeof(struct Object*));
     ArrayList_Init(&scene->list_Enemy, sizeof(struct Enemy*));
-    ArrayList_Init(&scene->list_EnemySpawnPoint,sizeof(struct Vector3*));
+    ArrayList_Init(&scene->list_EnemySpawnRegion,sizeof(struct Vector3*));
     Player_Init(&scene->player, weaponname);
     Player_SetPosition(&scene->player, -17.5, 0, -17.5);
 
@@ -25,112 +25,142 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
     //Map_new_Walls
     struct Mesh *mesh_Wall = ModelMap_new_Wall_New();
     struct Object *Map_Wall = Object_New(mesh_Wall, NULL, WALL);
+
     //set collideBoxes:
     struct CollideBox *collideBoxes_Wall = (struct CollideBox *) malloc(sizeof(struct CollideBox) * 30);
 
     //Wall      Name Rule: from blender collection
     CollideBox_Init(&collideBoxes_Wall[0], &Map_Wall->transform, 80, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[0].transform.position, 20, 1.25, 20);
+
     //Wall_001
     CollideBox_Init(&collideBoxes_Wall[1], &Map_Wall->transform, 80, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[1].transform.position, 20, 1.25, -20);
+
     //Wall_002
     CollideBox_Init(&collideBoxes_Wall[2], &Map_Wall->transform, 40, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[2].transform.position, -20, 1.25, 0);
     Vector3_Set(&collideBoxes_Wall[2].transform.rotation,0,M_PI/2,0);
+
     //Wall_003
     CollideBox_Init(&collideBoxes_Wall[3], &Map_Wall->transform, 40, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[3].transform.position, 60, 1.25, 0);
     Vector3_Set(&collideBoxes_Wall[3].transform.rotation,0,M_PI/2,0);
+
     //Wall_004
     CollideBox_Init(&collideBoxes_Wall[4], &Map_Wall->transform, 30, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[4].transform.position, -15, 1.25, -5);
     Vector3_Set(&collideBoxes_Wall[4].transform.rotation,0,M_PI/2,0);
+
     //Wall_005
     CollideBox_Init(&collideBoxes_Wall[5], &Map_Wall->transform, 30, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[5].transform.position, -0.8, 1.25, 0.5);
     Vector3_Set(&collideBoxes_Wall[5].transform.rotation,0,M_PI/4,0);
+
     //Wall_006
     CollideBox_Init(&collideBoxes_Wall[6], &Map_Wall->transform, 40, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[6].transform.position, 30, 1.25, 15);
+
     //Wall_007__ERROR FIX
     CollideBox_Init(&collideBoxes_Wall[7], &Map_Wall->transform, 13, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[7].transform.position, 0.5, 1.25, -10);
     Vector3_Set(&collideBoxes_Wall[7].transform.rotation,0,-M_PI/4,0);
+
     //Wall_008
     CollideBox_Init(&collideBoxes_Wall[8], &Map_Wall->transform, 15, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[8].transform.position, 25, 1.25, -2.5);
     Vector3_Set(&collideBoxes_Wall[8].transform.rotation,0,M_PI/2,0);
+
     //Wall_009
     CollideBox_Init(&collideBoxes_Wall[9], &Map_Wall->transform, 15, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[9].transform.position, -3.5, 1.25, -3.5);
     Vector3_Set(&collideBoxes_Wall[9].transform.rotation,0,M_PI/4,0);
+
     //Wall_010
     CollideBox_Init(&collideBoxes_Wall[10], &Map_Wall->transform, 9, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[10].transform.position, 10, 1.25, 10.55);
     Vector3_Set(&collideBoxes_Wall[10].transform.rotation,0,M_PI/2,0);
+
     //Wall_011
     CollideBox_Init(&collideBoxes_Wall[11], &Map_Wall->transform, 30, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[11].transform.position, 30, 1.25, 10);
+
     //Wall_012
     CollideBox_Init(&collideBoxes_Wall[12], &Map_Wall->transform, 7, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[12].transform.position, 0, 1.25, 8);
     Vector3_Set(&collideBoxes_Wall[12].transform.rotation,0,-M_PI/3,0);
+
     //Wall_013
     CollideBox_Init(&collideBoxes_Wall[13], &Map_Wall->transform, 16, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[13].transform.position, -2, 1.25, -15);
+
     //Wall_014__ERROR FIX
     CollideBox_Init(&collideBoxes_Wall[14], &Map_Wall->transform, 5, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[14].transform.position, 10, 1.25, -12.5);
     Vector3_Set(&collideBoxes_Wall[14].transform.rotation,0,M_PI/2,0);
+
     //Wall_015
     CollideBox_Init(&collideBoxes_Wall[15], &Map_Wall->transform, 40, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[15].transform.position, 40, 1.25, -15);
+
     //Wall_016__ERROR FIX
     CollideBox_Init(&collideBoxes_Wall[16], &Map_Wall->transform, 5, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[16].transform.position, 12.5, 1.25, -10);
+
     //Wall_017__ERROR FIX
     CollideBox_Init(&collideBoxes_Wall[17], &Map_Wall->transform, 30, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[17].transform.position, 15, 1.25, -5);
     Vector3_Set(&collideBoxes_Wall[17].transform.rotation,0,M_PI/2,0);
+
     //Wall_018__ERROR FIX
     CollideBox_Init(&collideBoxes_Wall[18], &Map_Wall->transform, 20, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[18].transform.position, 20, 1.25, -5);
     Vector3_Set(&collideBoxes_Wall[18].transform.rotation,0,M_PI/2,0);
+
     //Wall_019__ERROR FIX
     CollideBox_Init(&collideBoxes_Wall[19], &Map_Wall->transform, 20, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[19].transform.position, 45, 1.25, -5);
     Vector3_Set(&collideBoxes_Wall[19].transform.rotation,0,M_PI/2,0);
+
     //Wall_020
     CollideBox_Init(&collideBoxes_Wall[20], &Map_Wall->transform, 25, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[20].transform.position, 50, 1.25, 2.6);
     Vector3_Set(&collideBoxes_Wall[20].transform.rotation,0,M_PI/2,0);
+
     //Wall_021
     CollideBox_Init(&collideBoxes_Wall[21], &Map_Wall->transform, 20, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[21].transform.position, 35, 1.25, 5);
+
     //Wall_022
     CollideBox_Init(&collideBoxes_Wall[22], &Map_Wall->transform, 15, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[22].transform.position, 32.5, 1.25, -10);
+
     //Wall_023
     CollideBox_Init(&collideBoxes_Wall[23], &Map_Wall->transform, 10, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[23].transform.position, 40, 1.25, -5);
     Vector3_Set(&collideBoxes_Wall[23].transform.rotation,0,M_PI/2,0);
+
     //Wall_024
     CollideBox_Init(&collideBoxes_Wall[24], &Map_Wall->transform, 10, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[24].transform.position, 35, 1.25, 0);
+
     //Wall_025
     CollideBox_Init(&collideBoxes_Wall[25], &Map_Wall->transform, 5, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[25].transform.position, 30, 1.25, -2.5);
     Vector3_Set(&collideBoxes_Wall[25].transform.rotation,0,M_PI/2,0);
+
     //Wall_026
     CollideBox_Init(&collideBoxes_Wall[26], &Map_Wall->transform, 5, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[26].transform.position, 32.5, 1.25, -5);
+
     //Wall_027
     CollideBox_Init(&collideBoxes_Wall[27], &Map_Wall->transform, 16, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[27].transform.position, -1.3, 1.25, 15);
+
     //Wall_028
     CollideBox_Init(&collideBoxes_Wall[28], &Map_Wall->transform, 3, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[28].transform.position, 8.4, 1.25, 12);
+
     //Wall_029
     CollideBox_Init(&collideBoxes_Wall[29], &Map_Wall->transform, 3, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[29].transform.position, 6.8, 1.25, 13.5);
@@ -167,48 +197,48 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
 
     // usage: Scene_Add_EnemySpawnPoint(scene, x, y, z);
     // enemy spawn points are grouped in similar x coordinate or z coordinate
-    Scene_Add_EnemySpawnPoint(scene, -11,  0, -17);
-    Scene_Add_EnemySpawnPoint(scene, -11,  0, 14);
+    // Scene_Add_EnemySpawnPoint(scene, -11,  0, -17);
+    // Scene_Add_EnemySpawnPoint(scene, -11,  0, 14);
 
-    Scene_Add_EnemySpawnPoint(scene, 0.7,  0, 0.6);
-    Scene_Add_EnemySpawnPoint(scene, 14 ,  0, 0.6);
+    // Scene_Add_EnemySpawnPoint(scene, 0.7,  0, 0.6);
+    // Scene_Add_EnemySpawnPoint(scene, 14 ,  0, 0.6);
 
-    Scene_Add_EnemySpawnPoint(scene, 7.3,  0, 0.6);
-    Scene_Add_EnemySpawnPoint(scene, 7.3,  0, -7.2);
-    Scene_Add_EnemySpawnPoint(scene, 7.3,  0, 5.3);
+    // Scene_Add_EnemySpawnPoint(scene, 7.3,  0, 0.6);
+    // Scene_Add_EnemySpawnPoint(scene, 7.3,  0, -7.2);
+    // Scene_Add_EnemySpawnPoint(scene, 7.3,  0, 5.3);
 
-    Scene_Add_EnemySpawnPoint(scene, 0  ,  0, -7.3);
+    // Scene_Add_EnemySpawnPoint(scene, 0  ,  0, -7.3);
 
-    Scene_Add_EnemySpawnPoint(scene, -3,   0, 0.7);
-    Scene_Add_EnemySpawnPoint(scene, -3,   0, 7);
+    // Scene_Add_EnemySpawnPoint(scene, -3,   0, 0.7);
+    // Scene_Add_EnemySpawnPoint(scene, -3,   0, 7);
 
-    Scene_Add_EnemySpawnPoint(scene, 10,   0, -7.2);
-    Scene_Add_EnemySpawnPoint(scene, 10,   0, -17);
+    // Scene_Add_EnemySpawnPoint(scene, 10,   0, -7.2);
+    // Scene_Add_EnemySpawnPoint(scene, 10,   0, -17);
 
-    Scene_Add_EnemySpawnPoint(scene, -5.4, 0, 16.7);
-    Scene_Add_EnemySpawnPoint(scene, 14.5, 0, 16.7);
-    Scene_Add_EnemySpawnPoint(scene, 20,   0, 16.7);
-    Scene_Add_EnemySpawnPoint(scene, 26.1, 0, 16.7);
-    Scene_Add_EnemySpawnPoint(scene, 38,   0, 16.7);
-    Scene_Add_EnemySpawnPoint(scene, 49,   0, 16.7);
+    // Scene_Add_EnemySpawnPoint(scene, -5.4, 0, 16.7);
+    // Scene_Add_EnemySpawnPoint(scene, 14.5, 0, 16.7);
+    // Scene_Add_EnemySpawnPoint(scene, 20,   0, 16.7);
+    // Scene_Add_EnemySpawnPoint(scene, 26.1, 0, 16.7);
+    // Scene_Add_EnemySpawnPoint(scene, 38,   0, 16.7);
+    // Scene_Add_EnemySpawnPoint(scene, 49,   0, 16.7);
 
-    Scene_Add_EnemySpawnPoint(scene, 17.5, 0, -7.2);
-    Scene_Add_EnemySpawnPoint(scene, 19,   0, -7.2);
-    Scene_Add_EnemySpawnPoint(scene, 24.3, 0, -7.1);
-    Scene_Add_EnemySpawnPoint(scene, 38  , 0, -7.1);
-    Scene_Add_EnemySpawnPoint(scene, 49  , 0, -7.2);
+    // Scene_Add_EnemySpawnPoint(scene, 17.5, 0, -7.2);
+    // Scene_Add_EnemySpawnPoint(scene, 19,   0, -7.2);
+    // Scene_Add_EnemySpawnPoint(scene, 24.3, 0, -7.1);
+    // Scene_Add_EnemySpawnPoint(scene, 38  , 0, -7.1);
+    // Scene_Add_EnemySpawnPoint(scene, 49  , 0, -7.2);
 
 
-    Scene_Add_EnemySpawnPoint(scene, 26.1, 0, -16.2);
-    Scene_Add_EnemySpawnPoint(scene, 41.1, 0, 2.77);
-    Scene_Add_EnemySpawnPoint(scene, 41.1, 0, -4.6);
-    Scene_Add_EnemySpawnPoint(scene, 34.5, 0, -10.1);
+    // Scene_Add_EnemySpawnPoint(scene, 26.1, 0, -16.2);
+    // Scene_Add_EnemySpawnPoint(scene, 41.1, 0, 2.77);
+    // Scene_Add_EnemySpawnPoint(scene, 41.1, 0, -4.6);
+    // Scene_Add_EnemySpawnPoint(scene, 34.5, 0, -10.1);
 
-    Scene_Add_EnemySpawnPoint(scene, 15 ,  0, 8);
-    Scene_Add_EnemySpawnPoint(scene, 20 ,  0, 8);
-    Scene_Add_EnemySpawnPoint(scene, 25 ,  0, 8);
-    Scene_Add_EnemySpawnPoint(scene, 30 ,  0, 8);
-    Scene_Add_EnemySpawnPoint(scene, 35 ,  0, 8);
+    // Scene_Add_EnemySpawnPoint(scene, 15 ,  0, 8);
+    // Scene_Add_EnemySpawnPoint(scene, 20 ,  0, 8);
+    // Scene_Add_EnemySpawnPoint(scene, 25 ,  0, 8);
+    // Scene_Add_EnemySpawnPoint(scene, 30 ,  0, 8);
+    // Scene_Add_EnemySpawnPoint(scene, 35 ,  0, 8);
 
 
     //Initialize the meshes of enemy
@@ -244,13 +274,13 @@ void Del_Scene(struct Scene *scene){
         Del_Enemy(enemy);
         free(enemy);
     }
-    for (int i = 0; i < scene->list_EnemySpawnPoint.size; i++){
-        struct Vector3 *vector = ((struct Vector3**)scene->list_EnemySpawnPoint.data)[i];
+    for (int i = 0; i < scene->list_EnemySpawnRegion.size; i++){
+        struct Vector3 *vector = ((struct Vector3**)scene->list_EnemySpawnRegion.data)[i];
         free(vector);
     }
     Del_ArrayList(&scene->list_Object);
     Del_ArrayList(&scene->list_Enemy);
-    Del_ArrayList(&scene->list_EnemySpawnPoint);
+    Del_ArrayList(&scene->list_EnemySpawnRegion);
     Del_Player(&scene->player);
 }
 
@@ -540,7 +570,12 @@ int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox){
         }
     return 0;
 }
-void Scene_Add_EnemySpawnPoint(struct Scene *scene,double x, double y,double z){
-    struct Vector3 *vector=Vector3_New(x,y,z);
-    ArrayList_PushBack(&scene->list_EnemySpawnPoint,&vector);
+// void Scene_Add_EnemySpawnPoint(struct Scene *scene,double x, double y,double z){
+//     struct Vector3 *vector=Vector3_New(x,y,z);
+//     ArrayList_PushBack(&scene->list_EnemySpawnPoint,&vector);
+// }
+
+void Scene_Add_EnemySpawnRegion(struct Scene *scene, struct Rectangle *rectangle){
+    // struct Vector3 *vector=Vector3_New(x,y,z);
+    ArrayList_PushBack(&scene->list_EnemySpawnRegion, &rectangle);
 }
