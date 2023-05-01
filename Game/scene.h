@@ -54,4 +54,5 @@ int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox);
 // void Scene_Add_EnemySpawnRegion(struct Scene *scene,double x, double y,double z);
 void Scene_Add_EnemySpawnRegion(struct Scene *scene, struct EnemySpawnRegion *region);
 struct EnemySpawnRegion* EnemySpawnRegion_Init(double x1, double y1, double z1, double x2, double y2, double z2, int enemy_num);
+void Del_EnemySpawnRegion(struct EnemySpawnRegion* region);
 #endif //FPS_SIMULATOR_SCENE_H

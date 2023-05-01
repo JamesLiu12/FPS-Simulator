@@ -199,13 +199,17 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
     // initializing enemy spawn regions
 
     // region 1
-    struct EnemySpawnRegion *region1 = EnemySpawnRegion_Init(-10, 0, -10,   -20, 0, -20,   2);
+    struct EnemySpawnRegion *region1 = EnemySpawnRegion_Init(-20, 0, -20,   -10, 0, -10,   2);
     Scene_Add_EnemySpawnRegion(scene, region1);
     
     // region 2
-    struct EnemySpawnRegion *region2 = EnemySpawnRegion_Init(0, 0, -15,   -10, 0, -20,   5);
+    struct EnemySpawnRegion *region2 = EnemySpawnRegion_Init(-10, 0, -20,   0, 0, -15,   5);
     Scene_Add_EnemySpawnRegion(scene, region2);
     
+    // region 1 and region 2 have vertex 1 and vertex 2 reversed for easier calculation
+    // because they have negative coordinates
+    // in this arrangement, vertex2 - vertex1 would be always larger than or equal to 0
+
     // region 3
     struct EnemySpawnRegion *region3 = EnemySpawnRegion_Init(0, 0, 15,   10, 0, 20,   3);
     Scene_Add_EnemySpawnRegion(scene, region3);
@@ -264,38 +268,67 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname){
     //Sample Enemy generate test 
     // every enemy spawn region has 
     int pointnumber;
-    for(int i=0; i < 60; i++){
+    for(int i=0; i < scene->list_EnemySpawnRegion.size; i++){
 
         // initializing
-        pointnumber = rand()%(scene->list_EnemySpawnRegion.size);
-        struct Enemy *enemy = New_Enemy(&scene->enemyMeshes);
-        ArrayList_PushBack(&scene->list_Enemy, &enemy);
+        // pointnumber = rand()%(scene->list_EnemySpawnRegion.size);
+
+        struct EnemySpawnRegion* region = ((struct Vector3**)scene->list_EnemySpawnRegion.data)[i];
+
+        for (int j = 0; j < region->EnemyNum; j++){
+            struct Enemy *enemy = New_Enemy(&scene->enemyMeshes);
+            ArrayList_PushBack(&scene->list_Enemy, &enemy);
+        
+            // initializing a random positional vector
+            struct Vector3 point;
+            point.x = (rand() % ( (int)( region->vertex2->x - region->vertex1->x )*100 ) ) / 100;
+            point.y = 0;
+            point.z = (rand() % ( (int)( region->vertex2->z - region->vertex1->z )*100 ) ) / 100;
+
+            struct Vector3* position = region->vertex1;
+            position->x += point.x;
+            position->z += point.z;
+
+// ((struct Vector3**)scene->list_EnemySpawnRegion.data)[pointnumber]
+
+            Vector3_Copy(&position, &enemy->transform.position);
+        
+
+            // struct Vector3 *randomvector=Vector3_New((rand()%100)/100.0-0.5,0,(rand()%100)/100.0-0.5);
+            // Vector3_Add(&enemy->transform.position,randomvector);
+        }
+
+
         //Vector3_Set(&enemy->transform.position,-17+i/2.0,0,-17+i/2.0);
 
 
 
-        Vector3_Copy(((struct Vector3**)scene->list_EnemySpawnRegion.data)[pointnumber],&enemy->transform.position);
-        struct Vector3 *randomvector=Vector3_New((rand()%100)/100.0-0.5,0,(rand()%100)/100.0-0.5);
-        Vector3_Add(&enemy->transform.position,randomvector);
+
     }
     //Sample end
 }
 
 
 void Del_Scene(struct Scene *scene){
+
+    // frees the memory for scene objects
     for (int i = 0; i < scene->list_Object.size; i++){
         struct Object *object = ((struct Object**)scene->list_Object.data)[i];
         Del_Object(object);
         free(object);
     }
 
+    // frees the memory for scene enemies
     for (int i = 0; i < scene->list_Enemy.size; i++){
         struct Enemy *enemy = ((struct Enemy**)scene->list_Enemy.data)[i];
         Del_Enemy(enemy);
         free(enemy);
     }
+
+    // frees the memory for enemy spawn regions
     for (int i = 0; i < scene->list_EnemySpawnRegion.size; i++){
         struct EnemySpawnPoint *region = ((struct EnemySpawnPoint**)scene->list_EnemySpawnRegion.data)[i];
+        Del_EnemySpawnRegion(region);
         free(region);
     }
     Del_ArrayList(&scene->list_Object);
@@ -602,6 +635,12 @@ struct EnemySpawnRegion* EnemySpawnRegion_Init(double x1, double y1, double z1, 
     region->EnemyNum = enemy_num;
     return region;
 }
+
+void Del_EnemySpawnRegion(struct EnemySpawnRegion* region){
+    free(region->vertex1);
+    free(region->vertex2);
+}
+
 
 // adds an enemy spawn region to the scene
 // input: a scene pointer and a region pointer
