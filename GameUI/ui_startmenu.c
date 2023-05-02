@@ -87,30 +87,39 @@ void Show_StartMenu(struct UI_StartMenu *startui){
         strcpy(startui->tips_string,"You can also reload by pressing 'R'.");
         break;
         case 4:
-        strcpy(startui->tips_string,"Not all weapons deal extra damage to the head of the enemy, maybe other parts?");
+        strcpy(startui->tips_string,"Make sure your terminal size is at least 200 * 75 to avoid display errors.");
         break;
         case 5:
-        strcpy(startui->tips_string,"If you are going to die, get away from enemies and take a break.");
+        strcpy(startui->tips_string,"If display errors appear, scale your terminal and press ESC to refresh.");
         break;
         case 6:
-        strcpy(startui->tips_string,"To be or not to be, that is the question.");
+        strcpy(startui->tips_string,"Press ESC during the game if you want to take a break.");
         break;
         case 7:
-        strcpy(startui->tips_string,"If you want to hide something, the most obvious place is the hardest place to find it.");
+        strcpy(startui->tips_string,"Not all weapons deal extra damage to the head of the enemy, maybe other parts?");
         break;
         case 8:
-        strcpy(startui->tips_string,"Three holes on the wall behind.");
+        strcpy(startui->tips_string,"If you are going to die, get away from enemies and take a break.");
         break;
         case 9:
-        strcpy(startui->tips_string,"Enemies will start tracing you after they notice you.");
+        strcpy(startui->tips_string,"To be or not to be, that is the question.");
         break;
         case 10:
-        strcpy(startui->tips_string,"Try different weapons. They are useful.");
+        strcpy(startui->tips_string,"If you want to hide something, the most obvious place is the hardest place to find it.");
         break;
         case 11:
-        strcpy(startui->tips_string,"Someone asked \"why don't we make some breakable walls?\" And I said \"We do.\"");
+        strcpy(startui->tips_string,"Three holes on the wall behind.");
         break;
         case 12:
+        strcpy(startui->tips_string,"Enemies will start tracing you after they notice you.");
+        break;
+        case 13:
+        strcpy(startui->tips_string,"Try different weapons. They are useful.");
+        break;
+        case 14:
+        strcpy(startui->tips_string,"Someone asked \"why don't we make some breakable walls?\" And I said \"We do.\"");
+        break;
+        case 15:
         strcpy(startui->tips_string,"Go! Go! Rush B!");
         break;
         default:
@@ -151,11 +160,11 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
         }
         if(operation == 4){
             startui->tips_number++;
-            if(startui->tips_number > 12)startui->tips_number = 0;
+            if(startui->tips_number > 15)startui->tips_number = 0;
         }
         if(operation == 5){
             startui->tips_number--;
-            if(startui->tips_number < 0)startui->tips_number = 12;
+            if(startui->tips_number < 0)startui->tips_number = 15;
         }
     }
     if(startui->pointer<0||startui->pointer>=5){

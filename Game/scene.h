@@ -59,9 +59,6 @@ int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collideBox);
 //Add a square region for spawn enemy
 void Scene_Add_EnemySpawnSquare(struct Scene *scene, double x, double z, double len, double wid, int num);
 
-//Check if the player has won the game
-void Scene_Player_WinningCheck(struct Scene *scene);
-
 //Dlete the fake wall in scene
 void Scene_Delete_FakeWall(struct Scene *scene);
 #endif //FPS_SIMULATOR_SCENE_H

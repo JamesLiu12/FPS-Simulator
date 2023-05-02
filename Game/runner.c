@@ -48,7 +48,7 @@ int Runner_Run(struct Runner *runner){
             end=2;
             break;
         }
-        usleep(1000000 / runner->frame_rate);
+        usleep(1000000.0 / runner->frame_rate);
     }
     printf("\x1b[38;2;%d;%d;%dm", 0xee, 0xee, 0xee);
     printf("\x1b[48;2;%d;%d;%dm", 0, 0, 0);

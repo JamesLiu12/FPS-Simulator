@@ -22,8 +22,7 @@ with them, find the exit, and gradually discover the truth of the android compan
 ---
 
 ## Game Target
-Destroy enemies with your powerful weapon and find a way to escape the maze.  
-[Click here to view the maze](./images/Maze.png)
+Destroy enemies with your powerful weapon and find a way to escape the maze.
 
 ---
 
@@ -41,10 +40,11 @@ Destroy enemies with your powerful weapon and find a way to escape the maze.
 ### Crosshair
 * The red point in the center of the screen is the crosshair. Unfortunately, it does not support customization now.
 
-### The Map
-* The map is carefully designed to ensure players have differents experiences exploring different paths.  
-[Click here to view the Map](./images/map.png)  
-[Click here to view the Map with enemy spawn areas](./images/map_NEW_enemy.png)  
+### The Maze
+* The Maze is carefully designed to ensure players have different experiences exploring different paths.  
+* The player is spawned at the left-bottom corner of the maze
+[Click here to view the Maze](./images/map.png)  
+[Click here to view the Maze with enemy spawn areas](./images/map_NEW_enemy.png)  
 
 ### The End Door?
 * You should find the gate that looks like this to beat the game.  
@@ -56,7 +56,7 @@ Destroy enemies with your powerful weapon and find a way to escape the maze.
 
 ### The True End
 * The true end gate hides the truth about this space.  
-[Click here to view the True End Door](./images/True_end.png)  
+[Click here to view the True End Gate](./images/True_end.png)  
 ---
 
 ## Game Controls
@@ -81,17 +81,17 @@ Destroy enemies with your powerful weapon and find a way to escape the maze.
     Enemies might be able to perform a critical hit, and deal extra damage to player, making the game more exciting.
 
   2. Data structures for storing game status
-    We use a lot structures to store game status.
+    We use a lot of structures to store game status.
     We have structs like **Player**, **Enemy**, **Weapon** and **Object** to store the status of these objects. And we created a struct called **ArrayList** acting as lists to store objects,enemies and other structs
-    We also created bacis mathematical structs like **Vector** to store infomation like position, rotation, direction, etc
+    We also created basic mathematical structs like **Vector** to store information like position, rotation, direction, etc
   
   3. Dynamic memory management
     **ArrayList** is a struct like a dynamic list to store different types of data. We can add elements with the function ***ArrayList_PushBack()***
-    and ***ArrayList_PopBack()*** to delete the last element. It is used to store **Object** and **Enemy** in a scene. Therefore, we can deal with interations between player and other elements in each frame.
+    and ***ArrayList_PopBack()*** to delete the last element. It is used to store **Object** and **Enemy** in a scene. Therefore, we can deal with interactions between player and other elements in each frame.
   4. File input/output  
-    File input/output is used in storing game settings, to prevent players from setting the game in each time starting the game repeatly. The settings are stored in setting.cfg
+    File input/output is used in storing game settings, to prevent players from setting the game in each time starting the game repeatedly. The settings are stored in setting.cfg
   5. Program codes in multiple files
-    We created many different files to define different structs and functions related to those structs, which makes the project clear and easy to update.
+    We created many files to define different structs and functions related to those structs, which makes the project clear and easy to update.
 
 ---
 
@@ -104,7 +104,7 @@ files made by any other 3D computer graphics software, and use the `obj_converte
 C files that the game engined required. All the meshes in this game are made by **Blender**.  
 Besides the rendering system, this game engine also supports game object nested. All the game objects has a 
 **transform** attribute, which could clearly show the hierarchy of the objects.  
-**OP Engine** also supports OBB (Oriented Bounding Box). It allows you to set a cuboid colliding box in any size, any  
+**OP Engine** also supports OBB (Oriented Bounding Box). It allows you to set a cuboid colliding box in any size, any 
 direction, and with some basic colliding detection functions provided.
 There are more amazing feature about **OP Engine**, please refer to **OP Developer Docs** (not start to write yet).
 

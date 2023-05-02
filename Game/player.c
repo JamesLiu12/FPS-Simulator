@@ -7,7 +7,7 @@ void Player_Init(struct Player *player, enum WeaponName weaponname, int difficul
     Canvas_Init(&player->canvas, 33, 65);
     player->maxHealth = 100;
     player->health = player->maxHealth;
-    player->moveSpeed = 15;
+    player->moveSpeed = 10;
     player->rotationSpeed = 4;
     player->inFireCD = 0;
     player->FIREFLAG = 0;
@@ -28,7 +28,7 @@ void Player_Init(struct Player *player, enum WeaponName weaponname, int difficul
         break;
     case 1:
         player->healingCDtime = 9;
-        player->heal_per_sec = 1;
+        player->heal_per_sec = 2;
         break;
     case 2:
         player->healingCDtime = 1000;
@@ -121,6 +121,7 @@ void Player_SetDamageFlag(struct Player *player){
     player->DAMAGEFLAG = 1;
 }
 void Player_Control(struct Player *player, double delta_time){
+    if(player->moveSpeed * delta_time > 1) delta_time = 1.0/player->moveSpeed;
     if(kbhit()){
     if(keydown(W)) Player_RotateUp(player, delta_time);
     if(keydown(S)) Player_RotateDown(player, delta_time);

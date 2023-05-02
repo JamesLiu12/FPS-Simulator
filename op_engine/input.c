@@ -60,6 +60,7 @@ int kbhit(){
     /* Consume data */
     if (ret > 0) {
         read(0, get, 3);
+        if (get[0] != '\033') get[1] = '\0';
         char _tmp;
         while (poll(pfds, 1, 0) > 0){
             read(STDIN_FILENO, &_tmp, 1);
