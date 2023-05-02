@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wformat-security -Wformat-overflow
+CFLAGS =
 SRC = $(wildcard *.c op_engine/*.c Game/*.c Game/models/*.c GameUI/*.c util/*.c)
 SUBDIRS = op_engine Game Game/models GameUI util
 BIN_DIR = bin
