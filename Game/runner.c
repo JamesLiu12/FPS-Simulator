@@ -13,8 +13,8 @@ void Runner_Init(struct Runner *runner,struct UI_SettingMenu *settingui){
     runner->difficulty=settingui->difficulty;
     runner->sensitivity=settingui->sensitivity;
     runner->weaponnumber = settingui->weaponnumber;
-    runner->weaponlist[0]=P1999;
-    runner->weaponlist[1]=AK47;
+    runner->weaponlist[0]=AK47;
+    runner->weaponlist[1]=P1999;
     runner->weaponlist[2]=Razor_ELEC;
     runner->weaponlist[3]=X_114514;
     runner->weaponlist[4]=MOSS;
@@ -24,7 +24,7 @@ int Runner_Run(struct Runner *runner){
     int end=1;
     struct Scene scene;
     double delta_time;
-    Scene_Init(&scene, runner->weaponlist[runner->weaponnumber]);
+    Scene_Init(&scene, runner->weaponlist[runner->weaponnumber],runner->difficulty);
     Runner_SetPlayerRotationSpeed(&scene.player, runner->sensitivity);
     while(1){
         delta_time= ProgramRunTime() - runner->previousFrameTime;

@@ -7,7 +7,7 @@ struct UI_WeaponMenu {
     char Description[5][100];
 
 };
-void UI_WeaponMenu_Init(struct UI_WeaponMenu *weaponui);
+void UI_WeaponMenu_Init(struct UI_WeaponMenu *weaponui, int pointer);
 void Show_UI_WeaponMenu(struct UI_WeaponMenu *weaponui);
 int Launch_UI_WeaponMenu(struct UI_WeaponMenu *weaponui);
 #define Game_UI_WeaponSelectionMenu

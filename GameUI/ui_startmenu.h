@@ -3,6 +3,8 @@
 #include "ui_weaponselectionmenu.h"
 struct UI_StartMenu {
     int pointer;
+    int tips_number;
+    char tips_string[90];
     char menu[4][8];
     struct UI_SettingMenu settingui;
     struct UI_WeaponMenu weaponui;

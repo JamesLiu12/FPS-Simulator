@@ -16,12 +16,15 @@ struct UI_StartMenu* New_UI_StartMenu() {
 }
 void UI_StartMenu_Init(struct UI_StartMenu *startui){
     startui->pointer=0;
+    startui->tips_number = 0;
     strcpy(startui->menu[0],"New Game");
     strcpy(startui->menu[1]," Weapon ");
     strcpy(startui->menu[2],"Settings");
     strcpy(startui->menu[3],"  Exit  ");
+    strcpy(startui->tips_string,"Use arrow keys to roll up and down. Enter to comfirm selection.");
     UI_SettingMenu_Init(&startui->settingui);
-    UI_WeaponMenu_Init(&startui->weaponui);
+    UI_WeaponMenu_Init(&startui->weaponui, startui->settingui.weaponnumber);
+
 }
 void Show_StartMenu(struct UI_StartMenu *startui){
     screenclean();
@@ -35,6 +38,10 @@ void Show_StartMenu(struct UI_StartMenu *startui){
 /_/  |_/_/   \__/_/_/   /_/\___/_/\__,_/_/  /___/_/ /_/_/   /_/_/ /_/_/\__/\__, /  
                                                                           /____/   )");
     printf("\n");
+    strcpy(startui->menu[0],"New Game");
+    strcpy(startui->menu[1]," Weapon ");
+    strcpy(startui->menu[2],"Settings");
+    strcpy(startui->menu[3],"  Exit  ");
     for(int i=0;i<4;i++){
         if(startui->pointer!=i){
             for(int j=0;j<36;j++)printf(" ");
@@ -58,7 +65,68 @@ void Show_StartMenu(struct UI_StartMenu *startui){
             for(int j=0;j<36;j++)printf(" ");
             printf("\033[3;47;35m\\----------/\n\033[0m");
             }
-        printf("\n");}
+        printf("\n\n");}
+    for(int j=0;j<40;j++)printf(" ");
+    printf("Tips:");
+    printf("\n");
+    for(int j=0;j<26;j++)printf(" ");
+    printf("Use Left and Right to switch tips.");
+    printf("\n\n");
+
+    switch(startui->tips_number){
+        case 0:
+        strcpy(startui->tips_string,"Use arrow keys to roll up and down. Enter to confirm selection.");
+        break;
+        case 1:
+        strcpy(startui->tips_string,"Use WASD to control the player's camera and arrow keys to move.");
+        break;
+        case 2:
+        strcpy(startui->tips_string,"Use F to shoot at your enemies! If you run out of bullets, it will auto-reload.");
+        break;
+        case 3:
+        strcpy(startui->tips_string,"You can also reload by pressing 'R'.");
+        break;
+        case 4:
+        strcpy(startui->tips_string,"Not all weapons deal extra damage to the head of the enemy, maybe other parts?");
+        break;
+        case 5:
+        strcpy(startui->tips_string,"If you are going to die, get away from enemies and take a break.");
+        break;
+        case 6:
+        strcpy(startui->tips_string,"To be or not to be, that is the question.");
+        break;
+        case 7:
+        strcpy(startui->tips_string,"If you want to hide something, the most obvious place is the hardest place to find it.");
+        break;
+        case 8:
+        strcpy(startui->tips_string,"Three holes on the wall behind.");
+        break;
+        case 9:
+        strcpy(startui->tips_string,"Enemies will start tracing you after they notice you.");
+        break;
+        case 10:
+        strcpy(startui->tips_string,"Try different weapons. They are useful.");
+        break;
+        case 11:
+        strcpy(startui->tips_string,"Someone asked \"why don't we make some breakable walls?\" And I said \"We do.\"");
+        break;
+        case 12:
+        strcpy(startui->tips_string,"Go! Go! Rush B!");
+        break;
+        default:
+        break;
+    }
+    int spacelength=(90-strlen(startui->tips_string))/2;
+    for(int i=0;i<spacelength;i++)printf(" ");
+
+        for(int i=0;i<strlen(startui->tips_string);i++){
+            printf("\033[3;44;32m%c\033[0m",startui->tips_string[i]);
+            
+        }
+        printf("\033[3;44;32m  \033[0m");
+    
+    
+    printf("\n\n");
 }
 
 void Launch_StartMenu(struct UI_StartMenu *startui){
@@ -73,7 +141,7 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
         screenclean();
         Show_StartMenu(startui);
         operation=Fetch_Operation();
-        if(operation==1){
+        if(operation==1 ){
             startui->pointer++;
             if(startui->pointer==4)startui->pointer=0;
         }
@@ -81,8 +149,16 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
             startui->pointer--;
             if(startui->pointer==-1)startui->pointer=3;
         }
+        if(operation == 4){
+            startui->tips_number++;
+            if(startui->tips_number > 12)startui->tips_number = 0;
+        }
+        if(operation == 5){
+            startui->tips_number--;
+            if(startui->tips_number < 0)startui->tips_number = 12;
+        }
     }
-    if(startui->pointer<0||startui->pointer>=4){
+    if(startui->pointer<0||startui->pointer>=5){
         printf("Pointer Error");
         sleep(5);
         return;
@@ -96,11 +172,13 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
             screenclean();
             //Del_Runner(&runner);
             if(end == 1){
+                screenclean();
                 Victory();
                 goto STARTMENUORIGIN;
             }
             else{
                 if (end == 2){
+                    screenclean();
                     True_Victory();
                     goto STARTMENUORIGIN;
                 }
@@ -136,6 +214,9 @@ void Launch_StartMenu(struct UI_StartMenu *startui){
             //TODO
             break;
         case 3:
+            break;
+        case 4:
+            goto STARTMENUORIGIN;
             break;
         default:
         break;
@@ -446,6 +527,7 @@ void Victory(){
     printf("\033[1;1H");
 }
 void True_Victory(){
+    
     char a[200];
     usleep(200000);
     for(int i=0;i<10;i++)kbhit();

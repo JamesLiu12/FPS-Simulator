@@ -1,7 +1,7 @@
 #include "enemy.h"
 #include "math.h"
 #include "../util/util.h"
-void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
+void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes, int difficulty){
     Transform_Init(&enemy->transform, NULL);
 
     //Enemy_Head
@@ -34,18 +34,46 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes){
     Vector3_Set(&collideBoxes_EnemyLeg->transform.position, 0, 0.2, 0);
 
     Object_SetCollideBoxes(&enemy->leg, collideBoxes_EnemyLeg, 1);
-
-    enemy->speed = 1.3;
-    enemy->maxHealth = 100;
+    switch (difficulty)
+    {
+    case 0:
+        enemy->speed = 1.3;
+        enemy->maxHealth = 100;
+        enemy->criticalRate = 15;//the possibility of a critical hit, %
+        enemy->criticalDamage = 0.2;// the critical damage is 150%
+        enemy->senseDistance = 20;
+        enemy->damage = 3;
+        break;
+    case 1:
+        enemy->speed = 1.6;
+        enemy->maxHealth = 140;
+        enemy->criticalRate = 25;//the possibility of a critical hit, %
+        enemy->criticalDamage = 0.3;// the critical damage is 150%
+        enemy->senseDistance = 20;
+        enemy->damage = 5;
+        break;
+    case 2:
+        enemy->speed = 2.0;
+        enemy->maxHealth = 180;
+        enemy->criticalRate = 30;//the possibility of a critical hit, %
+        enemy->criticalDamage = 0.4;// the critical damage is 120%
+        enemy->senseDistance = 20;
+        enemy->damage = 6;
+        break;
+    default:
+        enemy->speed = 1.3;
+        enemy->maxHealth = 100;
+        enemy->criticalRate = 15;//the possibility of a critical hit, %
+        enemy->criticalDamage = 0.5;// the critical damage is 150%
+        enemy->senseDistance = 20;
+        enemy->damage = 3;
+        break;
+    }
 	enemy->health = enemy->maxHealth;
-	enemy->damage = 3;
     enemy->attackCDtime=1;
     enemy->attackCounter=0;
     enemy->inattackCD=0;
-	enemy->criticalRate = 15;//the possibility of a critical hit, %
-    enemy->criticalDamage = 0.5;// the critical damage is 150%
     enemy->attackDistance = 1.5;
-    enemy->senseDistance = 20;
     enemy->canSeeTarget = FALSE;
     enemy->DEADFLAG=0;
     Vector3_Set(&enemy->moveDirection, 0, 0, 0);
@@ -83,9 +111,9 @@ void Enemy_Attack(struct Enemy *enemy){
         enemy->attackCounter=enemy->attackCDtime;
     }
 }
-struct Enemy* New_Enemy(struct EnemyMeshes *meshes){
+struct Enemy* New_Enemy(struct EnemyMeshes *meshes, int difficulty){
     struct Enemy *enemy = (struct Enemy*)malloc(sizeof(struct Enemy));
-    Enemy_Init(enemy, meshes);
+    Enemy_Init(enemy, meshes, difficulty);
     return enemy;
 }
 

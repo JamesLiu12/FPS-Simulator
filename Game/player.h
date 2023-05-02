@@ -44,10 +44,10 @@ struct Player{
 };
 
 //Initializer of player
-void Player_Init(struct Player *player, enum WeaponName weaponname);
+void Player_Init(struct Player *player, enum WeaponName weaponname, int difficulty);
 
 //Newer of Player
-struct Player* New_Player(enum WeaponName weaponname);
+struct Player* New_Player(enum WeaponName weaponname, int difficulty);
 
 //Deleter of Player
 void Del_Player(struct Player *player);
