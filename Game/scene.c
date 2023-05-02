@@ -290,7 +290,7 @@ void Scene_Update(struct Scene *scene, double delta_time){
         struct Vector3 positionDiff;
         positionDiff = playerPosition;
         Vector3_Subtract(&positionDiff, &enemyPosition);
-        if (Vector3_Magnitude(&positionDiff) > 50) continue;
+        if (Vector3_Magnitude(&positionDiff) > 25) continue;
         Line_Set(&ray, &enemyPosition, &positionDiff);
 
         double distanceBetween = Vector3_Distance3D(&enemyPosition, &playerPosition);
@@ -301,7 +301,7 @@ void Scene_Update(struct Scene *scene, double delta_time){
         if (Enemy_IsTargetInAttackRange(enemy, &playerPosition)){
             Enemy_Attack(enemy);
             if(enemy->ATTACKFLAG){
-                //Player_ChangeHealth(&scene->player,-enemy->damage*(1+ enemy->criticalDamage * (rand() % 100 > enemy->criticalRate)));
+                Player_ChangeHealth(&scene->player,-enemy->damage*(1+ enemy->criticalDamage * (rand() % 100 > enemy->criticalRate)));
                 Player_SetDamageFlag(&scene->player);
             }
         }
