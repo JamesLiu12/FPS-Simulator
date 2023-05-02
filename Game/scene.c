@@ -216,7 +216,7 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname, int difficulty)
     Scene_Add_EnemySpawnSquare(scene, 42.5, -2.5, 5, 15, 4);
     Scene_Add_EnemySpawnSquare(scene, 38, 7.5, 10, 5, 4);
 
-    
+
     //Enemy generator 
     int maxX, minX, maxZ, minZ;
     for(int i=0; i < scene->list_EnemySpawnArea.size; i++){
@@ -228,7 +228,19 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname, int difficulty)
         for(int j = 0; j < region->number ; j++){
             struct Enemy *enemy = New_Enemy(&scene->enemyMeshes, difficulty);
 
-            Vector3_Set(&enemy->transform.position, minX + 1.0 * rand() / RAND_MAX * ( maxX - minX ), 0, minZ + 1.0 * rand() / RAND_MAX * ( maxZ - minZ ));
+            double random_position_x, random_position_z;
+            // random_position.x = minX + 1.0 * rand() / RAND_MAX * ( maxX - minX );
+            // random_position.y = 0;
+            // random_position.z = minZ + 1.0 * rand() / RAND_MAX * ( maxZ - minZ );
+            do {
+                random_position_x = minX + 1.0 * rand() / RAND_MAX * ( maxX - minX );
+                random_position_z = minZ + 1.0 * rand() / RAND_MAX * ( maxZ - minZ );
+                Vector3_Set(&enemy->transform.position, random_position_x, 0, random_position_z);
+
+            }
+            while ( Scene_Collided_Enemy(scene, &(enemy->head.collideBoxes[0])) || Scene_Collided_Object(scene, &(enemy->head.collideBoxes[0])));
+
+            // Vector3_Set(&enemy->transform.position, minX + 1.0 * rand() / RAND_MAX * ( maxX - minX ), 0, minZ + 1.0 * rand() / RAND_MAX * ( maxZ - minZ ));
             
             ArrayList_PushBack(&scene->list_Enemy, &enemy);
         }
