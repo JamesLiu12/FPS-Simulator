@@ -26,6 +26,7 @@ Destroy enemies with your powerful weapon and find a way to escape the maze.
 
 ---
 
+
 ## Game Objects
 ### Wall & Floor
 * The different characters are used to show the wall in different distance. `██` for close wall, `▓▓` for far wall, 
@@ -59,19 +60,6 @@ Destroy enemies with your powerful weapon and find a way to escape the maze.
 [Click here to view the True End Gate](./images/True_end.png)  
 ---
 
-## Game Controls
-* **Rotate view**: **_W_** rotate up, **_S_** rotate down, **_A_** rotate left, **_D_** rotate right.
-* **Move**: $\uparrow$ move forward, $\downarrow$ move back, $\leftarrow$ move left, $\rightarrow$ move right
-* **Load the firearm**: players can load firearms by pressing **_R_**
-* **Shooting**: players can shoot by pressing **_F_** (fire!).
-* **Pause**: Press **_ESC_** to pause the game, resume it at any time by pressing **_ESC_** again, or press **_ETNER_** to quit
-
-## Game Menu Controls
-* **_W_** cursor move up, **_S_** cursor move down
-* **_ENTER_** select
-* **_A_** decrease / **_D_** increase the value of the selected setting (frame rate / difficulty / sensitivity)
-
----
 
 ## Features Implemented
   1. Generation of random game sets or events
@@ -110,6 +98,22 @@ There are more amazing feature about **OP Engine**, please refer to **OP Develop
 
 ---
 
+
+## Game Controls
+* **Rotate view**: **_W_** rotate up, **_S_** rotate down, **_A_** rotate left, **_D_** rotate right.
+* **Move**: $\uparrow$ move forward, $\downarrow$ move back, $\leftarrow$ move left, $\rightarrow$ move right
+* **Load the firearm**: players can load firearms by pressing **_R_**
+* **Shooting**: players can shoot by pressing **_F_** (fire!).
+* **Pause**: Press **_ESC_** to pause the game, resume it at any time by pressing **_ESC_** again, or press **_ETNER_** to quit
+
+## Game Menu Controls
+* **_W_** cursor move up, **_S_** cursor move down
+* **_ENTER_** select
+* **_A_** decrease / **_D_** increase the value of the selected setting (frame rate / difficulty / sensitivity)
+* Check the tips to find some useful information
+---
+
+
 ## Compile & Run
 ### For Linux user:
 1. Open the terminal in the game folder.
@@ -117,6 +121,7 @@ There are more amazing feature about **OP Engine**, please refer to **OP Develop
 To only compile the game, please run `make all`, then the executable file `./bin/FPS_Simulator` will be generated.
 3. Run `make clean` to delete all the object files and binary files generated.
 4. Run `make tar` to pack the whole project (excluding the object and binary files) into an archive file.
+**Important**: Make sure the terminal size is at least *200 * 75*
 
 ### For Windows user:
 [//]: # (TODO)
