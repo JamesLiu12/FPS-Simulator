@@ -10,7 +10,7 @@ void Weapon_Init(struct Weapon* weapon, enum WeaponName weaponName){
 
     if (weaponName == AK47){
         weapon->damage = 21;
-        weapon->fireCDtime = 0.1;
+        weapon->fireCDtime = 0.05;
         weapon->reloadCDtime=1.6;
         weapon->magazine_size=30;
         weapon->bullet_number=weapon->magazine_size;

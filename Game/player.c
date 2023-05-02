@@ -7,7 +7,7 @@ void Player_Init(struct Player *player, enum WeaponName weaponname, int difficul
     Canvas_Init(&player->canvas, 33, 65);
     player->maxHealth = 100;
     player->health = player->maxHealth;
-    player->moveSpeed = 15;
+    player->moveSpeed = 10;
     player->rotationSpeed = 4;
     player->inFireCD = 0;
     player->FIREFLAG = 0;
