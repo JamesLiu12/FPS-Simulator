@@ -205,7 +205,18 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname, int difficulty)
     Scene_Add_EnemySpawnSquare(scene, 55, 12, 8, 8, 4);
     Scene_Add_EnemySpawnSquare(scene, 55, -10, 8, 8, 3);
     Scene_Add_EnemySpawnSquare(scene, -10, -10, 8, 8, 5);
+    Scene_Add_EnemySpawnSquare(scene, 7.5, 2.5, 15, 5, 4);
+    Scene_Add_EnemySpawnSquare(scene, 10, 3.75, 5, 5, 3);
+    Scene_Add_EnemySpawnSquare(scene, 5, 17.5, 20, 5, 5);
+    Scene_Add_EnemySpawnSquare(scene, 17.5, 5, 5, 10, 3);
+    Scene_Add_EnemySpawnSquare(scene, 22.5, -2.5, 5, 25, 7);
+    Scene_Add_EnemySpawnSquare(scene, 40, -17.5, 40, 5, 7);
+    Scene_Add_EnemySpawnSquare(scene, 30, 12.5, 20, 5, 6);
+    Scene_Add_EnemySpawnSquare(scene, 35, -2.5, 10, 5, 3);
+    Scene_Add_EnemySpawnSquare(scene, 42.5, -2.5, 5, 15, 4);
+    Scene_Add_EnemySpawnSquare(scene, 38, 7.5, 10, 5, 4);
 
+    
     //Enemy generator 
     int maxX, minX, maxZ, minZ;
     for(int i=0; i < scene->list_EnemySpawnArea.size; i++){
