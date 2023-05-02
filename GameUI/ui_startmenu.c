@@ -685,7 +685,7 @@ void True_Victory(){
     for(int i=0;i<10;i++)kbhit();
     screenclean();
     printchar(40,'\n');
-    strcpy(a,"Code 19198xx AI failed.\nPlayer broke the trap.\n\n(press to continue)");
+    strcpy(a,"Code 19198xx NOVA AI failed.\nPlayer broke the trap.\n\n(press to continue)");
     printdialog(a);
     while(1){if(kbhit())break;}
     screenclean();

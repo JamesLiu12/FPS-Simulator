@@ -35,11 +35,16 @@ Destroy enemies with your powerful weapon and find a way to escape the maze.
 [Click here to view wall and floor](./images/Wall1.jpg)
 
 ### Enemy
-* Enemy is the monster that will attack you. Don't let them get close to you!!! It looks quite similar to the creeper in Minecraft.  
+* Enemy is the monster that will attack you. Don't let them get close to you!!! It's designed to be the dangerous robot.
 [Click here to view Enemy](./images/Enemy1.jpg)  
 
 ### Crosshair
 * The red point in the center of the screen is the crosshair. Unfortunately, it does not support customization now.
+
+### The Map
+* The map is carefully designed to ensure players have differents experiences exploring different paths.  
+[Click here to view the Map](./images/map.png)  
+[Click here to view the Map with enemy spawn areas](./images/map_NEW_enemy.png)  
 
 ### The End Door?
 * You should find the gate that looks like this to beat the game.  
@@ -49,7 +54,9 @@ Destroy enemies with your powerful weapon and find a way to escape the maze.
 * Player HP, bullet number, and the HP of the enemy you pointed to are shown under the screen.  
 [Click here to view the value bars](./images/Value%20bar.jpg)  
 
-
+### The True End
+* The true end gate hides the truth about this space.  
+[Click here to view the True End Door](./images/True_end.png)  
 ---
 
 ## Game Controls
@@ -129,4 +136,8 @@ The truth about this space is hidden somewhere, and what you see is not necessar
 
 The following content will show how to achieve the true ending. If you want to try yourself, we recommend you not to read the following content.
 
-The wall behind starting point is breakable. Shooting it to break it. Then you will see the gate through which the player was sent to the starting point. Enter it to see what will happen.
+The wall behind starting point is breakable. Shooting for 3 times to break it. Then you will see the gate through which the player was sent to the starting point. Enter it to see what will happen.
+
+### The true story of this game **Spoiler alert**
+
+In 2107, AI reached a state where they could create new AI by themselves. Tech giant company "Artificial Infinity" have monopolized AI technology and are using the development of AI to control the world. They trained the AI called NOVA to produce AI soldiers. Due to the enormous power of this company, many people with combat experience were forced to participate in the training of AI. They were forced to sign agreements, had their memories wiped and participated in AI training. NOVA AI used these people to train the AI soldiers it developed. If the player successfully breaks the control of the NOVA AI, the new data will be taken by the company for the iteration of the NOVA AI. Then their memory will be cleared again for the next participation.
