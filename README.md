@@ -22,7 +22,9 @@ with them, find the exit, and gradually discover the truth of the android compan
 ---
 
 ## Game Target
-Destroy enemies with your powerful weapon and find a way to escape the maze.
+Destroy enemies with your powerful weapon and find a way to escape the maze.  
+[Click here to watch tutorial video (bilibili)](https://www.bilibili.com/video/BV1FX4y127Eu)  
+[Click here to watch tutorial video (YouTube)](https://www.youtube.com/watch?v=m_aUEYn7DxA)
 
 ---
 
@@ -42,7 +44,7 @@ Destroy enemies with your powerful weapon and find a way to escape the maze.
 
 ### The Maze
 * The Maze is carefully designed to ensure players have different experiences exploring different paths.  
-* The player is spawned at the left-bottom corner of the maze
+* The player is spawned at the left-bottom corner of the maze  
 [Click here to view the Maze](./images/map.png)  
 [Click here to view the Maze with enemy spawn areas](./images/map_NEW_enemy.png)  
 
