@@ -33,8 +33,8 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname, int difficulty)
     CollideBox_Init(&collideBoxes_Wall[0], &Map_Wall->transform, 80, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[0].transform.position, 20, 1.25, 20);
     //Wall_001
-    CollideBox_Init(&collideBoxes_Wall[1], &Map_Wall->transform, 60, 2.5, 0.2);
-    Vector3_Set(&collideBoxes_Wall[1].transform.position, 30, 1.25, -20);
+    CollideBox_Init(&collideBoxes_Wall[1], &Map_Wall->transform, 75, 2.5, 0.2);
+    Vector3_Set(&collideBoxes_Wall[1].transform.position, 22.5, 1.25, -20);
     //Wall_002
     CollideBox_Init(&collideBoxes_Wall[2], &Map_Wall->transform, 40, 2.5, 0.2);
     Vector3_Set(&collideBoxes_Wall[2].transform.position, -20, 1.25, 0);
@@ -290,6 +290,7 @@ void Scene_Update(struct Scene *scene, double delta_time){
         struct Vector3 positionDiff;
         positionDiff = playerPosition;
         Vector3_Subtract(&positionDiff, &enemyPosition);
+        if (Vector3_Magnitude(&positionDiff) > 50) continue;
         Line_Set(&ray, &enemyPosition, &positionDiff);
 
         double distanceBetween = Vector3_Distance3D(&enemyPosition, &playerPosition);
@@ -300,7 +301,7 @@ void Scene_Update(struct Scene *scene, double delta_time){
         if (Enemy_IsTargetInAttackRange(enemy, &playerPosition)){
             Enemy_Attack(enemy);
             if(enemy->ATTACKFLAG){
-                Player_ChangeHealth(&scene->player,-enemy->damage*(1+ enemy->criticalDamage * (rand() % 100 > enemy->criticalRate)));
+                //Player_ChangeHealth(&scene->player,-enemy->damage*(1+ enemy->criticalDamage * (rand() % 100 > enemy->criticalRate)));
                 Player_SetDamageFlag(&scene->player);
             }
         }
@@ -320,7 +321,6 @@ void Scene_Update(struct Scene *scene, double delta_time){
     Player_Update(&scene->player, delta_time);
     Player_Move(&scene->player, &scene->player.move);
 
-    Scene_Player_WinningCheck(scene);
     if(scene->FAKE_WALL_shootcounter == 3) Scene_Delete_FakeWall(scene);
     if(Scene_Collided_Object(scene,&scene->player.collideBox)){
         Vector3_Scale(&scene->player.move, -1);
@@ -542,8 +542,18 @@ int Scene_Collided_Enemy(struct Scene *scene, struct CollideBox *collideBox){
 int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collideBox){
     for(int i = 0; i < scene->list_Object.size ; i++){
             struct Object *object = ((struct Object**)scene->list_Object.data)[i];
+
             for(int j = 0; j < object->collideBoxCount ;j++){
+                struct Vector3 PositionDiff = scene->player.transform.globalPosition;
+                Vector3_Subtract(&PositionDiff, &object->collideBoxes[j].transform.globalPosition);
+                if(Vector3_Magnitude(&PositionDiff) > 50) continue;
                 if(CollideBox_IsCollide(collideBox, &object->collideBoxes[j])){
+                    if(object->tag == END){
+                        scene->player.WINFLAG=1;
+                    }
+                    if(object->tag == TRUE_END){
+                        scene->player.TRUEWINFLAG=1;
+                    }
 #if DEBUG
                     printf("%d %d OBJECT\n", i, j);
 #endif
@@ -556,26 +566,6 @@ int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collideBox){
 void Scene_Add_EnemySpawnSquare(struct Scene *scene, double x, double z, double len, double wid, int num){
     struct RegionSquare *region2d = New_RegionSquare(x, z, len, wid, num);
     ArrayList_PushBack(&scene->list_EnemySpawnArea,&region2d);
-}
-void Scene_Player_WinningCheck(struct Scene *scene){
-    for(int i = 0; i < scene->list_Object.size ; i++){
-            struct Object *object = ((struct Object**)scene->list_Object.data)[i];
-            for(int j = 0; j < object->collideBoxCount ;j++){
-                if(CollideBox_IsCollide(&scene->player.collideBox,&object->collideBoxes[j])){
-                    if(object->tag == END){
-                        scene->player.WINFLAG=1;
-                    }
-                    if(object->tag == TRUE_END){
-                        scene->player.TRUEWINFLAG=1;
-                    }
-#if DEBUG
-                    printf("%d %d OBJECT\n", i, j);
-#endif
-                    return;
-                }
-            }
-        }
-    return;
 }
 void Scene_Delete_FakeWall(struct Scene *scene){
     for(int i = 0; i < scene->list_Object.size; i++){

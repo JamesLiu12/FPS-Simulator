@@ -121,6 +121,7 @@ void Player_SetDamageFlag(struct Player *player){
     player->DAMAGEFLAG = 1;
 }
 void Player_Control(struct Player *player, double delta_time){
+    if(player->moveSpeed * delta_time > 1) delta_time = 1.0/player->moveSpeed;
     if(kbhit()){
     if(keydown(W)) Player_RotateUp(player, delta_time);
     if(keydown(S)) Player_RotateDown(player, delta_time);
