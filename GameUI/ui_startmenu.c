@@ -382,7 +382,7 @@ void printdeadeye_true(){
 void Victory(){
     int temp;
     char a[200];
-        strcpy(a,"Seeing this wall reminds you of something.\n\n(press E to open the door)");
+        strcpy(a,"You: So, this is the exit, right?\n\n(press E to open the door)");
         screenclean();
         printchar(30,'-');
         printchar(25,'_');
