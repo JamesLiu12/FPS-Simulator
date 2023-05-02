@@ -34,13 +34,14 @@ struct Player{
      * inReloadCD: if the player could reload
      * RELOADFLAG: if the player reloads this frame
      * DEADFLAG: if the player has dead
-     * WINFLAG: if the player has win
+     * WINFLAG: if the player has won
+     * TRUEWINFLAG: if the player is has true won
      * QUITFLAG: if the player has quit the game
      */
     double fireCDcounter,reloadCDcounter;
     double healingCDcounter, healingCDtime, heal_per_sec;
     struct Weapon weapon;
-    int inFireCD, FIREFLAG, inReloadCD, RELOADFLAG, DEADFLAG, WINFLAG,TRUEWINFLAG, QUITFLAG, DAMAGEFLAG;
+    int inFireCD, FIREFLAG, inReloadCD, RELOADFLAG, DEADFLAG, WINFLAG, TRUEWINFLAG, QUITFLAG, DAMAGEFLAG;
 };
 
 //Initializer of player

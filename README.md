@@ -22,18 +22,20 @@ with them, find the exit, and gradually discover the truth of the android compan
 ---
 
 ## Game Target
-Destroy enemies with your powerful weapon and find a way to escape in the maze.
+Destroy enemies with your powerful weapon and find a way to escape the maze.  
+[Click here to view the maze](./images/Maze.png)
 
 ---
 
 ## Game Objects
 ### Wall & Floor
-* The different characters are used to show the wall in different distance. `██` for close wall, `▓▓` for far wall, `▒▒` for much far wall.  
-[Click here to view wall](./images/Wall1.jpg)  
-You may also notice that the floor is showed by another lighter color in these images.
+* The different characters are used to show the wall in different distance. `██` for close wall, `▓▓` for far wall, 
+`▒▒` for much far wall.  
+* The character for floor is `░░`  
+[Click here to view wall and floor](./images/Wall1.jpg)
 
 ### Enemy
-* Enemy is the monster that will attack you. Don't let then get close to you!!! It's designed to be the dangerous robot.
+* Enemy is the monster that will attack you. Don't let them get close to you!!! It's designed to be the dangerous robot.
 [Click here to view Enemy](./images/Enemy1.jpg)  
 
 ### Crosshair
@@ -45,8 +47,8 @@ You may also notice that the floor is showed by another lighter color in these i
 [Click here to view the Map with enemy spawn areas](./images/map_NEW_enemy.png)  
 
 ### The End Door?
-* You should find the door that looks like this to beat the game.  
-[Click here to view the End Door](./images/End%20door.png)  
+* You should find the gate that looks like this to beat the game.  
+[Click here to view the End Gate](./images/End%20door.png)  
 
 ### The value bars
 * Player HP, bullet number, and the HP of the enemy you pointed to are shown under the screen.  
@@ -114,7 +116,7 @@ There are more amazing feature about **OP Engine**, please refer to **OP Develop
 2. To run the game directly, please run `./start.sh`, this will compile and run the game.  
 To only compile the game, please run `make all`, then the executable file `./bin/FPS_Simulator` will be generated.
 3. Run `make clean` to delete all the object files and binary files generated.
-4. Run `make tar` to pack all the whole objects (excluding the object and binary files) into a archive file.
+4. Run `make tar` to pack the whole project (excluding the object and binary files) into an archive file.
 
 ### For Windows user:
 [//]: # (TODO)
