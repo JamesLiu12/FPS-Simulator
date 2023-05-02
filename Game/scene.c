@@ -3,7 +3,7 @@
 #include "../Game/models/models.h"
 #include "../util/array_list.h"
 #include "../util/util.h"
-#include "region2D.h"
+#include "region_square.h"
 #include "runner.h"
 #include <math.h>
 #include <stdio.h>
@@ -17,7 +17,7 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname, int difficulty)
     srand((int)time(NULL));
     ArrayList_Init(&scene->list_Object, sizeof(struct Object*));
     ArrayList_Init(&scene->list_Enemy, sizeof(struct Enemy*));
-    ArrayList_Init(&scene->list_EnemySpawnArea,sizeof(struct Region2D*));
+    ArrayList_Init(&scene->list_EnemySpawnArea,sizeof(struct RegionSquare*));
     Player_Init(&scene->player, weaponname, difficulty);
     Player_SetPosition(&scene->player, -17.5, 0, -17.5);
     scene->FAKE_WALL_shootcounter = 0;
@@ -220,7 +220,7 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname, int difficulty)
     //Enemy generator 
     int maxX, minX, maxZ, minZ;
     for(int i=0; i < scene->list_EnemySpawnArea.size; i++){
-        struct Region2D *region = ((struct Region2D**)scene->list_EnemySpawnArea.data)[i];
+        struct RegionSquare *region = ((struct RegionSquare**)scene->list_EnemySpawnArea.data)[i];
         maxX = region->x + region->length/2;
         minX = region->x - region->length/2;
         maxZ = region->z + region->width/2;
@@ -262,7 +262,7 @@ void Del_Scene(struct Scene *scene){
         free(enemy);
     }
     for (int i = 0; i < scene->list_EnemySpawnArea.size; i++){
-        struct Region2D *region = ((struct Region2D**)scene->list_EnemySpawnArea.data)[i];
+        struct RegionSquare *region = ((struct RegionSquare**)scene->list_EnemySpawnArea.data)[i];
         free(region);
     }
     Del_ArrayList(&scene->list_Object);
@@ -532,18 +532,18 @@ void Clear_Enemy(struct Scene *scene){
             Del_Enemy(enemy);}
     }
 }
-int Scene_Collided_Enemy(struct Scene *scene, struct CollideBox *collidebox){
+int Scene_Collided_Enemy(struct Scene *scene, struct CollideBox *collideBox){
     for(int i = 0; i < scene->list_Enemy.size ; i++){
             struct Enemy *enemy = ((struct Enemy**)scene->list_Enemy.data)[i];
-            if(CollideBox_IsCollide(collidebox,&enemy->head.collideBoxes[0])){ return 1; }
+            if(CollideBox_IsCollide(collideBox, &enemy->head.collideBoxes[0])){ return 1; }
         }
     return 0;
 }
-int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox){
+int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collideBox){
     for(int i = 0; i < scene->list_Object.size ; i++){
             struct Object *object = ((struct Object**)scene->list_Object.data)[i];
             for(int j = 0; j < object->collideBoxCount ;j++){
-                if(CollideBox_IsCollide(collidebox,&object->collideBoxes[j])){
+                if(CollideBox_IsCollide(collideBox, &object->collideBoxes[j])){
 #if DEBUG
                     printf("%d %d OBJECT\n", i, j);
 #endif
@@ -554,7 +554,7 @@ int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collidebox){
     return 0;
 }
 void Scene_Add_EnemySpawnSquare(struct Scene *scene, double x, double z, double len, double wid, int num){
-    struct Region2D *region2d = Region2D_New(x, z, len, wid, num);
+    struct RegionSquare *region2d = New_RegionSquare(x, z, len, wid, num);
     ArrayList_PushBack(&scene->list_EnemySpawnArea,&region2d);
 }
 void Scene_Player_WinningCheck(struct Scene *scene){
