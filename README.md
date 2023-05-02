@@ -37,7 +37,7 @@ Destroy enemies with your powerful weapon and find a way to escape the maze.
 [Click here to view wall and floor](./images/Wall1.jpg)
 
 ### Enemy
-* Enemy is the monster that will attack you. Don't let them get close to you!!! It's designed to be the dangerous robot.
+* Enemy is the monster that will attack you. Don't let them get close to you!!! It's designed to be the dangerous robot.  
 [Click here to view Enemy](./images/Enemy1.jpg)  
 
 ### Crosshair
@@ -122,8 +122,8 @@ There are more amazing feature about **OP Engine**, please refer to **OP Develop
 2. To run the game directly, please run `./start.sh`, this will compile and run the game.  
 To only compile the game, please run `make all`, then the executable file `./bin/FPS_Simulator` will be generated.
 3. Run `make clean` to delete all the object files and binary files generated.
-4. Run `make tar` to pack the whole project (excluding the object and binary files) into an archive file.
-**Important**: Make sure the terminal size is at least *200 * 75*
+4. Run `make tar` to pack the whole project (excluding the object and binary files) into an archive file.  
+* **_Important_**: Make sure the terminal size is at least *200 * 75*
 
 ### For Windows user:
 [//]: # (TODO)
@@ -134,17 +134,18 @@ unknown cache refreshing mechanism issues, the flushing rate on Windows terminal
 ## Hidden End
 The truth about this space is hidden somewhere, and what you see is not necessarily true. But you can get some hints from tips in the main menu.
 
+<br>
+<br>
+<br>
 
+## **_!!!Spoiler alert !!!_**
 
-
-
-
-### How to achieve the true ending **Spoiler alert**
+### How to achieve the true ending **_!!!Spoiler alert !!!_**
 
 The following content will show how to achieve the true ending. If you want to try yourself, we recommend you not to read the following content.
 
 The wall behind starting point is breakable. Shooting for 3 times to break it. Then you will see the gate through which the player was sent to the starting point. Enter it to see what will happen.
 
-### The true story of this game **Spoiler alert**
+### The true story of this game
 
 In 2107, AI reached a state where they could create new AI by themselves. Tech giant company "Artificial Infinity" have monopolized AI technology and are using the development of AI to control the world. They trained the AI called NOVA to produce AI soldiers. Due to the enormous power of this company, many people with combat experience were forced to participate in the training of AI. They were forced to sign agreements, had their memories wiped and participated in AI training. NOVA AI used these people to train the AI soldiers it developed. If the player successfully breaks the control of the NOVA AI, the new data will be taken by the company for the iteration of the NOVA AI. Then their memory will be cleared again for the next participation.
