@@ -12,27 +12,26 @@ void Runner_Init(struct Runner *runner,struct UI_SettingMenu *settingui){
     runner->frame_rate=settingui->framerate;
     runner->difficulty=settingui->difficulty;
     runner->sensitivity=settingui->sensitivity;
-    runner->weaponnumber = settingui->weaponnumber;
-    runner->weaponlist[0]=AK47;
-    runner->weaponlist[1]=P1999;
-    runner->weaponlist[2]=Razor_ELEC;
-    runner->weaponlist[3]=X_114514;
-    runner->weaponlist[4]=MOSS;
+    runner->weaponNumber = settingui->weaponnumber;
+    runner->list_Weapon[0]=AK47;
+    runner->list_Weapon[1]=P1999;
+    runner->list_Weapon[2]=Razor_ELEC;
+    runner->list_Weapon[3]=X_114514;
+    runner->list_Weapon[4]=MOSS;
     runner->previousFrameTime = ProgramRunTime();
 }
 int Runner_Run(struct Runner *runner){
     int end=1;
     struct Scene scene;
-    double delta_time;
-    Scene_Init(&scene, runner->weaponlist[runner->weaponnumber],runner->difficulty);
+    Scene_Init(&scene, runner->list_Weapon[runner->weaponNumber], runner->difficulty);
     Runner_SetPlayerRotationSpeed(&scene.player, runner->sensitivity);
     while(1){
-        delta_time= ProgramRunTime() - runner->previousFrameTime;
+        runner->delta_time= ProgramRunTime() - runner->previousFrameTime;
         runner->previousFrameTime = ProgramRunTime();
 #ifdef _WIN32
-        delta_time *= 0.01;
+        runner->delta_time *= 0.01;
 #endif
-        Scene_Update(&scene, delta_time);
+        Scene_Update(&scene, runner->delta_time);
 
         if(scene.player.DEADFLAG || scene.player.QUITFLAG){
             screenclean();
@@ -62,13 +61,9 @@ int Runner_Run(struct Runner *runner){
     //TODO
     //For each frame
 }
-void Runner_Load(struct Runner *runner){
-    //TODO
-    Runner_Run(runner);
-}
+
 void Del_Runner(struct Runner *runner){
-    
-    free(runner);
+
 }
 void Runner_SetPlayerRotationSpeed(struct Player *player, double sensitivity){
     player->rotationSpeed= 3 * sensitivity / 100;
