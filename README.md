@@ -92,7 +92,7 @@ Destroy enemies with your powerful weapon and find a way to escape the maze.
 In order to make this game, we have made an entire **_3-Dimensional Game Engine_** without using any non-standard C 
 libraries.  
 The name of this engine is **OP engine**, as it is made by a ~~Genshin Impact player~~.  
-With this game engine, it allows you to render any forms shapes of model. All you need to do is to take your own `.obj`  
+With this game engine, it allows you to render any forms shapes of model. All you need to do is to take your own `.obj` 
 files made by any other 3D computer graphics software, and use the `obj_converter` to transform your `.obj` files to the 
 C files that the game engined required. All the meshes in this game are made by **Blender**.  
 Besides the rendering system, this game engine also supports game object nested. All the game objects has a 
