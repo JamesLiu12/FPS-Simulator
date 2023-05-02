@@ -41,7 +41,8 @@ You may also notice that the floor is showed by another lighter color in these i
 
 ### The Map
 * The map is carefully designed to ensure players have differents experiences exploring different paths.  
-[Click here to view the End Door](./images/map.png)  
+[Click here to view the Map](./images/map.png)  
+[Click here to view the Map with enemy spawn areas](./images/map_NEW_enemy.png)  
 
 ### The End Door?
 * You should find the door that looks like this to beat the game.  
