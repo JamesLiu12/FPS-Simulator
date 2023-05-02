@@ -201,20 +201,20 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname, int difficulty)
 
     //Adding Enemy Spawn Square Areas
     Scene_Add_EnemySpawnSquare(scene, -15, 15, 8, 8, 2);
-    Scene_Add_EnemySpawnSquare(scene, 25, 17.5, 50, 4, 10);
-    Scene_Add_EnemySpawnSquare(scene, 55, 12, 8, 8, 4);
-    Scene_Add_EnemySpawnSquare(scene, 55, -10, 8, 8, 2);
-    Scene_Add_EnemySpawnSquare(scene, -10, -10, 8, 8, 3);
-    Scene_Add_EnemySpawnSquare(scene, 7.5, 2.5, 15, 5, 3);
+    Scene_Add_EnemySpawnSquare(scene, 35, 17.5, 50, 4, 35);
+    Scene_Add_EnemySpawnSquare(scene, 55, 12, 8, 8, 6);
+    Scene_Add_EnemySpawnSquare(scene, 55, -10, 8, 8, 5);
+    Scene_Add_EnemySpawnSquare(scene, -10, -10, 8, 8, 5);
+    Scene_Add_EnemySpawnSquare(scene, 7.5, 2.5, 15, 5, 5);
     Scene_Add_EnemySpawnSquare(scene, 10, -3.75, 5, 5, 3);
-    Scene_Add_EnemySpawnSquare(scene, 5, -17.5, 20, 5, 2);
-    Scene_Add_EnemySpawnSquare(scene, 17.5, 5, 5, 10, 3);
-    Scene_Add_EnemySpawnSquare(scene, 22.5, -2.5, 5, 25, 2);
-    Scene_Add_EnemySpawnSquare(scene, 40, -17.5, 40, 5, 3);
-    Scene_Add_EnemySpawnSquare(scene, 30, 12.5, 20, 5, 2);
-    Scene_Add_EnemySpawnSquare(scene, 35, -2.5, 10, 5, 3);
-    Scene_Add_EnemySpawnSquare(scene, 42.5, -2.5, 5, 15, 2);
-    Scene_Add_EnemySpawnSquare(scene, 38, 7.5, 10, 5, 2);
+    Scene_Add_EnemySpawnSquare(scene, 5, -17.5, 20, 5, 6);
+    Scene_Add_EnemySpawnSquare(scene, 17.5, 5, 5, 10, 5);
+    Scene_Add_EnemySpawnSquare(scene, 22.5, -2.5, 5, 25, 7);
+    Scene_Add_EnemySpawnSquare(scene, 40, -17.5, 40, 5, 10);
+    Scene_Add_EnemySpawnSquare(scene, 30, 12.5, 20, 5, 10);
+    Scene_Add_EnemySpawnSquare(scene, 35, -2.5, 10, 5, 4);
+    Scene_Add_EnemySpawnSquare(scene, 42.5, -2.5, 5, 15, 5);
+    Scene_Add_EnemySpawnSquare(scene, 38, 7.5, 10, 5, 3);
 
 
     //Enemy generator 
@@ -290,7 +290,7 @@ void Scene_Update(struct Scene *scene, double delta_time){
         struct Vector3 positionDiff;
         positionDiff = playerPosition;
         Vector3_Subtract(&positionDiff, &enemyPosition);
-        if (Vector3_Magnitude(&positionDiff) > 25) continue;
+        if (Vector3_Magnitude(&positionDiff) > enemy->senseDistance + 10) continue;
         Line_Set(&ray, &enemyPosition, &positionDiff);
 
         double distanceBetween = Vector3_Distance3D(&enemyPosition, &playerPosition);
@@ -545,8 +545,8 @@ int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collideBox){
 
             for(int j = 0; j < object->collideBoxCount ;j++){
                 struct Vector3 PositionDiff = scene->player.transform.globalPosition;
-                Vector3_Subtract(&PositionDiff, &object->collideBoxes[j].transform.globalPosition);
-                if(Vector3_Magnitude(&PositionDiff) > 50) continue;
+                //Vector3_Subtract(&PositionDiff, &object->collideBoxes[j].transform.globalPosition);
+                //if(Vector3_Magnitude(&PositionDiff) > 50) continue;
                 if(CollideBox_IsCollide(collideBox, &object->collideBoxes[j])){
                     if(object->tag == END){
                         scene->player.WINFLAG=1;

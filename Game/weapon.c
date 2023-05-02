@@ -9,8 +9,8 @@
 void Weapon_Init(struct Weapon* weapon, enum WeaponName weaponName){
 
     if (weaponName == AK47){
-        weapon->damage = 21;
-        weapon->fireCDtime = 0.05;
+        weapon->damage = 13;
+        weapon->fireCDtime = 0.06;
         weapon->reloadCDtime=1.6;
         weapon->magazine_size=30;
         weapon->bullet_number=weapon->magazine_size;
@@ -21,7 +21,7 @@ void Weapon_Init(struct Weapon* weapon, enum WeaponName weaponName){
     }
     if (weaponName == P1999){
         weapon->damage = 34;
-        weapon->fireCDtime = 0.6;
+        weapon->fireCDtime = 0.5;
         weapon->reloadCDtime=0.9;
         weapon->magazine_size=8;
         weapon->bullet_number=weapon->magazine_size;
@@ -32,7 +32,7 @@ void Weapon_Init(struct Weapon* weapon, enum WeaponName weaponName){
     }
     if (weaponName == Razor_ELEC){
         weapon->damage = 60;
-        weapon->fireCDtime = 0.8;
+        weapon->fireCDtime = 0.7;
         weapon->reloadCDtime=2;
         weapon->magazine_size=5;
         weapon->bullet_number=weapon->magazine_size;
@@ -42,10 +42,10 @@ void Weapon_Init(struct Weapon* weapon, enum WeaponName weaponName){
         strcpy(weapon->namestring,"Razor_ELEC");
     }
     if (weaponName == X_114514){
-        weapon->damage = 26;
-        weapon->fireCDtime = 0.2;
-        weapon->reloadCDtime=1;
-        weapon->magazine_size=16;
+        weapon->damage = 10;
+        weapon->fireCDtime = 0.02;
+        weapon->reloadCDtime=2.5;
+        weapon->magazine_size=50;
         weapon->bullet_number=weapon->magazine_size;
         weapon->head_rate=1.3;
         weapon->body_rate=1.0;
@@ -55,7 +55,7 @@ void Weapon_Init(struct Weapon* weapon, enum WeaponName weaponName){
     if (weaponName == MOSS){
         weapon->damage = 70;
         weapon->fireCDtime = 0.1;
-        weapon->reloadCDtime=1;
+        weapon->reloadCDtime=0.9;
         weapon->magazine_size=1;
         weapon->bullet_number=weapon->magazine_size;
         weapon->head_rate=1;

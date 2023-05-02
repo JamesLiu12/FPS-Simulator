@@ -28,7 +28,7 @@ void Player_Init(struct Player *player, enum WeaponName weaponname, int difficul
         break;
     case 1:
         player->healingCDtime = 9;
-        player->heal_per_sec = 1;
+        player->heal_per_sec = 2;
         break;
     case 2:
         player->healingCDtime = 1000;

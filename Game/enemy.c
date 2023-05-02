@@ -37,7 +37,7 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes, int difficulty)
     switch (difficulty)
     {
     case 0:
-        enemy->speed = 1.3;
+        enemy->speed = 1.5;
         enemy->maxHealth = 100;
         enemy->criticalRate = 15;//the possibility of a critical hit, %
         enemy->criticalDamage = 0.2;// the critical damage is 150%
@@ -45,19 +45,19 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes, int difficulty)
         enemy->damage = 3;
         break;
     case 1:
-        enemy->speed = 1.6;
-        enemy->maxHealth = 140;
+        enemy->speed = 2.0;
+        enemy->maxHealth = 150;
         enemy->criticalRate = 25;//the possibility of a critical hit, %
         enemy->criticalDamage = 0.3;// the critical damage is 150%
-        enemy->senseDistance = 20;
+        enemy->senseDistance = 25;
         enemy->damage = 5;
         break;
     case 2:
-        enemy->speed = 2.0;
-        enemy->maxHealth = 180;
+        enemy->speed = 3.0;
+        enemy->maxHealth = 200;
         enemy->criticalRate = 30;//the possibility of a critical hit, %
         enemy->criticalDamage = 0.4;// the critical damage is 120%
-        enemy->senseDistance = 20;
+        enemy->senseDistance = 30;
         enemy->damage = 6;
         break;
     default:
