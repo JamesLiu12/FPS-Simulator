@@ -1,5 +1,9 @@
 #ifndef OP_VECTOR
 
+/*
+    Defines the data and basic operations on a 3D vector
+*/
+
 //Left hand(x right, y upward, z forward)
 struct Vector3 {
     double x, y, z;
