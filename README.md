@@ -41,7 +41,7 @@ Destroy enemies with your powerful weapon and find a way to escape the maze.
 [Click here to view Enemy](./images/Enemy1.jpg)  
 
 ### Crosshair
-* The red point in the center of the screen is the crosshair. Aim at the enemy with it. I could make 
+* The red point in the center of the screen is the crosshair. Aim at the enemy with it. You could make critical damage if you shoot enemy's head. Try your best to make more headshot!
 
 ### The Maze
 * The Maze is carefully designed to ensure players have different experiences exploring different paths.  
