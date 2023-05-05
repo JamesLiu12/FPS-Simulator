@@ -41,7 +41,7 @@ Destroy enemies with your powerful weapon and find a way to escape the maze.
 [Click here to view Enemy](./images/Enemy1.jpg)  
 
 ### Crosshair
-* The red point in the center of the screen is the crosshair. Unfortunately, it does not support customization now.
+* The red point in the center of the screen is the crosshair. Aim at the enemy with it. I could make 
 
 ### The Maze
 * The Maze is carefully designed to ensure players have different experiences exploring different paths.  
