@@ -36,4 +36,4 @@ clean:
 .PHONY: all clean tar
 
 tar:
-	tar -czvf FPS_Simulator.tar.gz *.c *.h op_engine Game GameUI util Makefile
+	tar -czvf FPS_Simulator.tar.gz *.c op_engine Game GameUI util Makefile setting.cfg obj_converter images README.md start.sh

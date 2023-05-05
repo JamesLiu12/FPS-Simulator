@@ -22,9 +22,12 @@ with them, find the exit, and gradually discover the truth of the android compan
 ---
 
 ## Game Target
-Destroy enemies with your powerful weapon and find a way to escape the maze.
+Destroy enemies with your powerful weapon and find a way to escape the maze.  
+[Click here to watch tutorial video (bilibili)](https://www.bilibili.com/video/BV1FX4y127Eu)  
+[Click here to watch tutorial video (YouTube)](https://www.youtube.com/watch?v=m_aUEYn7DxA)
 
 ---
+
 
 ## Game Objects
 ### Wall & Floor
@@ -34,7 +37,7 @@ Destroy enemies with your powerful weapon and find a way to escape the maze.
 [Click here to view wall and floor](./images/Wall1.jpg)
 
 ### Enemy
-* Enemy is the monster that will attack you. Don't let them get close to you!!! It's designed to be the dangerous robot.
+* Enemy is the monster that will attack you. Don't let them get close to you!!! It's designed to be the dangerous robot.  
 [Click here to view Enemy](./images/Enemy1.jpg)  
 
 ### Crosshair
@@ -42,7 +45,7 @@ Destroy enemies with your powerful weapon and find a way to escape the maze.
 
 ### The Maze
 * The Maze is carefully designed to ensure players have different experiences exploring different paths.  
-* The player is spawned at the left-bottom corner of the maze
+* The player is spawned at the left-bottom corner of the maze  
 [Click here to view the Maze](./images/map.png)  
 [Click here to view the Maze with enemy spawn areas](./images/map_NEW_enemy.png)  
 
@@ -59,19 +62,6 @@ Destroy enemies with your powerful weapon and find a way to escape the maze.
 [Click here to view the True End Gate](./images/True_end.png)  
 ---
 
-## Game Controls
-* **Rotate view**: **_W_** rotate up, **_S_** rotate down, **_A_** rotate left, **_D_** rotate right.
-* **Move**: $\uparrow$ move forward, $\downarrow$ move back, $\leftarrow$ move left, $\rightarrow$ move right
-* **Load the firearm**: players can load firearms by pressing **_R_**
-* **Shooting**: players can shoot by pressing **_F_** (fire!).
-* **Pause**: Press **_ESC_** to pause the game, resume it at any time by pressing **_ESC_** again, or press **_ETNER_** to quit
-
-## Game Menu Controls
-* **_W_** cursor move up, **_S_** cursor move down
-* **_ENTER_** select
-* **_A_** decrease / **_D_** increase the value of the selected setting (frame rate / difficulty / sensitivity)
-
----
 
 ## Features Implemented
   1. Generation of random game sets or events
@@ -110,6 +100,22 @@ There are more amazing feature about **OP Engine**, please refer to **OP Develop
 
 ---
 
+
+## Game Controls
+* **Rotate view**: **_W_** rotate up, **_S_** rotate down, **_A_** rotate left, **_D_** rotate right.
+* **Move**: $\uparrow$ move forward, $\downarrow$ move back, $\leftarrow$ move left, $\rightarrow$ move right
+* **Load the firearm**: players can load firearms by pressing **_R_**
+* **Shooting**: players can shoot by pressing **_F_** (fire!).
+* **Pause**: Press **_ESC_** to pause the game, resume it at any time by pressing **_ESC_** again, or press **_ETNER_** to quit
+
+## Game Menu Controls
+* **_W_** cursor move up, **_S_** cursor move down
+* **_ENTER_** select
+* **_A_** decrease / **_D_** increase the value of the selected setting (frame rate / difficulty / sensitivity)
+* Check the tips to find some useful information
+---
+
+
 ## Compile & Run
 ### For Linux user:
 1. Open the terminal in the game folder.
@@ -117,8 +123,9 @@ There are more amazing feature about **OP Engine**, please refer to **OP Develop
 To only compile the game, please run `make all`, then the executable file `./bin/FPS_Simulator` will be generated.
 3. Run `make clean` to delete all the object files and binary files generated.
 4. Run `make tar` to pack the whole project (excluding the object and binary files) into an archive file.  
-* **_Important_**: Make sure the terminal size is at least *200 * 75*
-* **_For those playing on HKU CS server_**: Due to the unstable performance and the latency issue, the game sometimes lags when the CS server is under high load. We recommend you to play the game on your own PC or VM for a better experience.
+* **_Important_**: Make sure the terminal size is at least *200 * 75*  
+* **_For those playing on HKU CS server_**: Due to the unstable performance and the latency issue, the game sometimes lags when the CS server is under high load. We recommend you to play the game on your own PC or VM for a better experience.  
+
 ### For Windows user:
 [//]: # (TODO)
 
@@ -128,17 +135,18 @@ unknown cache refreshing mechanism issues, the flushing rate on Windows terminal
 ## Hidden End
 The truth about this space is hidden somewhere, and what you see is not necessarily true. But you can get some hints from tips in the main menu.
 
+<br>
+<br>
+<br>
 
+## **_!!!Spoiler alert !!!_**
 
-
-
-
-### How to achieve the true ending **Spoiler alert**
+### How to achieve the true ending **_!!!Spoiler alert !!!_**
 
 The following content will show how to achieve the true ending. If you want to try yourself, we recommend you not to read the following content.
 
 The wall behind starting point is breakable. Shooting for 3 times to break it. Then you will see the gate through which the player was sent to the starting point. Enter it to see what will happen.
 
-### The true story of this game **Spoiler alert**
+### The true story of this game
 
 In 2107, AI reached a state where they could create new AI by themselves. Tech giant company "Artificial Infinity" have monopolized AI technology and are using the development of AI to control the world. They trained the AI called NOVA to produce AI soldiers. Due to the enormous power of this company, many people with combat experience were forced to participate in the training of AI. They were forced to sign agreements, had their memories wiped and participated in AI training. NOVA AI used these people to train the AI soldiers it developed. If the player successfully breaks the control of the NOVA AI, the new data will be taken by the company for the iteration of the NOVA AI. Then their memory will be cleared again for the next participation.
