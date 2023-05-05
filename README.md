@@ -116,8 +116,9 @@ There are more amazing feature about **OP Engine**, please refer to **OP Develop
 2. To run the game directly, please run `./start.sh`, this will compile and run the game.  
 To only compile the game, please run `make all`, then the executable file `./bin/FPS_Simulator` will be generated.
 3. Run `make clean` to delete all the object files and binary files generated.
-4. Run `make tar` to pack the whole project (excluding the object and binary files) into an archive file.
-
+4. Run `make tar` to pack the whole project (excluding the object and binary files) into an archive file.  
+* **_Important_**: Make sure the terminal size is at least *200 * 75*
+* **_Important_**: Due to the unstable performance of CS server, the game sometimes lags when the cs server is under high load. We recommend you to run the code on your own linux to have better experience.
 ### For Windows user:
 [//]: # (TODO)
 
