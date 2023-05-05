@@ -118,7 +118,7 @@ To only compile the game, please run `make all`, then the executable file `./bin
 3. Run `make clean` to delete all the object files and binary files generated.
 4. Run `make tar` to pack the whole project (excluding the object and binary files) into an archive file.  
 * **_Important_**: Make sure the terminal size is at least *200 * 75*
-* **_Important_**: Due to the unstable performance of CS server, the game sometimes lags when the cs server is under high load. We recommend you to run the code on your own linux to have better experience.
+* **_For those playing on HKU CS server_**: Due to the unstable performance and the latency issue, the game sometimes lags when the CS server is under high load. We recommend you to play the game on your own PC or VM for a better experience.
 ### For Windows user:
 [//]: # (TODO)
 
