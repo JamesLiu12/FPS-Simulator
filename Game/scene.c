@@ -13,6 +13,13 @@
 #include "../util/util.h"
 #define _USE_MATH_DEFINES
 
+/* this is the whole implementation of our game
+   which is a scene containing various objects, walls, enemies and so on
+ */
+
+// initializes a scene
+// input: a pointer to a scene struct, a enum of type WeaponName, an integer that indicates the difficulty of the game
+// output: void
 void Scene_Init(struct Scene *scene, enum WeaponName weaponname, int difficulty){
     srand((int)time(NULL));
     ArrayList_Init(&scene->list_Object, sizeof(struct Object*));
@@ -248,7 +255,9 @@ void Scene_Init(struct Scene *scene, enum WeaponName weaponname, int difficulty)
     //Enemy generator  end
 }
 
-
+// frees the memory addresses of all variables assigned address using malloc
+// input: a scene struct pointer
+// output: void
 void Del_Scene(struct Scene *scene){
     for (int i = 0; i < scene->list_Object.size; i++){
         struct Object *object = ((struct Object**)scene->list_Object.data)[i];
@@ -271,6 +280,9 @@ void Del_Scene(struct Scene *scene){
     Del_Player(&scene->player);
 }
 
+// updates the scene every frame
+// input: a scene struct pointer and a double representing the time difference to update a player
+// output: void
 void Scene_Update(struct Scene *scene, double delta_time){
     Transform_UpdateGlobal(&scene->player.transform);
     Transform_UpdateGlobal(&scene->player.collideBox.transform);
@@ -358,6 +370,9 @@ void print_bar(int bar_length, double ratio, int start_row, int start_col){
     for (int i = 0; i < bar_length + 2; i++) printf("-");
 }
 
+// draws out all the objects in the scene
+// input: a scene struct pointer, a canvas struct pointer
+// output: void
 void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     Canvas_clear(canvas);
 
@@ -448,6 +463,12 @@ void Scene_Show(struct Scene *scene, struct Canvas *canvas){
     Canvas_flush(canvas);
 }   
 
+// detects whether a ray collides with an enemy and assigns it to result_enemy and the body part to result_tag
+// input: a scene struct pointer
+//   a line struct pointer representing a ray
+//   a pointer to an enemy struct pointer
+//   a pointer to an enum Tag
+// output: void
 void Scene_EnemyCollided(struct Scene *scene, struct Line *ray, struct Enemy **result_enemy, enum Tag *result_tag){
     double min_dist = INFINITY;
 
@@ -509,6 +530,9 @@ double Scene_MinDistanceWall(struct Scene *scene, struct Line *ray){
     return minDistance;
 }
 
+// the function being called after the player shoots
+// input: a scene pointer struct
+// output: void
 void Scene_PlayerShoot(struct Scene *scene){
     struct Line ray;
     Transform_UpdateGlobal(&scene->player.canvas.camera_transform);
@@ -524,6 +548,9 @@ void Scene_PlayerShoot(struct Scene *scene){
 
 }
 
+// frees the memory address of an enemy and removes it from scene if it is dead
+// input: a scene struct pointer
+// output: void
 void Clear_Enemy(struct Scene *scene){
     for(int i = 0; i < scene->list_Enemy.size; i++){
         struct Enemy *enemy = ((struct Enemy **)scene->list_Enemy.data)[i];
@@ -532,6 +559,10 @@ void Clear_Enemy(struct Scene *scene){
             Del_Enemy(enemy);}
     }
 }
+
+// determines whether an object collides with any other enemies in scene
+// input: a scene struct pointer and a collidebox struct pointer
+// output: a bool represented by an int
 int Scene_Collided_Enemy(struct Scene *scene, struct CollideBox *collideBox){
     for(int i = 0; i < scene->list_Enemy.size ; i++){
             struct Enemy *enemy = ((struct Enemy**)scene->list_Enemy.data)[i];
@@ -539,6 +570,10 @@ int Scene_Collided_Enemy(struct Scene *scene, struct CollideBox *collideBox){
         }
     return 0;
 }
+
+// determines whether an object collides with any other objects in scene
+// input: a scene struct pointer and a collidebox struct pointer
+// output: a bool represented by an int
 int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collideBox){
     for(int i = 0; i < scene->list_Object.size ; i++){
             struct Object *object = ((struct Object**)scene->list_Object.data)[i];
@@ -563,10 +598,18 @@ int Scene_Collided_Object(struct Scene *scene, struct CollideBox *collideBox){
         }
     return 0;
 }
+
+// add a spawn area to the scene
+// input: a scene struct pointer and the parameters needed to initialize a RegionSquare pointer
+// output: void
 void Scene_Add_EnemySpawnSquare(struct Scene *scene, double x, double z, double len, double wid, int num){
     struct RegionSquare *region2d = New_RegionSquare(x, z, len, wid, num);
     ArrayList_PushBack(&scene->list_EnemySpawnArea,&region2d);
 }
+
+// removes a fake wall from scene if it is destroyed by the player
+// input: a scene struct pointer
+// output: void
 void Scene_Delete_FakeWall(struct Scene *scene){
     for(int i = 0; i < scene->list_Object.size; i++){
         struct Object *object = ((struct Object **)scene->list_Object.data)[i];
