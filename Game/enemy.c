@@ -1,6 +1,12 @@
 #include "enemy.h"
 #include "math.h"
 #include "../util/util.h"
+
+/* defines the behaviors an enemy can have */
+
+// initializes an enemy including its collidebox and coordinates
+// input: an enemy struct pointer, an enemymeshes pointer, an int indicating the difficulty
+// output: none
 void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes, int difficulty){
     Transform_Init(&enemy->transform, NULL);
 
@@ -79,6 +85,9 @@ void Enemy_Init(struct Enemy *enemy, struct EnemyMeshes *meshes, int difficulty)
     Vector3_Set(&enemy->moveDirection, 0, 0, 0);
 }
 
+// updates the enemy for a given time
+// input: an enemy pointer and a double indicating time
+// output: void
 void Enemy_Update(struct Enemy *enemy, double delta_time){
     if (enemy->canSeeTarget){
         struct Vector3 move = enemy->moveDirection,
@@ -104,6 +113,8 @@ void Enemy_Update(struct Enemy *enemy, double delta_time){
         if(enemy->attackCounter <= 0)enemy->inattackCD=0;
     }
 }
+
+// attack behavior of an enemy
 void Enemy_Attack(struct Enemy *enemy){
     if(!enemy->inattackCD && enemy->canSeeTarget){
         enemy->ATTACKFLAG=1;
@@ -111,12 +122,19 @@ void Enemy_Attack(struct Enemy *enemy){
         enemy->attackCounter=enemy->attackCDtime;
     }
 }
+
+// function to create a new enemy
+// input: a mesh pointer and an int indicating the difficulty
+// output: an enemy pointer
 struct Enemy* New_Enemy(struct EnemyMeshes *meshes, int difficulty){
     struct Enemy *enemy = (struct Enemy*)malloc(sizeof(struct Enemy));
     Enemy_Init(enemy, meshes, difficulty);
     return enemy;
 }
 
+// frees the memory address stored in an enemy struct and the enemy struct itself
+// input: an enemy pointer
+// output: void
 void Del_Enemy(struct Enemy *enemy){
     Del_Transform(&enemy->transform);
     Del_Object(&enemy->head);
@@ -124,28 +142,43 @@ void Del_Enemy(struct Enemy *enemy){
     Del_Object(&enemy->leg);
 }
 
+// initializes meshes within an enemy
+// input: an enemymesh pointer and meshes for the head, body and leg of an enemy
+// output: void
 void EnemyMeshes_Init(struct EnemyMeshes *meshes, struct Mesh *head, struct Mesh *body, struct Mesh *leg){
     meshes->head = head;
     meshes->body = body;
     meshes->leg = leg;
 }
 
+// creates meshes within an enemy
+// input: meshes for the head, body and leg of an enemy
+// output: an enemymesh pointer
 struct EnemyMeshes* New_EnemyMeshes(struct Mesh *head, struct Mesh *body, struct Mesh *leg){
     struct EnemyMeshes *meshes = (struct EnemyMeshes*)malloc(sizeof(struct EnemyMeshes));
     EnemyMeshes_Init(meshes, head, body, leg);
     return meshes;
 }
 
+// frees the memory allocated to enemymeshes
+// input: an enemymeshes pointer
+// output: void
 void Del_EnemyMeshes(struct EnemyMeshes *meshes){
     Del_Mesh(meshes->head);
     Del_Mesh(meshes->body);
     Del_Mesh(meshes->leg);
 }
 
+// the move behavior of an enemy
+// input: an enemy pointer and a 3d vector pointer indicating the movement of an enemy
+// output: void
 void Enemy_Move(struct Enemy* enemy, struct Vector3* move){
     Transform_AddPosition(&enemy->transform, move);
 }
 
+// the rotate behavior of an enemy
+// input: an enemy pointer and a 3d vector pointer indicating the rotation of an enemy
+// output: void
 void Enemy_Rotation(struct Enemy* enemy, struct Vector3 *angle){
     Object_Rotation(&enemy->head, angle);
     Object_Rotation(&enemy->body,angle);
@@ -153,11 +186,18 @@ void Enemy_Rotation(struct Enemy* enemy, struct Vector3 *angle){
     Transform_RotationMatrixUpdate(&enemy->transform);
 }
 
+// the behavior when an enemy's health changes, including add hp, judging max hp and enemy death
+// input: an enemy pointer, a double representing health point change
+// output: void
 void Enemy_ChangeHealth(struct Enemy *enemy, double delta_health){
     enemy->health += delta_health;
     if(enemy->health > enemy->maxHealth) enemy->health = enemy->maxHealth;
     if(enemy->health <= 0) enemy->DEADFLAG=1;
 }
+
+// gets the damage done to the enemy when a weapon hits
+// input: an enemy pointer, an enum Tag pointer, a struct weapon pointer
+// output: void
 void Enemy_GetDamage(struct Enemy *enemy, enum Tag *tag, struct Weapon *weapon){
     if(*tag == ENEMY_HEAD){
         Enemy_ChangeHealth(enemy, -weapon->damage*weapon->head_rate);
@@ -169,6 +209,10 @@ void Enemy_GetDamage(struct Enemy *enemy, enum Tag *tag, struct Weapon *weapon){
         Enemy_ChangeHealth(enemy, -weapon->damage*weapon->leg_rate);
     }
 }
+
+// judges if the target position is less than the attack distance of the enemy
+// input: an enemy pointer, a 3d vector pointer indicating the coordinates of the target position
+// output: a boolean represented by an integer
 int Enemy_IsTargetInAttackRange(struct Enemy *enemy, struct Vector3 *targetPosition){
     if(Vector3_Distance3D(&enemy->transform.globalPosition,targetPosition)<enemy->attackDistance)return 1;
     return 0;
