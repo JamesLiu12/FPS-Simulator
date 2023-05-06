@@ -3,6 +3,10 @@
 #include "../GameUI/ui_instruction.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+// initializes a player
+// input: a player pointer, a enum weapon indicating the weapon held by the player, an int representing difficulty
+// output: void
 void Player_Init(struct Player *player, enum WeaponName weaponname, int difficulty){
     Canvas_Init(&player->canvas, 33, 65);
     player->maxHealth = 100;
@@ -51,22 +55,39 @@ void Player_Init(struct Player *player, enum WeaponName weaponname, int difficul
     Weapon_Init(&player->weapon, weaponname);
 }
 
+// creates a new player
+// input: a weapon enum and an int representing difficulty
+// output: a player pointer
 struct Player* New_Player(enum WeaponName weaponname, int difficulty) {
     struct Player* player = (struct Player*)malloc(sizeof(struct Player));
     Player_Init(player, weaponname, difficulty);
     return player;
 }
 
+// frees the memory stored by a player and allocated to a player
+// input: a player pointer
+// output: void
 void Del_Player(struct Player *player){
     Del_Canvas(&player->canvas);
 }
 
+// the move behavior of a player
+// input: a player pointer, a 3d vector indicating the movement
+// output: void
 void Player_Move(struct Player *player, struct Vector3* move){
     Vector3_Add(&player->transform.position, move);
 }
+
+// sets the position of a player
+// input: a player pointer and the components of a 3d vector as double
+// output: void
 void Player_SetPosition(struct Player *player, double x, double y, double z){
     Vector3_Set(&player->transform.position,x,y,z);
 }
+
+// the rotate behavior of a player
+// input: a player pointer, a 3d vector indicating the angle of rotation
+// output: void
 void Player_Rotate(struct Player *player, struct Vector3* angle){
     //Vector3_Add(&player->transform.rotation, angle);
     //Transform_RotationMatrixUpdate(&player->transform);
@@ -82,11 +103,14 @@ void Player_Rotate(struct Player *player, struct Vector3* angle){
 
 }
 
+// initializes the starting position of a player
 void Player_Start(struct Player *player){
-    //TODO
     Vector3_Set(&player->transform.position,0,1,0);
 }
 
+// updates the player per unit time
+// input: a player pointer, a double representing the unit time
+// output: void
 void Player_Update(struct Player *player, double delta_time){
     if(player->DAMAGEFLAG){
         player->healingCDcounter = player-> healingCDtime;
@@ -117,9 +141,14 @@ void Player_Update(struct Player *player, double delta_time){
     Vector3_Set(&player->move, 0, 0, 0);
     Player_Control(player, delta_time);
 }
+
 void Player_SetDamageFlag(struct Player *player){
     player->DAMAGEFLAG = 1;
 }
+
+// defines the controls that can be done to the player per unit time, including rotate and move
+// input: a player pointer, a double representing the unit time
+// output: void
 void Player_Control(struct Player *player, double delta_time){
     if(player->moveSpeed * delta_time > 1) delta_time = 1.0/player->moveSpeed;
     if(kbhit()){
@@ -141,6 +170,11 @@ void Player_Control(struct Player *player, double delta_time){
     if(keydown(ESC)) Player_Pause(player);
     }
 }
+
+// sets the reload time and decreases the bullet number by 1 when the player shoots
+// this function is executed when a player shot is detected
+// input: a player pointer
+// output: void
 void Player_Shoot(struct Player *player){
     if(!player->FIREFLAG){
         if(!player->inFireCD && !player->inReloadCD){
@@ -153,6 +187,11 @@ void Player_Shoot(struct Player *player){
         }
     }
 }
+
+// sets the reload cd if reload flag is not set
+// executed when a player reloads
+// input: a player pointer
+// output: void
 void Player_Reload(struct Player *player){
     if(!player->RELOADFLAG){
         if(!player->inReloadCD){
@@ -162,6 +201,10 @@ void Player_Reload(struct Player *player){
         }
     }
 }
+
+// behavior when a player pauses the game
+// input: a player pointer
+// output: void
 void Player_Pause(struct Player *player){
     screenclean();
     printf(R"(                      ______       __    __   __  .___________. ______   
@@ -181,6 +224,10 @@ void Player_Pause(struct Player *player){
         }
     }
 }
+
+// behavior of move forward of a player per unit time
+// input: a player pointer and a double representing unit time
+// output: void
 void Player_MoveForward(struct Player *player, double delta_time){
     struct Vector3 movement;
     Vector3_Set(&movement, player->facing.x, 0, player->facing.z);
@@ -189,6 +236,10 @@ void Player_MoveForward(struct Player *player, double delta_time){
     //Player_Move(player,&movement);
     Vector3_Copy(&movement, &player->move);
 }
+
+// behavior of move back of a player per unit time
+// input: a player pointer and a double representing unit time
+// output: void
 void Player_MoveBackward(struct Player *player, double delta_time){
     struct Vector3 movement;
     Vector3_Set(&movement, -player->facing.x, 0, -player->facing.z);
@@ -198,6 +249,10 @@ void Player_MoveBackward(struct Player *player, double delta_time){
     //Player_Move(player, &movement);
     Vector3_Copy(&movement, &player->move);
 }
+
+// behavior of move left of a player per unit time
+// input: a player pointer and a double representing unit time
+// output: void
 void Player_MoveLeft(struct Player *player, double delta_time){
     struct Vector3 movement;
     Vector3_Set(&movement,-player->facing.z,0,player->facing.x);
@@ -207,6 +262,10 @@ void Player_MoveLeft(struct Player *player, double delta_time){
     //Player_Move(player,&movement);
     Vector3_Copy(&movement, &player->move);
 }
+
+// behavior of move right of a player per unit time
+// input: a player pointer and a double representing unit time
+// output: void
 void Player_MoveRight(struct Player *player, double delta_time){
     struct Vector3 movement;
     Vector3_Set(&movement, player->facing.z, 0, -player->facing.x);
@@ -217,6 +276,9 @@ void Player_MoveRight(struct Player *player, double delta_time){
     Vector3_Copy(&movement, &player->move);
 }
 
+// behavior of rotate up of a player per unit time
+// input: a player pointer and a double representing unit time
+// output: void
 void Player_RotateUp(struct Player *player, double delta_time){
     struct Vector3 rotation;
     Vector3_Set(&rotation, player->facing.z, 0, -player->facing.x);
@@ -224,6 +286,10 @@ void Player_RotateUp(struct Player *player, double delta_time){
     Vector3_Scale(&rotation, player->rotationSpeed * delta_time * 0.5);
     Player_Rotate(player, &rotation);
 }
+
+// behavior of rotate down of a player per unit time
+// input: a player pointer and a double representing unit time
+// output: void
 void Player_RotateDown(struct Player *player, double delta_time){
     struct Vector3 rotation;
     Vector3_Set(&rotation, -player->facing.z, 0, player->facing.x);
@@ -231,6 +297,10 @@ void Player_RotateDown(struct Player *player, double delta_time){
     Vector3_Scale(&rotation, player->rotationSpeed * delta_time * 0.5);
     Player_Rotate(player, &rotation);
 }
+
+// behavior of rotate left of a player per unit time
+// input: a player pointer and a double representing unit time
+// output: void
 void Player_RotateLeft(struct Player *player, double delta_time){
     struct Vector3 rotation;
     struct Vector3 current_rotation;
@@ -246,6 +316,10 @@ void Player_RotateLeft(struct Player *player, double delta_time){
     Matrix3x3_TransformMatrix(&RotationMatrix, &rotation);
     Player_Rotate(player, &rotation);
 }
+
+// behavior of rotate right of a player per unit time
+// input: a player pointer and a double representing unit time
+// output: void
 void Player_RotateRight(struct Player *player, double delta_time){
     struct Vector3 rotation;
     struct Vector3 current_rotation;
@@ -262,6 +336,9 @@ void Player_RotateRight(struct Player *player, double delta_time){
     Player_Rotate(player, &rotation);
 }
 
+// the behavior when a player's health changes, including add hp, judging max hp and player death
+// input: a player pointer, a double representing health point change
+// output: void
 void Player_ChangeHealth(struct Player *player, double deltaHealth){
     player->health += deltaHealth;
     if(player->health > player->maxHealth) player->health = player->maxHealth;
