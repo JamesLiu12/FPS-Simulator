@@ -2,11 +2,11 @@
 ### ENGG1340 Group project made by group 102
 
 ## Contributors
-Liu Sizhe (University no.: 3036098041)  
-Chan Aaron (University no.: 3036057217)  
-Zhuang Keju (University no.: 3035988201)  
-Xiao Yuxuan (University no.: 3035974389)  
-Ding Zhouchen (University no.: 3036094526)
+Liu Sizhe 
+Chan Aaron
+Zhuang Keju
+Xiao Yuxuan
+Ding Zhouchen
 
 ---
 
