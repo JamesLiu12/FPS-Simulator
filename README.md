@@ -2,11 +2,11 @@
 ### ENGG1340 Group project made by group 102
 
 ## Contributors
-Liu Sizhe 
-Chan Aaron
-Zhuang Keju
-Xiao Yuxuan
-Ding Zhouchen
+Liu Sizhe  
+Chan Aaron  
+Zhuang Keju  
+Xiao Yuxuan  
+Ding Zhouchen  
 
 ---
 
